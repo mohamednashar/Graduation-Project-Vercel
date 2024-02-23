@@ -14,7 +14,7 @@ const Slider = () => {
   const [nextEl, setNextEl] = useState(null);
   return (
     <Swiper
-      className="!mx-28"
+      className="md:!mx-28"
       navigation={{ prevEl, nextEl }}
       modules={[Navigation, Pagination, Scrollbar, A11y]}
       spaceBetween={1}

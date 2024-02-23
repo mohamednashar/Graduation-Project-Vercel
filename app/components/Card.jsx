@@ -3,7 +3,7 @@ import { useState } from "react";
 
 export function CardDefault({ courseTitle, courseImg, courseDescription }) {
   return (
-    <div className="max-w-screen-lg mx-4 mt-6 overflow-hidden border dark:border-none shadow-lg rounded-xl sm:mx-auto">
+    <div className="max-w-screen-lg mx-4 mt-6 overflow-hidden border dark:border-none rounded-xl sm:mx-auto">
       <div className="flex flex-col overflow-hidden bg-white dark:bg-[#1e1e1e] dark:text-white sm:flex-row md:h-80">
         <div className="text-white dark:text-black p-8 sm:p-8 bg-[#66bfbf] order-first ml-auto h-48 w-full sm:order-none sm:h-auto sm:w-1/2 lg:w-2/5 flex flex-col justify-between">
           <div className>
