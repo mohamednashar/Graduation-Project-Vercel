@@ -1,25 +1,21 @@
 "use client";
 import React, { useState } from "react";
 import ThemeChanger from "../components/ThemeChanger";
-import { useRouter } from "next/navigation";
 const page = () => {
 
 
-  const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
   const [isUser, setIsUser] = useState(false);
 
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
 
-    // Uncheck the other checkbox when one is checked
     if (name === 'admin' && checked) {
       setIsUser(false);
     } else if (name === 'user' && checked) {
       setIsAdmin(false);
     }
 
-    // Update the state of the clicked checkbox
     if (name === 'admin') {
       setIsAdmin(checked);
     } else if (name === 'user') {
@@ -27,15 +23,6 @@ const page = () => {
     }
   };
 
-  const handleRoute = () => {
-    if (isAdmin) {
-      router.push('/admin');
-    } else if (isUser) {
-      router.push('/user');
-    } else {
-      // Handle default case or show an error
-    }
-  };
 
 
   return (
@@ -104,7 +91,7 @@ const page = () => {
                         <button
                           className="bg-indigo-500 dark:!bg-slate-500 mb-3 inline-block w-full rounded-lg px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_rgba(0,0,0,0.2)] transition-all duration-300 hover:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)] focus:outline-none focus:ring-0 active:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)]"
                           type="button"
-                          onClick={handleRoute}
+                          
                         >
                           Log in
                         </button>

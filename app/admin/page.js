@@ -1,11 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import ThemeChanger from "../components/ThemeChanger";
-import { useRouter } from "next/navigation";
 const page = () => {
 
 
-  const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
   const [isUser, setIsUser] = useState(false);
 
