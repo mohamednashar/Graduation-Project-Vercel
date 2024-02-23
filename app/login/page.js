@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import ThemeChanger from "../components/ThemeChanger";
-const page = () => {
+const Page = () => {
 
 
   const [isAdmin, setIsAdmin] = useState(false);
@@ -131,4 +131,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
