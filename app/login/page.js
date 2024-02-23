@@ -1,10 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import ThemeChanger from "../components/ThemeChanger";
-const Page = () => {
+
+const Login = () => {
 
 
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] =useState(false)
   const [isUser, setIsUser] = useState(false);
 
   const handleCheckboxChange = (e) => {
@@ -131,4 +132,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Login;
