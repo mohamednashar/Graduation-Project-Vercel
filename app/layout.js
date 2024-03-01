@@ -19,7 +19,8 @@ export default function RootLayout({ children }) {
       <body className={`${inter.className} bg-gray-100 dark:bg-[#121212] overflow-x-hidden`}>
         <ThemeProvider attribute="class">
           <ReduxProvider>
-            <Navbar />
+          {pathname !== '/login' && <Navbar />}
+            
             <div>{children}</div>
           </ReduxProvider>
         </ThemeProvider>

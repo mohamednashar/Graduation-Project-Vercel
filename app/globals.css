@@ -11,7 +11,7 @@
 
 /*Checkbox Style*/
 
-input[type="checkbox"] {
+input[type="radio"] {
 
     -webkit-appearance: none;
 
@@ -27,7 +27,7 @@ input[type="checkbox"] {
     place-content: center;
   }
   
-  input[type="checkbox"]::before {
+  input[type="radio"]::before {
     content: "";
     width: 0.65em;
     height: 0.65em;
@@ -36,10 +36,10 @@ input[type="checkbox"] {
     transform-origin: bottom left;
     transition: 120ms transform ease-in-out;
     box-shadow: inset 1em 1em var(--form-control-color);
-    background-color:rgb(99, 102, 241)
+    background-color:rgb(102, 191, 191)
   }
   
-  input[type="checkbox"]:checked::before {
+  input[type="radio"]:checked::before {
     transform: scale(1);
   }
   
