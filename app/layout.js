@@ -1,10 +1,9 @@
 "use client";
-import { ReduxProvider } from "./reduxToolkit/provider/provider";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "next-themes";
 import Navbar from "./components/Navbar";
 import { usePathname } from "next/navigation";
+import ThemeHandler from "./components/ThemeHandler";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {
@@ -16,14 +15,14 @@ export default function RootLayout({ children }) {
         <meta name="description" content="Description" />
         <link rel="icon" href="images/icon.jpg"></link>
       </head>
-      <body className={`${inter.className} bg-gray-100 dark:bg-[#121212] overflow-x-hidden`}>
-        <ThemeProvider attribute="class">
-          <ReduxProvider>
-          {pathname !== '/login' && <Navbar />}
-            
-            <div>{children}</div>
-          </ReduxProvider>
-        </ThemeProvider>
+      <body
+        className={`${inter.className} bg-gray-100 dark:bg-[#121212] overflow-x-hidden`}
+      >
+        <ThemeHandler>
+          {pathname !== "/" && <Navbar />}
+
+          <div>{children}</div>
+        </ThemeHandler>
       </body>
     </html>
   );

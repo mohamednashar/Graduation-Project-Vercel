@@ -1,10 +1,10 @@
 import React from 'react'
-import Login from './login/page'
+import AddProf from '../addProf/page'
 
 function page() {
   return (
     <div>
-      <Login/>
+      <AddProf/>
     </div>
   )
 }
