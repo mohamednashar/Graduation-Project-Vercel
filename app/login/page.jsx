@@ -54,7 +54,7 @@ const Login = () => {
   }
 
   return (
-    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 h-screen ">
+    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 h-screen">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm bg-white p-5 rounded-t-2xl shadow-lg">
         <svg
           className="w-10 h-10 mx-auto"
@@ -169,7 +169,7 @@ const Login = () => {
             checked={isCheckedTeachingAssistant}
             onChange={handleCheckboxChange}
             />
-            <label className="font-bold" for="TeachingAssistant">Teaching Assistant</label>
+            <label className="font-bold" for="TeachingAssistant">Assistant</label>
           </div>
 
 
@@ -183,6 +183,8 @@ const Login = () => {
             onChange={handleCheckboxChange} />
             <label className="font-bold" for="student">Student</label>
           </div>
+
+          
           <div className="flex items-center gap-2">
             <input 
             type="radio" 
@@ -193,6 +195,8 @@ const Login = () => {
             onChange={handleCheckboxChange} />
             <label className="font-bold" for="staff">Staff</label>
           </div>
+
+
         </div>
       </div>
     </div>

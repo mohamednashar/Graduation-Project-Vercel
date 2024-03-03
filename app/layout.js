@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
         className={`${inter.className} bg-gray-100 dark:bg-[#121212] overflow-x-hidden`}
       >
         <ThemeHandler>
-          {pathname !== "/" && <Navbar />}
+        {(!pathname.startsWith("/mainStaff") && pathname !== "/") && <Navbar />}
 
           <div>{children}</div>
         </ThemeHandler>
