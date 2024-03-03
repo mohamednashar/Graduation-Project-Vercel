@@ -1,4 +1,3 @@
-import { Button } from '@material-tailwind/react';
 import React from 'react';
 
 const DownloadButton = ({ fileUrl }) => {
@@ -18,11 +17,9 @@ const DownloadButton = ({ fileUrl }) => {
   };
 
   return (
-    <div className='text-center animate__animated animate__bounceIn'>
-      <Button onClick={handleDownload} className="bg-[#66bfbf] hover:bg-[#f76b8a] text-white font-bold py-3 px-6 rounded my-10 transition-all duration-200">
+      <button onClick={handleDownload} className="bg-[#66bfbf] hover:bg-[#f76b8a] text-white font-bold py-3 px-6 rounded  transition-all duration-500">
         Download Slide
-      </Button>
-    </div>
+      </button>
   );
 };
 

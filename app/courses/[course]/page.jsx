@@ -1,9 +1,15 @@
 "use client";
 import DownloadButton from "@/app/components/DownloadButton";
-import { Button, Spinner } from "@material-tailwind/react";
+import { Button, Input, Spinner } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faLeftLong } from "@fortawesome/free-solid-svg-icons";
+import {
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
 import "animate.css";
 import Spin from "@/app/components/Spin";
 
@@ -152,9 +158,6 @@ const VideoPlayer = ({ videoSrc, isOpen }) => {
           iframeLoaded ? "" : "hidden"
         }
         ${isOpen ? "md:w-3/4" : "md:w-1/2"}
-
-        
-        
         `}
         src={videoSrc}
         allowFullScreen="allowFullScreen"
@@ -176,6 +179,26 @@ const IndexPage = () => {
   const [courseContent, setCourseContent] = useState(false);
 
   const [isHovered, setIsHovered] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [openDeleteLecture, setOpenDeleteLecture] = useState(false);
+
+  const handleOpen = () => setOpen(!open);
+  const handleOpenDeleteLecture = () =>
+    setOpenDeleteLecture(!openDeleteLecture);
+  const handleDownload = (fileUrl) => {
+    // Create an anchor element
+    const link = document.createElement("a");
+    // Set the href attribute to the file URL
+    link.href = fileUrl;
+    // Set the download attribute to the file name
+    link.download = fileUrl.substring(fileUrl.lastIndexOf("/") + 1); // Extract filename from URL
+    // Append the anchor element to the body
+    document.body.appendChild(link);
+    // Trigger a click event on the anchor element
+    link.click();
+    // Remove the anchor element from the body
+    document.body.removeChild(link);
+  };
 
   return (
     <div
@@ -186,29 +209,35 @@ const IndexPage = () => {
       }`}
     >
       <div
-        className={`transition-all duration-200 ${
+        className={`transition-all duration-200  ${
           isSidebarOpen ? `w-full md:w-3/4 md:mr-5` : `w-full`
         } `}
       >
         <VideoPlayer videoSrc={currentVideo.src} isOpen={isSidebarOpen} />
-        <DownloadButton fileUrl={currentVideo.slideUrl} />
-
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sit magnam
-          consequuntur deserunt non. Laborum fugiat dolorem ex suscipit iure
-          dolor reiciendis veritatis enim, doloribus officia ad ut error
-          repellendus mollitia autem necessitatibus fuga facilis obcaecati
-          cumque nihil dolores est numquam. Suscipit excepturi reiciendis
-          eligendi harum natus necessitatibus qui cum dignissimos? Ratione
-          distinctio ipsam ad neque fuga natus placeat voluptatibus quod dolorem
-          modi odio nobis accusamus, adipisci dignissimos illum nesciunt. Magnam
-          nulla delectus sapiente ullam? Reprehenderit deserunt nam quam
-          excepturi harum, debitis possimus. Illo, veniam? Facilis nostrum nemo
-          nobis illum ullam consectetur mollitia qui officia voluptates, omnis
-          natus a illo officiis animi, eveniet voluptas quam pariatur minima.
-          Explicabo nam aliquid numquam, deleniti quas saepe cupiditate omnis,
-          laboriosam inventore vitae nesciunt cum tenetur natus in earum
-        </p>
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            onClick={() => {
+              handleDownload(currentVideo.slideUrl);
+            }}
+            className="bg-[#66bfbf] hover:bg-[#f76b8a] text-white font-bold py-2 px-3 rounded  transition-all duration-500"
+          >
+            Download Slide
+          </button>
+          <button
+            className="bg-[#66bfbf] hover:bg-[#f76b8a] text-white font-bold py-2 px-3 rounded  transition-all duration-500"
+            onClick={handleOpen}
+            variant="gradient"
+          >
+            Add new lecture
+          </button>
+          <button
+            className="bg-red-600 hover:bg-red-900 text-white font-bold py-2 px-3 rounded  transition-all duration-500"
+            onClick={handleOpenDeleteLecture}
+            variant="gradient"
+          >
+            Delete lecture
+          </button>
+        </div>
 
         <button
           onClick={toggleSidebar}
@@ -246,6 +275,80 @@ const IndexPage = () => {
           toggleSidebar={toggleSidebar}
         />
       )}
+
+      <Dialog
+        open={open}
+        handler={handleOpen}
+        animate={{
+          mount: { scale: 1, y: 0 },
+          unmount: { scale: 0.9, y: -100 },
+        }}
+        className="bg-white dark:bg-[#282828]"
+      >
+        <DialogHeader className="text-black dark:text-white">
+          Add new lecture.
+        </DialogHeader>
+        <DialogBody>
+          <Input
+            variant="standard"
+            placeholder="Lecture URL"
+            className="p-3 my-3 cursor-text bg-gray-200 dark:bg-[#3f3f3f] border-none"
+          />
+
+          <Input
+            variant="standard"
+            placeholder="Slide URL"
+            className="p-3 my-3 cursor-text bg-gray-200 dark:bg-[#3f3f3f] border-none"
+          />
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant="text"
+            color="red"
+            onClick={handleOpen}
+            className="mr-1"
+          >
+            <span>Cancel</span>
+          </Button>
+          <Button variant="gradient" color="green" onClick={handleOpen}>
+            <span>ADD</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
+
+      <Dialog
+        open={openDeleteLecture}
+        handler={handleOpenDeleteLecture}
+        animate={{
+          mount: { scale: 1, y: 0 },
+          unmount: { scale: 0.9, y: -100 },
+        }}
+        className="bg-white dark:bg-[#282828]"
+      >
+        <DialogHeader className="text-red-800 font-bold">
+          Delete lecture
+        </DialogHeader>
+        <DialogBody className="text-lg text-red-600 font-bold">
+          This lecture will be deleted from all the students who are studying
+          this course with you. Are you sure about that?
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant="text"
+            color="red"
+            onClick={handleOpenDeleteLecture}
+            className="mr-1"
+          >
+            <span>Cancel</span>
+          </Button>
+          <button
+            className="bg-red-600 py-2 px-4 mx-2 hover:bg-red-900 transition-all duration-500 rounded-lg text-white font-semibold"
+            onClick={handleOpenDeleteLecture}
+          >
+            Delete
+          </button>
+        </DialogFooter>
+      </Dialog>
     </div>
   );
 };
