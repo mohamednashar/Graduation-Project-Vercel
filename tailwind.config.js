@@ -9,7 +9,8 @@ module.exports = withMT({
   darkMode:"class",
   theme: {
     extend: {
-      colors: {        
+      colors: {     
+       
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

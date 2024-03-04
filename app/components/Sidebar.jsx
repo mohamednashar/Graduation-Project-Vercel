@@ -10,6 +10,7 @@ import {
   Icon5,
   Icon6,
   Icon7,
+  Icon8,
 
 } from "./icons";
 
@@ -38,6 +39,12 @@ const menuItems = [
     id: 7,
     label: "Search Assistant",
     icon: Icon7,
+    link: "/mainStaff/searchTeachingAssistant",
+  },
+  {
+    id: 8,
+    label: "Logout",
+    icon: Icon8,
     link: "/mainStaff/searchTeachingAssistant",
   },
 
@@ -102,7 +109,7 @@ function Sidebar() {
             </button>
 
             {!toggleCollapse && (
-              <p className="text-[#156585] font-semibold text-sm">
+              <p className="text-[#265E73] font-semibold text-sm">
                 Education Platform
               </p>
             )}

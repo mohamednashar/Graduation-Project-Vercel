@@ -1,6 +1,5 @@
 "use client";
-import DownloadButton from "@/app/components/DownloadButton";
-import { Button, Input, Spinner } from "@material-tailwind/react";
+import { Button, Input } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faLeftLong } from "@fortawesome/free-solid-svg-icons";
@@ -214,7 +213,7 @@ const IndexPage = () => {
         } `}
       >
         <VideoPlayer videoSrc={currentVideo.src} isOpen={isSidebarOpen} />
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-8 flex-wrap justify-center mt-5">
           <button
             onClick={() => {
               handleDownload(currentVideo.slideUrl);
@@ -289,24 +288,22 @@ const IndexPage = () => {
           Add new lecture.
         </DialogHeader>
         <DialogBody>
-          <Input
-            variant="standard"
-            placeholder="Lecture URL"
-            className="p-3 my-3 cursor-text bg-gray-200 dark:bg-[#3f3f3f] border-none"
-          />
+          <div className="gap-6 flex flex-col">
 
-          <Input
-            variant="standard"
-            placeholder="Slide URL"
-            className="p-3 my-3 cursor-text bg-gray-200 dark:bg-[#3f3f3f] border-none"
-          />
+          <Input variant="standard" label="Video URL" className="dark:bg-[#3f3f3f]"/>
+
+<Input variant="standard" label="Slide URL" className="dark:bg-[#3f3f3f]"/>
+
+          </div>
+        
+
         </DialogBody>
         <DialogFooter>
           <Button
             variant="text"
             color="red"
             onClick={handleOpen}
-            className="mr-1"
+            className="mr-2"
           >
             <span>Cancel</span>
           </Button>
