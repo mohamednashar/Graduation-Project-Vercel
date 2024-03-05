@@ -19,7 +19,7 @@ const labels = [
   "Gender",
 ];
 
-const Page = () => {
+const UpdateStudent = () => {
   const [formData, setFormData] = useState({});
 
   const [open, setOpen] = useState(false);
@@ -247,4 +247,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default UpdateStudent;

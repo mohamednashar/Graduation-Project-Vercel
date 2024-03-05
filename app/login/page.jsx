@@ -48,7 +48,7 @@ const Login = () => {
   const routerPage = ()=>{
     if(isCheckedStudent) return "mainStudent"
     if(isCheckedProf) return "mainProf"
-    if(isCheckedStaff) return "mainStaff"
+    if(isCheckedStaff) return "mainStaff/student"
     if(isCheckedTeachingAssistant) return "mainTeachingAssistant"
 
   }

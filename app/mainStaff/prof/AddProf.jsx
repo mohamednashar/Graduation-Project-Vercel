@@ -26,7 +26,7 @@ const labels = [
   "Gender",
 ];
 
-const Page = () => {
+const AddProf = () => {
   const [formData, setFormData] = useState({});
 
   const [open, setOpen] = useState(false);
@@ -267,4 +267,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default AddProf;

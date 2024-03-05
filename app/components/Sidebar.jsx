@@ -17,14 +17,14 @@ import {
 
 
 const menuItems = [
-  { id: 1, label: "Add Student", icon: Icon1, link: "/mainStaff" },
-  { id: 2, label: "Add Prof", icon: Icon2, link: "/mainStaff/addProf" },
-  { id: 3, label: "Add Assistant", icon: Icon3, link: "/mainStaff/addTeachingAssistant" },
+  { id: 1, label: "Student", icon: Icon1, link: "/mainStaff/student" },
+  { id: 2, label: "Prof", icon: Icon2, link: "/mainStaff/prof" },
+  { id: 3, label: "Assistant", icon: Icon3, link: "/mainStaff/assistant" },
   {
     id: 4,
-    label: "Add Course",
+    label: "Course",
     icon: Icon4,
-    link: "/mainStaff/addCourse",
+    link: "/mainStaff/course",
   },
 
 
