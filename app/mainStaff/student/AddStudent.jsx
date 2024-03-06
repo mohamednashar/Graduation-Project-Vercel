@@ -1,6 +1,14 @@
 "use client";
-import { Button, Dialog, DialogBody } from "@material-tailwind/react";
+import { Transition } from "@headlessui/react";
+import {
+  Button,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+} from "@material-tailwind/react";
 import { useState } from "react";
+import Select from "react-select";
 
 const labels = [
   "First Name",
@@ -16,18 +24,34 @@ const labels = [
   "College",
   "Department",
   "GPA",
-  "Gender",
+  "GPA"
 ];
 
-const Addstudent = () => {
+const AddStudent = () => {
   const [formData, setFormData] = useState({});
 
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(!open);
 
-   
-  
+  const collegeOptions = [
+    "College A",
+    "College B",
+    "College C",
+    "College D",
+  ].map((option) => ({
+    value: option,
+    label: option,
+  }));
+
+  const departmentOptions = [
+    "Department X",
+    "Department Y",
+    "Department Z",
+  ].map((option) => ({
+    value: option,
+    label: option,
+  }));
 
   const [isMale, setIsMale] = useState(true);
   const [isFemale, setIsFemale] = useState(false);
@@ -56,7 +80,6 @@ const Addstudent = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Replace the following console log with your actual logic to send the data to the server
     console.log("Form Data:", formData);
   };
 
@@ -69,35 +92,27 @@ const Addstudent = () => {
         {label}
       </label>
       {type === "select" ? (
-      <select
-      id={id}
-      value={formData[id]}
-      onChange={handleInputChange}
-      className="w-full block p-2 text-gray-900 border border-gray-300 rounded-lg bg-white sm:text-xs dark:bg-[#3f3f3f] dark:text-white"
-    >
-      {id === "college" ? (
-        // Options for the "College" select
-        [ "College A", "College B", "College C", "College D"].map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))
-      ) : id === "department" ? (
-        // Options for the "Department" select
-        ["Department X", "Department Y", "Department Z"].map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))
-      ) : (
-        // Default options (you can customize this as needed)
-        [1, 2, 3, 4].map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))
-      )}
-    </select>
+        <Select
+          className="w-[150px] md:w-[250px]"
+          id={id}
+          onChange={(selectedOptions) => {
+            const selectedValues = selectedOptions.map(
+              (selectedOption) => selectedOption.value
+            );
+            setFormData((prevFormData) => {
+              return { ...prevFormData, [id]: selectedValues };
+            });
+          }}
+          options={
+            id === "college"
+              ? collegeOptions
+              : id === "department"
+              ? departmentOptions
+              : []
+          }
+          isMulti
+          closeMenuOnSelect={false}
+        />
       ) : type === "radio" ? (
         <div className="flex items-center">
           <input
@@ -169,7 +184,13 @@ const Addstudent = () => {
             ) : (
               renderInput(
                 label,
-                index === 8 ? "date" : index === 13 ? "radio" : index === 10 || index === 11 ? "select" : "text",
+                index === 8
+                  ? "date"
+                  : index === 13
+                  ? "radio"
+                  : index === 10 || index === 11
+                  ? "select"
+                  : "text",
                 label.toLowerCase()
               )
             )}
@@ -247,4 +268,4 @@ const Addstudent = () => {
   );
 };
 
-export default Addstudent;
+export default AddStudent;
