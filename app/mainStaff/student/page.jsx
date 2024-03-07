@@ -1,5 +1,5 @@
 "use client";
-import Addstudent from "./AddStudent";
+import AddStudent from "./AddStudent";
 
 import {
   Tabs,
@@ -8,7 +8,7 @@ import {
   Tab,
   TabPanel,
 } from "@material-tailwind/react";
-import UpdateStudent from "./UpdateStudent";
+import GridExample from "./UpdateStudent";
 import DeleteStudent from "./DeleteStudent";
 
 const data = [
@@ -48,8 +48,8 @@ const page = () => {
         >
           {data.map(({ value }) => (
             <TabPanel key={value} value={value}>
-              {value === "Add Student" && <Addstudent />}
-              {value === "Update Student" && <UpdateStudent />}
+              {value === "Add Student" && <AddStudent />}
+              {value === "Update Student" && <GridExample />}
               {value === "Delete Student" && <DeleteStudent />}
             </TabPanel>
           ))}
