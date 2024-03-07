@@ -49,7 +49,7 @@ const page = () => {
           {data.map(({ value }) => (
             <TabPanel key={value} value={value}>
               {value === "Add Student" && <AddStudent />}
-              {value === "Update Student" && <div className="h-[500px] shadow-md w-[1000px] mx-auto"><UpdateStudent /></div> }
+              {value === "Update Student" && <div className="h-[500px] shadow-md w-full md:w-[80%] mx-auto"><UpdateStudent /></div> }
               {value === "Delete Student" && <DeleteStudent />}
             </TabPanel>
           ))}

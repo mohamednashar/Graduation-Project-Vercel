@@ -1,4 +1,5 @@
 "use client";
+import AddAssistant from "./AddAssistant";
 
 import {
   Tabs,
@@ -7,7 +8,8 @@ import {
   Tab,
   TabPanel,
 } from "@material-tailwind/react";
-import AddAssistant from "./AddAssistant";
+import DeleteAssistant from "./DeleteAssistant";
+import UpdateAssistant from "./UpdateAssistant";
 
 const data = [
   {
@@ -46,8 +48,9 @@ const page = () => {
         >
           {data.map(({ value }) => (
             <TabPanel key={value} value={value}>
-              {value === "Add Assistant" && <AddAssistant/>}
-           
+              {value === "Add Assistant" && <AddAssistant />}
+              {value === "Update Assistant" && <div className="h-[500px] shadow-md w-full md:w-[80%] mx-auto"><UpdateAssistant /></div> }
+              {value === "Delete Assistant" && <DeleteAssistant />}
             </TabPanel>
           ))}
         </TabsBody>

@@ -1,4 +1,5 @@
 "use client";
+import AddProf from "./AddProf";
 
 import {
   Tabs,
@@ -7,8 +8,8 @@ import {
   Tab,
   TabPanel,
 } from "@material-tailwind/react";
-import AddProf from "./AddProf";
-
+import DeleteProf from "./DeleteProf";
+import UpdateProf from "./UpdateProf";
 
 const data = [
   {
@@ -48,7 +49,8 @@ const page = () => {
           {data.map(({ value }) => (
             <TabPanel key={value} value={value}>
               {value === "Add Prof" && <AddProf />}
-           
+              {value === "Update Prof" && <div className="h-[500px] shadow-md w-full md:w-[80%] mx-auto"><UpdateProf /></div> }
+              {value === "Delete Prof" && <DeleteProf />}
             </TabPanel>
           ))}
         </TabsBody>

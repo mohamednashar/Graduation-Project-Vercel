@@ -7,10 +7,10 @@ import {
 } from "@material-tailwind/react";
 import React, { useState } from "react";
 
-function DeleteStudent() {
-  const [openDeleteStudent, setOpenDeleteStudent] = useState(false);
-  const handleOpenDeleteStudent = () => {
-    setOpenDeleteStudent(!openDeleteStudent);
+function DeleteCourse() {
+  const [openDeleteCourse, setOpenDeleteCourse] = useState(false);
+  const handleOpenDeleteCourse = () => {
+    setOpenDeleteCourse(!openDeleteCourse);
   };
   return (
     <div>
@@ -25,16 +25,16 @@ function DeleteStudent() {
 
       <div className=" w-full md:w-[80%] mx-auto flex items-center justify-center">
         <button
-          onClick={handleOpenDeleteStudent}
+          onClick={handleOpenDeleteCourse}
           className="p-2 rounded-md bg-red-600 hover:bg-red-800 mx-w-[500px] text-white"
         >
-          Delete Student
+          Delete Course
         </button>
       </div>
 
       <Dialog
-        open={openDeleteStudent}
-        handler={handleOpenDeleteStudent}
+        open={openDeleteCourse}
+        handler={handleOpenDeleteCourse}
         animate={{
           mount: { scale: 1, y: 0 },
           unmount: { scale: 0.9, y: -100 },
@@ -42,23 +42,23 @@ function DeleteStudent() {
         className="bg-white dark:bg-[#282828]"
       >
         <DialogHeader className="text-red-800 font-bold">
-          Delete Student
+          Delete Course
         </DialogHeader>
         <DialogBody className="text-lg text-red-600 font-bold">
-          This Student will be deleted from your system . Are you sure about that?
+          This Course will be deleted from your system . Are you sure about that?
         </DialogBody>
         <DialogFooter>
           <Button
             variant="text"
             color="red"
-            onClick={handleOpenDeleteStudent}
+            onClick={handleOpenDeleteCourse}
             className="mr-1"
           >
             <span>Cancel</span>
           </Button>
           <button
             className="bg-red-600 py-2 px-4 mx-2 hover:bg-red-900 transition-all duration-500 rounded-lg text-white font-semibold"
-            onClick={handleOpenDeleteStudent}
+            onClick={handleOpenDeleteCourse}
           >
             Delete
           </button>
@@ -68,4 +68,4 @@ function DeleteStudent() {
   );
 }
 
-export default DeleteStudent;
+export default DeleteCourse;

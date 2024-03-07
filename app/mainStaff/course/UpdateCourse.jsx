@@ -81,7 +81,6 @@ const UpdateStudent = () => {
          pagination={true}
          paginationPageSize={100}
          paginationPageSizeSelector={[20, 50, 100]}
-
         />
       </div>
     </div>
