@@ -82,9 +82,92 @@ const VideoSidebar = ({ onSelectVideo, isOpen, toggleSidebar }) => {
     };
   }, []);
 
+  const [open, setOpen] = useState(false);
+  const [openDeleteLecture, setOpenDeleteLecture] = useState(false);
+
+  const handleOpen = () => setOpen(!open);
+  const handleOpenDeleteLecture = () =>
+    setOpenDeleteLecture(!openDeleteLecture);
+
   return (
-    <div
-      className={`rounded-xl md:w-1/4 bg-white dark:bg-[#1e1e1e] h-[100vh] overflow-y-auto dark:text-gray-300
+    <>
+      <Dialog
+        open={open}
+        handler={handleOpen}
+        animate={{
+          mount: { scale: 1, y: 0 },
+          unmount: { scale: 0.9, y: -100 },
+        }}
+        className="bg-white dark:bg-[#282828]"
+      >
+        <DialogHeader className="text-black dark:text-white">
+          Add new lecture.
+        </DialogHeader>
+        <DialogBody>
+          <div className="gap-6 flex flex-col">
+            <Input
+              variant="standard"
+              label="Video URL"
+              className="dark:bg-[#3f3f3f]"
+            />
+
+            <Input
+              variant="standard"
+              label="Slide URL"
+              className="dark:bg-[#3f3f3f]"
+            />
+          </div>
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant="text"
+            color="red"
+            onClick={handleOpen}
+            className="mr-2"
+          >
+            <span>Cancel</span>
+          </Button>
+          <Button variant="gradient" color="green" onClick={handleOpen}>
+            <span>ADD</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
+      <Dialog
+        open={openDeleteLecture}
+        handler={handleOpenDeleteLecture}
+        animate={{
+          mount: { scale: 1, y: 0 },
+          unmount: { scale: 0.9, y: -100 },
+        }}
+        className="bg-white dark:bg-[#282828]"
+      >
+        <DialogHeader className="text-red-800 font-bold">
+          Delete lecture
+        </DialogHeader>
+        <DialogBody className="text-lg text-red-600 font-bold">
+          This lecture will be deleted from all the students who are studying
+          this course with you. Are you sure about that?
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant="text"
+            color="red"
+            onClick={handleOpenDeleteLecture}
+            className="mr-1"
+          >
+            <span>Cancel</span>
+          </Button>
+          <button
+            className="bg-red-600 py-2 px-4 mx-2 hover:bg-red-900 transition-all duration-500 rounded-lg text-white font-semibold"
+            onClick={handleOpenDeleteLecture}
+          >
+            Delete
+          </button>
+        </DialogFooter>
+      </Dialog>
+
+      <div
+        className={`rounded-xl md:w-1/4 bg-white dark:bg-[#1e1e1e] h-[100vh] overflow-y-auto dark:text-gray-300
       ${scroll ? "sticky top-0 right-0" : ""}
     ${
       isVisible
@@ -92,41 +175,55 @@ const VideoSidebar = ({ onSelectVideo, isOpen, toggleSidebar }) => {
         : "animate__animated animate__fadeOutRight"
     }
     `}
-    >
-      <div className="p-4 ">
-        <div className="flex mb-4 border-b-2 pb-2 items-center">
-          <h2 className="text-lg font-bold ">Lectures</h2>
-
-          <Button
-            onClick={() => {
-              handleDisappear();
-              toggleSidebar();
-            }}
-            className="text-md ml-auto hidden rounded-full md:flex justify-center items-center bg-[#66bfbf] dark:bg-[#66bfbf] dark:text-black  w-3 h-3 p-3.5 transition-all duration-200 hover:rotate-180"
-          >
-            <FontAwesomeIcon icon={faXmark} />
-          </Button>
-        </div>
-        <div className="flex flex-col ">
-          {videos.map((video) => (
-            <Button
-              key={video.id}
-              className={`bg-gray-200 text-black  cursor-pointer p-2 dark:text-gray-300 rounded-xl last:border-none transition-all duration-200 mb-6 ${
-                currentVid.id === video.id
-                  ? "bg-[#66bfbf] text-white dark:bg-[#66bfbf] dark:text-black "
-                  : "dark:bg-[#353535]"
-              }`}
-              onClick={() => {
-                onSelectVideo(video);
-                selectVidIndex(video);
-              }}
+      >
+        <div className="p-4">
+          <div className="flex mb-4 border-b-2 pb-2 items-center gap-4">
+            <button
+              className="bg-[#66bfbf] hover:bg-[#f76b8a] text-white font-bold py-2 px-3 rounded-xl transition-all duration-500"
+              onClick={handleOpen}
+              variant="gradient"
             >
-              {video.title}
+              Add Lecture
+            </button>
+            <button
+              className="bg-red-600 hover:bg-red-900 text-white font-bold py-2 px-3 rounded-xl  transition-all duration-500"
+              onClick={handleOpenDeleteLecture}
+              variant="gradient"
+            >
+              Delete Lecture
+            </button>
+
+            <Button
+              onClick={() => {
+                handleDisappear();
+                toggleSidebar();
+              }}
+              className="text-md ml-auto hidden rounded-full md:flex justify-center items-center bg-[#66bfbf] dark:bg-[#66bfbf] dark:text-black  w-3 h-3 p-3.5 transition-all duration-200 hover:rotate-180"
+            >
+              <FontAwesomeIcon icon={faXmark} />
             </Button>
-          ))}
+          </div>
+          <div className="flex flex-col ">
+            {videos.map((video) => (
+              <Button
+                key={video.id}
+                className={`bg-gray-200 text-black  cursor-pointer p-2 dark:text-gray-300 rounded-xl last:border-none transition-all duration-200 mb-6 ${
+                  currentVid.id === video.id
+                    ? "bg-[#66bfbf] text-white dark:bg-[#66bfbf] dark:text-black "
+                    : "dark:bg-[#353535]"
+                }`}
+                onClick={() => {
+                  onSelectVideo(video);
+                  selectVidIndex(video);
+                }}
+              >
+                {video.title}
+              </Button>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -178,12 +275,7 @@ const IndexPage = () => {
   const [courseContent, setCourseContent] = useState(false);
 
   const [isHovered, setIsHovered] = useState(true);
-  const [open, setOpen] = useState(false);
-  const [openDeleteLecture, setOpenDeleteLecture] = useState(false);
 
-  const handleOpen = () => setOpen(!open);
-  const handleOpenDeleteLecture = () =>
-    setOpenDeleteLecture(!openDeleteLecture);
   const handleDownload = (fileUrl) => {
     // Create an anchor element
     const link = document.createElement("a");
@@ -221,20 +313,6 @@ const IndexPage = () => {
             className="bg-[#66bfbf] hover:bg-[#f76b8a] text-white font-bold py-2 px-3 rounded  transition-all duration-500"
           >
             Download Slide
-          </button>
-          <button
-            className="bg-[#66bfbf] hover:bg-[#f76b8a] text-white font-bold py-2 px-3 rounded  transition-all duration-500"
-            onClick={handleOpen}
-            variant="gradient"
-          >
-            Add new lecture
-          </button>
-          <button
-            className="bg-red-600 hover:bg-red-900 text-white font-bold py-2 px-3 rounded  transition-all duration-500"
-            onClick={handleOpenDeleteLecture}
-            variant="gradient"
-          >
-            Delete lecture
           </button>
         </div>
 
@@ -274,78 +352,6 @@ const IndexPage = () => {
           toggleSidebar={toggleSidebar}
         />
       )}
-
-      <Dialog
-        open={open}
-        handler={handleOpen}
-        animate={{
-          mount: { scale: 1, y: 0 },
-          unmount: { scale: 0.9, y: -100 },
-        }}
-        className="bg-white dark:bg-[#282828]"
-      >
-        <DialogHeader className="text-black dark:text-white">
-          Add new lecture.
-        </DialogHeader>
-        <DialogBody>
-          <div className="gap-6 flex flex-col">
-
-          <Input variant="standard" label="Video URL" className="dark:bg-[#3f3f3f]"/>
-
-<Input variant="standard" label="Slide URL" className="dark:bg-[#3f3f3f]"/>
-
-          </div>
-        
-
-        </DialogBody>
-        <DialogFooter>
-          <Button
-            variant="text"
-            color="red"
-            onClick={handleOpen}
-            className="mr-2"
-          >
-            <span>Cancel</span>
-          </Button>
-          <Button variant="gradient" color="green" onClick={handleOpen}>
-            <span>ADD</span>
-          </Button>
-        </DialogFooter>
-      </Dialog>
-
-      <Dialog
-        open={openDeleteLecture}
-        handler={handleOpenDeleteLecture}
-        animate={{
-          mount: { scale: 1, y: 0 },
-          unmount: { scale: 0.9, y: -100 },
-        }}
-        className="bg-white dark:bg-[#282828]"
-      >
-        <DialogHeader className="text-red-800 font-bold">
-          Delete lecture
-        </DialogHeader>
-        <DialogBody className="text-lg text-red-600 font-bold">
-          This lecture will be deleted from all the students who are studying
-          this course with you. Are you sure about that?
-        </DialogBody>
-        <DialogFooter>
-          <Button
-            variant="text"
-            color="red"
-            onClick={handleOpenDeleteLecture}
-            className="mr-1"
-          >
-            <span>Cancel</span>
-          </Button>
-          <button
-            className="bg-red-600 py-2 px-4 mx-2 hover:bg-red-900 transition-all duration-500 rounded-lg text-white font-semibold"
-            onClick={handleOpenDeleteLecture}
-          >
-            Delete
-          </button>
-        </DialogFooter>
-      </Dialog>
     </div>
   );
 };

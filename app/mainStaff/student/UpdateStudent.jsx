@@ -28,7 +28,7 @@ var filterParams = {
   },
 };
 
-const GridExample = () => {
+const UpdateStudent = () => {
   const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
   const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
   const [rowData, setRowData] = useState([]);
@@ -73,13 +73,17 @@ const GridExample = () => {
     <div style={containerStyle}>
       <div style={gridStyle} className="ag-theme-quartz">
         <AgGridReact
-          rowData={rowData}
-          columnDefs={columnDefs}
-          defaultColDef={defaultColDef}
+         rowData={rowData}
+         columnDefs={columnDefs}
+         defaultColDef={defaultColDef}
+         rowSelection="multiple"
+         suppressRowClickSelection={true}
+         pagination={true}
+         paginationPageSize={200}
         />
       </div>
     </div>
   );
 };
 
-export default GridExample;
+export default UpdateStudent;

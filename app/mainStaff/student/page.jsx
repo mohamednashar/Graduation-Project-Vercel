@@ -8,8 +8,8 @@ import {
   Tab,
   TabPanel,
 } from "@material-tailwind/react";
-import GridExample from "./UpdateStudent";
 import DeleteStudent from "./DeleteStudent";
+import UpdateStudent from "./UpdateStudent";
 
 const data = [
   {
@@ -49,7 +49,7 @@ const page = () => {
           {data.map(({ value }) => (
             <TabPanel key={value} value={value}>
               {value === "Add Student" && <AddStudent />}
-              {value === "Update Student" && <GridExample />}
+              {value === "Update Student" && <div className="h-[500px] shadow-md w-[1000px] mx-auto"><UpdateStudent /></div> }
               {value === "Delete Student" && <DeleteStudent />}
             </TabPanel>
           ))}
