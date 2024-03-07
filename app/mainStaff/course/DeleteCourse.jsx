@@ -15,7 +15,7 @@ function DeleteCourse() {
   return (
     <div>
       <div className="flex items-center justify-center gap-5 bg-white w-full md:w-[80%] mx-auto my-4 p-4">
-        <label htmlFor="nationalID">national ID</label>
+        <label htmlFor="nationalID">Course Code</label>
         <input
           type="number"
           id="nationalID"

@@ -11,6 +11,7 @@ import Select from "react-select";
 const labels = [
   "Course Title",
   "Course Description",
+  "Course Code",
   "College",
   "Department",
   "Prof",
@@ -120,7 +121,7 @@ const AddCourse = () => {
           
               renderInput(
                 label,
-               index === 2 || index === 3 || index === 4
+               index === 3|| index === 4 || index === 5
                   ? "select"
                   : "text",
                 label.toLowerCase()

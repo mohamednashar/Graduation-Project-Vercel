@@ -28,21 +28,8 @@ const menuItems = [
   },
 
 
-  { id: 5, label: "Search Student", icon: Icon5, link: "/mainStaff/searchStudent" },
   {
-    id: 6,
-    label: "Search Prof",
-    icon: Icon6,
-    link: "/mainStaff/searchProf",
-  },
-  {
-    id: 7,
-    label: "Search Assistant",
-    icon: Icon7,
-    link: "/mainStaff/searchTeachingAssistant",
-  },
-  {
-    id: 8,
+    id: 5,
     label: "Logout",
     icon: Icon8,
     link: "/mainStaff/searchTeachingAssistant",
