@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/24/outline";
 import ThemeChanger from "./ThemeChanger";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const navigation = [
   { name: "Home", href: "/main", current: true },
@@ -23,6 +24,9 @@ function classNames(...classes) {
 }
 
 export default function Example() {
+  const pathName = usePathname();
+  let activeLink = pathName.slice(0);
+
   return (
     <Disclosure as="nav" className="bg-[white] dark:bg-[#1e1e1e]">
       {({ open }) => (
@@ -62,21 +66,29 @@ export default function Example() {
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4 ">
-                    {navigation.map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-200 dark:bg-[#353535] dark:text-white transition-all duration-200"
-                            : "dark:text-gray-300 dark:hover:bg-[#9dd4d4] dark:hover:text-black hover:bg-gray-100 hover:text-[#f76b8a] transition-all duration-200",
-                          "rounded-md px-3 py-2 text-sm font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
+                    {navigation.map((item) => {
+                      return (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          className={classNames(
+                            "rounded-md px-3 py-2 text-sm font-medium",
+                            (item.name === "Home" && activeLink === "/main") ||
+                              (item.name === "Quiz" &&
+                                activeLink.startsWith("/quizzes")) ||
+                              (item.name === "Meeting" &&
+                                activeLink === "/meeting") ||
+                              (item.name === "Calendar" &&
+                                activeLink === "/calendar")
+                              ? "bg-gray-200 dark:bg-[#353535] dark:text-white transition-all duration-200"
+                              : ""
+                            // Add other classes here if needed
+                          )}
+                        >
+                          {item.name}
+                        </Link>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -131,7 +143,7 @@ export default function Example() {
                       <Menu.Item>
                         {({ active }) => (
                           <Link
-                            href="#"
+                            href="/settings"
                             className={classNames(
                               active ? "bg-gray-100 dark:bg-[#66bfbf] " : "",
                               "block px-4 py-2 text-sm text-gray-700 dark:text-gray-300"
@@ -143,15 +155,15 @@ export default function Example() {
                       </Menu.Item>
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="#"
+                          <Link
+                            href="/login"
                             className={classNames(
                               active ? "bg-gray-100 dark:bg-[#66bfbf] " : "",
                               "block px-4 py-2 text-sm text-gray-700 dark:text-gray-300"
                             )}
                           >
                             Sign out
-                          </a>
+                          </Link>
                         )}
                       </Menu.Item>
                     </Menu.Items>
