@@ -118,20 +118,20 @@ export default function UpdateStudent () {
           <input className='rounded-md p-2 block w-72 border border-solid border-gray-800' type='date' placeholder="Date of birth"/>          
           <input className='rounded-md p-2 block w-72 border border-solid border-gray-800' type='number' placeholder="Phone" />          
           <div className="w-72">
-      <Select  label="Select Version">
+      <Select  label="College">
       
-        <Option>Material Tailwind React</Option>
-        <Option>Material Tailwind Vue</Option>
-        <Option>Material Tailwind Angular</Option>
+        <Option>Option A</Option>
+        <Option>Option B</Option>
+        <Option>Option C</Option>
       </Select>
     </div>                    <div className="w-72">
-      <Select  label="Select Version">
+      <Select  label="Department">
       
-        <Option>Material Tailwind React</Option>
-        <Option>Material Tailwind Vue</Option>
-        <Option>Material Tailwind Angular</Option>
+      <Option>Option A</Option>
+        <Option>Option B</Option>
+        <Option>Option C</Option>
       </Select>
-    </div>          
+    </div>               
           <div className="flex gap-10">
       <Radio name="Gender"  label="Male" />
       <Radio name="Gender"  label="Female"  />

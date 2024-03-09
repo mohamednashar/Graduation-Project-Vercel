@@ -10,7 +10,6 @@ import {
   Icon5,
   Icon6,
   Icon7,
-  Icon8,
 
 } from "./icons";
 
@@ -26,12 +25,26 @@ const menuItems = [
     icon: Icon4,
     link: "/mainStaff/course",
   },
+  {
+    id: 5,
+    label: "Department",
+    icon: Icon5,
+    link: "/mainStaff/department",
+  },
+
+  {
+    id: 6,
+    label: "Group",
+    icon: Icon6,
+    link: "/mainStaff/group",
+  },
+
 
 
   {
-    id: 5,
+    id: 7,
     label: "Logout",
-    icon: Icon8,
+    icon: Icon7,
     link: "/",
   },
 

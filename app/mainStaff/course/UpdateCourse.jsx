@@ -108,34 +108,35 @@ export default function UpdateCourse () {
           <form >
 
         <div className='flex flex-wrap items-center gap-5 '>
-            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="First Name" />          
-            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="Second Name" />          
-            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="Third Name" />          
-            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="Fourth Name" /> 
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'  placeholder="Username" />          
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'  placeholder="mail" />          
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'  placeholder="Address" />          
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800' type='date' placeholder="Date of birth"/>          
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800' type='number' placeholder="Phone" />          
+            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="Course Title" />          
+            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="Course description" />          
+            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="Course Code" />          
+                   
           <div className="w-72">
-      <Select  label="Select Version">
+      <Select  label="College">
       
-        <Option>Material Tailwind React</Option>
-        <Option>Material Tailwind Vue</Option>
-        <Option>Material Tailwind Angular</Option>
+        <Option>Option A</Option>
+        <Option>Option B</Option>
+        <Option>Option C</Option>
       </Select>
     </div>                    <div className="w-72">
-      <Select  label="Select Version">
+      <Select  label="Department">
       
-        <Option>Material Tailwind React</Option>
-        <Option>Material Tailwind Vue</Option>
-        <Option>Material Tailwind Angular</Option>
+      <Option>Option A</Option>
+        <Option>Option B</Option>
+        <Option>Option C</Option>
       </Select>
-    </div>          
-          <div className="flex gap-10">
-      <Radio name="Gender"  label="Male" />
-      <Radio name="Gender"  label="Female"  />
     </div>     
+
+      <div className="w-72">
+      <Select  label="Prof">
+      
+        <Option>Option A</Option>
+        <Option>Option B</Option>
+        <Option>Option C</Option>
+      </Select>
+    </div>                    
+          
        
         </div>         
           </form>

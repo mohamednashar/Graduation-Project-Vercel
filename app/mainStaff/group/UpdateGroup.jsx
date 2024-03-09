@@ -21,7 +21,53 @@ import {
   Option,
 } from "@material-tailwind/react";
 
-export default function UpdateAssistant () {
+export default function UpdateGroup () {
+
+
+  const [formData, setFormData] = useState({
+    college: "",
+    department: "",
+    numberOfGroups: 0,
+    groupNames: []
+  });
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleGroupNamesChange = (event) => {
+    const { name, value } = event.target;
+    const groupNames = [...formData.groupNames];
+    groupNames[parseInt(name)] = value;
+    setFormData({ ...formData, groupNames });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("Form Data:", formData);
+  };
+
+  const renderGroupNamesInputs = ({ open }) => {
+  
+    let inputs = [];
+    for (let i = 0; i < formData.numberOfGroups; i++) {
+      inputs.push(
+        <input
+          key={i}
+          type="text"
+          name={i}
+          value={formData.groupNames[i] || ""}
+          onChange={handleGroupNamesChange}
+          className='rounded-md p-2 block w-72 border border-solid border-gray-800'
+          placeholder={`Group ${i + 1} Name`}
+        />
+      );
+    }
+    
+    return inputs;
+  };
+
   const gridRef = useRef();
   const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
   const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
@@ -54,7 +100,15 @@ export default function UpdateAssistant () {
   
     const [open, setOpen] = useState(false);
    
-    const handleOpen = () => setOpen(!open);
+    const handleOpen = () => 
+    {
+      setOpen(!open);
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        numberOfGroups: 0 // Update numberOfGroups with the new value
+      }));
+  
+    }
     const onSelectionChanged = useCallback(() => {
       const selectedRows = gridRef.current.api.getSelectedRows();
       document.querySelector('#selectedRows').innerHTML =
@@ -103,42 +157,35 @@ export default function UpdateAssistant () {
           unmount: { scale: 0.9, y: -100 },
         }}
       >
-        <DialogHeader>Update Assistant Data</DialogHeader>
+        <DialogHeader>Update Group Data</DialogHeader>
         <DialogBody>
-          <form >
-
-        <div className='flex flex-wrap items-center gap-5 '>
-            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="First Name" />          
-            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="Second Name" />          
-            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="Third Name" />          
-            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="Fourth Name" /> 
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'  placeholder="Username" />          
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'  placeholder="mail" />          
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'  placeholder="Address" />          
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800' type='date' placeholder="Date of birth"/>          
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800' type='number' placeholder="Phone" />          
-          <div className="w-72">
-      <Select  label="College">
+        <form onSubmit={handleSubmit}>
+      <div className='flex flex-wrap items-center gap-5 '>
+        <input
+          type="text"
+          name="college"
+          onChange={handleInputChange}
+          className='rounded-md p-2 block w-72 border border-solid border-gray-800'
+          placeholder="College"
+        />
+        <input
+          type="text"
+          name="department"
+          onChange={handleInputChange}
+          className='rounded-md p-2 block w-72 border border-solid border-gray-800'
+          placeholder="Department"
+        />
+        <input
+          type="number"
+          name="numberOfGroups"
+          onChange={handleInputChange}
+          className='rounded-md p-2 block w-72 border border-solid border-gray-800'
+          placeholder="Number of Groups"
+        />
+        {renderGroupNamesInputs({open})}
       
-        <Option>Option A</Option>
-        <Option>Option B</Option>
-        <Option>Option C</Option>
-      </Select>
-    </div>                    <div className="w-72">
-      <Select  label="Department">
-      
-      <Option>Option A</Option>
-        <Option>Option B</Option>
-        <Option>Option C</Option>
-      </Select>
-    </div>              
-          <div className="flex gap-10">
-      <Radio name="Gender"  label="Male" />
-      <Radio name="Gender"  label="Female"  />
-    </div>     
-       
-        </div>         
-          </form>
+      </div>
+    </form>
         </DialogBody>
         <DialogFooter>
           <Button

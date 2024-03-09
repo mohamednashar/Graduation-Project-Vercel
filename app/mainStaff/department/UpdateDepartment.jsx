@@ -21,7 +21,53 @@ import {
   Option,
 } from "@material-tailwind/react";
 
-export default function UpdateAssistant () {
+export default function UpdateDepartment () {
+
+
+  const [formData, setFormData] = useState({
+    college: "",
+    department: "",
+    numberOfDepartments: 0,
+    DepartmentNames: []
+  });
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleDepartmentNamesChange = (event) => {
+    const { name, value } = event.target;
+    const DepartmentNames = [...formData.DepartmentNames];
+    DepartmentNames[parseInt(name)] = value;
+    setFormData({ ...formData, DepartmentNames });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("Form Data:", formData);
+  };
+
+  const renderDepartmentNamesInputs = ({ open }) => {
+  
+    let inputs = [];
+    for (let i = 0; i < formData.numberOfDepartments; i++) {
+      inputs.push(
+        <input
+          key={i}
+          type="text"
+          name={i}
+          value={formData.DepartmentNames[i] || ""}
+          onChange={handleDepartmentNamesChange}
+          className='rounded-md p-2 block w-72 border border-solid border-gray-800'
+          placeholder={`Department ${i + 1} Name`}
+        />
+      );
+    }
+    
+    return inputs;
+  };
+
   const gridRef = useRef();
   const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
   const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
@@ -54,7 +100,15 @@ export default function UpdateAssistant () {
   
     const [open, setOpen] = useState(false);
    
-    const handleOpen = () => setOpen(!open);
+    const handleOpen = () => 
+    {
+      setOpen(!open);
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        numberOfDepartments: 0 // Update numberOfDepartments with the new value
+      }));
+  
+    }
     const onSelectionChanged = useCallback(() => {
       const selectedRows = gridRef.current.api.getSelectedRows();
       document.querySelector('#selectedRows').innerHTML =
@@ -103,42 +157,29 @@ export default function UpdateAssistant () {
           unmount: { scale: 0.9, y: -100 },
         }}
       >
-        <DialogHeader>Update Assistant Data</DialogHeader>
+        <DialogHeader>Update Department Data</DialogHeader>
         <DialogBody>
-          <form >
-
-        <div className='flex flex-wrap items-center gap-5 '>
-            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="First Name" />          
-            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="Second Name" />          
-            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="Third Name" />          
-            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="Fourth Name" /> 
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'  placeholder="Username" />          
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'  placeholder="mail" />          
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'  placeholder="Address" />          
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800' type='date' placeholder="Date of birth"/>          
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800' type='number' placeholder="Phone" />          
-          <div className="w-72">
-      <Select  label="College">
+        <form onSubmit={handleSubmit}>
+      <div className='flex flex-wrap items-center gap-5 '>
+        <input
+          type="text"
+          name="college"
+          onChange={handleInputChange}
+          className='rounded-md p-2 block w-72 border border-solid border-gray-800'
+          placeholder="College"
+        />
       
-        <Option>Option A</Option>
-        <Option>Option B</Option>
-        <Option>Option C</Option>
-      </Select>
-    </div>                    <div className="w-72">
-      <Select  label="Department">
+        <input
+          type="number"
+          name="numberOfDepartments"
+          onChange={handleInputChange}
+          className='rounded-md p-2 block w-72 border border-solid border-gray-800'
+          placeholder="Number of Departments"
+        />
+        {renderDepartmentNamesInputs({open})}
       
-      <Option>Option A</Option>
-        <Option>Option B</Option>
-        <Option>Option C</Option>
-      </Select>
-    </div>              
-          <div className="flex gap-10">
-      <Radio name="Gender"  label="Male" />
-      <Radio name="Gender"  label="Female"  />
-    </div>     
-       
-        </div>         
-          </form>
+      </div>
+    </form>
         </DialogBody>
         <DialogFooter>
           <Button
