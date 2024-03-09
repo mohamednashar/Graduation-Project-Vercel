@@ -32,7 +32,7 @@ const menuItems = [
     id: 5,
     label: "Logout",
     icon: Icon8,
-    link: "/mainStaff/searchTeachingAssistant",
+    link: "/",
   },
 
  

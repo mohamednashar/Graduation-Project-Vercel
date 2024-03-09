@@ -17,8 +17,8 @@ const data = [
     value: "Add Assistant",
   },
   {
-    label: "Update Assistant",
-    value: "Update Assistant",
+    label: "Show Assistants",
+    value: "Show Assistants",
   },
   {
     label: "Delete Assistant",
@@ -36,7 +36,7 @@ const page = () => {
   return (
     <div>
       <Tabs value={defaultTabValue}>
-        <TabsHeader className="mx-40 bg-gray-300 border-2">
+        <TabsHeader className="w-full md:w-[90%] mx-auto bg-gray-300 border-2">
           {data.map(({ label, value }) => (
             <Tab key={value} value={value}>
               {label}
@@ -49,7 +49,7 @@ const page = () => {
           {data.map(({ value }) => (
             <TabPanel key={value} value={value}>
               {value === "Add Assistant" && <AddAssistant />}
-              {value === "Update Assistant" && <div className="h-[500px] shadow-md w-full md:w-[80%] mx-auto"><UpdateAssistant /></div> }
+              {value === "Show Assistants" && <div className="h-[700px] shadow-md w-full md:w-[90%] mx-auto"><UpdateAssistant /></div> }
               {value === "Delete Assistant" && <DeleteAssistant />}
             </TabPanel>
           ))}

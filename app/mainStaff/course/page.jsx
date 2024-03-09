@@ -17,8 +17,8 @@ const data = [
     value: "Add Course",
   },
   {
-    label: "Update Course",
-    value: "Update Course",
+    label: "Show Courses",
+    value: "Show Courses",
   },
   {
     label: "Delete Course",
@@ -36,7 +36,7 @@ const page = () => {
   return (
     <div>
       <Tabs value={defaultTabValue}>
-        <TabsHeader className="mx-40 bg-gray-300 border-2">
+        <TabsHeader className="w-full md:w-[90%] mx-auto bg-gray-300 border-2">
           {data.map(({ label, value }) => (
             <Tab key={value} value={value}>
               {label}
@@ -49,7 +49,7 @@ const page = () => {
           {data.map(({ value }) => (
             <TabPanel key={value} value={value}>
               {value === "Add Course" && <AddCourse />}
-              {value === "Update Course" && <div className="h-[500px] shadow-md w-full md:w-[80%] mx-auto"><UpdateCourse /></div> }
+              {value === "Show Courses" && <div className="h-[700px] shadow-md w-full md:w-[90%] mx-auto"><UpdateCourse /></div> }
               {value === "Delete Course" && <DeleteCourse />}
             </TabPanel>
           ))}

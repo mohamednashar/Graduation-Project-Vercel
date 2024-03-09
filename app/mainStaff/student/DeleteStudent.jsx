@@ -14,7 +14,7 @@ function DeleteStudent() {
   };
   return (
     <div>
-      <div className="flex items-center justify-center gap-5 bg-white w-full md:w-[80%] mx-auto my-4 p-4">
+      <div className="flex items-center justify-center gap-5 bg-white w-full md:w-[90%] mx-auto my-4 p-4">
         <label htmlFor="nationalID">national ID</label>
         <input
           type="number"
@@ -23,7 +23,7 @@ function DeleteStudent() {
         />
       </div>
 
-      <div className=" w-full md:w-[80%] mx-auto flex items-center justify-center">
+      <div className=" w-full md:w-[90%] mx-auto flex items-center justify-center">
         <button
           onClick={handleOpenDeleteStudent}
           className="p-2 rounded-md bg-red-600 hover:bg-red-800 mx-w-[500px] text-white"
