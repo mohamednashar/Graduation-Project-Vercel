@@ -53,7 +53,7 @@ export function CardDefault({ courseTitle, courseImg, courseDescription }) {
           <div className="flex justify-end mt-8 sm:mt-auto ">
             <Link
               href={`courses/${courseTitle}`}
-              className="group flex w-44 cursor-pointer select-none items-center justify-center rounded-full bg-[#66bfbf] px-6 py-2 text-white dark:text-black transition-all duration-200 hover:bg-[#f76b8a]"
+              className="group flex w-44 cursor-pointer select-none items-center justify-center rounded-full bg-[#66bfbf] px-6 py-2 text-white dark:text-black transition-all duration-200 hover:bg-[#4e9999]"
             >
               <div className="flex items-center justify-center w-full py-1 font-semibold text-center rounded group">
                 Open Course{" "}

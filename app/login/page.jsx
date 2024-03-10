@@ -110,7 +110,7 @@ const Login = () => {
               <div className="text-sm">
                 <a
                   href="#"
-                  className="font-semibold text-[#66bfbf] hover:text-[#f76b8a] transition-all duration-200"
+                  className="font-semibold text-[#66bfbf] hover:text-[#4e9999] transition-all duration-200"
                 >
                   Forgot password?
                 </a>
@@ -134,7 +134,7 @@ const Login = () => {
               
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-[#66bfbf] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#f76b8a] transition-all duration-200 "
+                className="flex w-full justify-center rounded-md bg-[#66bfbf] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#4e9999] transition-all duration-200 "
               >
                 Log in
               </button>

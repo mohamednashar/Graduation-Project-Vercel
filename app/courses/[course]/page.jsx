@@ -11,6 +11,7 @@ import {
 } from "@material-tailwind/react";
 import "animate.css";
 import Spin from "@/app/components/Spin";
+import Notes from "@/app/components/Notes";
 
 const videos = [
   {
@@ -179,7 +180,7 @@ const VideoSidebar = ({ onSelectVideo, isOpen, toggleSidebar }) => {
         <div className="p-4">
           <div className="flex mb-4 border-b-2 pb-2 items-center gap-4">
             <button
-              className="bg-[#66bfbf] hover:bg-[#f76b8a] text-white font-bold py-2 px-3 rounded-xl transition-all duration-500"
+              className="bg-[#66bfbf] hover:bg-[#4e9999] text-white font-bold py-2 px-3 rounded-xl transition-all duration-500"
               onClick={handleOpen}
               variant="gradient"
             >
@@ -310,12 +311,14 @@ const IndexPage = () => {
             onClick={() => {
               handleDownload(currentVideo.slideUrl);
             }}
-            className="bg-[#66bfbf] hover:bg-[#f76b8a] text-white font-bold py-2 px-3 rounded  transition-all duration-500"
+            className="bg-[#66bfbf] hover:bg-[#4e9999] text-white font-bold py-2 px-3 rounded  transition-all duration-500"
           >
             Download Slide
           </button>
+        
 
         </div>
+        <Notes/>
 
         <button
           onClick={toggleSidebar}

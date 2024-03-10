@@ -21,7 +21,7 @@ const Slider = () => {
       slidesPerView={1}
     >
       <div
-        className="swiper-button-prev !text-[#66bfbf] hover:!text-[#f76b8a] transition-all duration-200"
+        className="swiper-button-prev !text-[#66bfbf] hover:!text-[#4e9999] transition-all duration-200"
         ref={(node) => setPrevEl(node)}
       >
         <FontAwesomeIcon
@@ -31,7 +31,7 @@ const Slider = () => {
       </div>
 
       <div
-        className="swiper-button-next !text-[#66bfbf] hover:!text-[#f76b8a] transition-all duration-200"
+        className="swiper-button-next !text-[#66bfbf] hover:!text-[#4e9999] transition-all duration-200"
         ref={(node) => setNextEl(node)}
       >
         <FontAwesomeIcon
