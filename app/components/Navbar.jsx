@@ -4,8 +4,6 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
   BellIcon,
-  SunIcon,
-  MoonIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import ThemeChanger from "./ThemeChanger";
@@ -17,6 +15,7 @@ const navigation = [
   { name: "Quiz", href: "/quizzes", current: false },
   { name: "Meeting", href: "/meeting", current: false },
   { name: "Calendar", href: "/calendar", current: false },
+  { name: "Assignments", href: "/assignments", current: false },
 ];
 
 function classNames(...classes) {
@@ -74,6 +73,7 @@ export default function Example() {
                           className={classNames(
                             "rounded-md px-3 py-2 text-sm font-medium",
                             (item.name === "Home" && activeLink === "/main") ||
+                            (item.name === "Assignments" && activeLink === "/assignments")||
                               (item.name === "Quiz" &&
                                 activeLink.startsWith("/quizzes")) ||
                               (item.name === "Meeting" &&
