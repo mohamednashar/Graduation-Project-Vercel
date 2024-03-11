@@ -44,7 +44,6 @@ const page = () => {
           ))}
         </TabsHeader>
         <TabsBody
-          animate={tabAnimate}
         >
           {data.map(({ value }) => (
             <TabPanel key={value} value={value}>

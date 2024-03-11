@@ -28,11 +28,7 @@ const data = [
 
 const page = () => {
   const defaultTabValue = data[0].value;
-  const tabAnimate = {
-    initial: { y: -50, scale: 0.7 },
-    mount: { y: 0, scale: 1 },
-    unmount: { y: 50, scale: 0.7 },
-  };
+
   return (
     <div>
       <Tabs value={defaultTabValue}>
@@ -44,7 +40,6 @@ const page = () => {
           ))}
         </TabsHeader>
         <TabsBody
-          animate={tabAnimate}
         >
           {data.map(({ value }) => (
             <TabPanel className="dark:text-gray-100" key={value} value={value}>
