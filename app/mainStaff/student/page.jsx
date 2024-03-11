@@ -36,7 +36,7 @@ const page = () => {
   return (
     <div>
       <Tabs value={defaultTabValue}>
-        <TabsHeader className="w-full md:w-[90%] mx-auto bg-gray-300 border-2">
+        <TabsHeader className="w-full md:w-[90%] mx-auto bg-gray-300 dark:bg-[#1e1e1e] ">
           {data.map(({ label, value }) => (
             <Tab key={value} value={value}>
               {label}
@@ -47,7 +47,7 @@ const page = () => {
           animate={tabAnimate}
         >
           {data.map(({ value }) => (
-            <TabPanel key={value} value={value}>
+            <TabPanel className="dark:text-gray-100" key={value} value={value}>
               {value === "Add Student" && <AddStudent />}
               {value === "Show Students" && <div className="h-[700px] shadow-md w-full md:w-[90%] mx-auto"><UpdateStudent /></div> }
               {value === "Delete Student" && <DeleteStudent />}

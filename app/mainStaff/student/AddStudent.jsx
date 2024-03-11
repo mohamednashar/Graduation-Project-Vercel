@@ -150,7 +150,7 @@ const AddStudent = () => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col w-full md:w-[90%] mx-auto">
-      <div className="bg-white  p-5 rounded-lg shadow-md flex flex-wrap justify-center lg:justify-between">
+      <div className="bg-white dark:bg-[#1e1e1e] p-5 rounded-lg shadow-md flex flex-wrap justify-center lg:justify-between">
         {labels.map((label, index) => (
           <div key={index} className="">
             {index === labels.length - 1 ? (

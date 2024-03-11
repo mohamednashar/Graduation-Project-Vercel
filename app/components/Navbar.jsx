@@ -71,7 +71,7 @@ export default function Example() {
                           key={item.name}
                           href={item.href}
                           className={classNames(
-                            "rounded-md px-3 py-2 text-sm font-medium",
+                            "rounded-md px-3 py-2 text-sm font-medium hover:text-[#66bfbf] transition-all duration-200 hover:scale-105",
                             (item.name === "Home" && activeLink === "/main") ||
                             (item.name === "Assignments" && activeLink === "/assignments")||
                               (item.name === "Quiz" &&
@@ -80,7 +80,7 @@ export default function Example() {
                                 activeLink === "/meeting") ||
                               (item.name === "Calendar" &&
                                 activeLink === "/calendar")
-                              ? "bg-gray-200 dark:bg-[#353535] dark:text-white transition-all duration-200"
+                              ? "bg-gray-200 dark:bg-[#353535] dark:text-white transition-all duration-200 "
                               : ""
                             // Add other classes here if needed
                           )}
@@ -156,7 +156,7 @@ export default function Example() {
                       <Menu.Item>
                         {({ active }) => (
                           <Link
-                            href="/login"
+                            href="/"
                             className={classNames(
                               active ? "bg-gray-100 dark:bg-[#66bfbf] " : "",
                               "block px-4 py-2 text-sm text-gray-700 dark:text-gray-300"

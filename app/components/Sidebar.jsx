@@ -12,6 +12,7 @@ import {
   Icon7,
 
 } from "./icons";
+import ThemeChanger from "./ThemeChanger";
 
 
 
@@ -56,7 +57,7 @@ function Sidebar() {
   const [toggleCollapse, setToggleCollapse] = useState(false);
 
   const wrapperClasses =
-    "h-screen px-4 pb-4 bg-white flex justify-between flex-col  " +
+    "h-screen px-4 pb-4 bg-white flex justify-between flex-col dark:bg-[#1e1e1e]  " +
     (toggleCollapse ? "w-24" : "w-80");
 
 
@@ -112,8 +113,11 @@ function Sidebar() {
               <p className="text-[#265E73] font-semibold text-sm">
                 Education Platform
               </p>
+              
             )}
           </div>
+                        <ThemeChanger/>
+
           
         </div>
         

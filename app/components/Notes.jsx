@@ -31,8 +31,8 @@ const Notes = () => {
   const quillRef = React.useRef();
 
   return (
-    <div className="container mx-auto my-8 p-8 bg-white max-w-3xl rounded-lg shadow-md">
-      <ReactQuill ref={quillRef} value={note} onChange={handleNoteChange} modules={quillModules} />
+    <div className="container mx-auto my-8 p-8 bg-white dark:bg-[#1e1e1e] max-w-3xl rounded-lg shadow-md">
+      <ReactQuill className="ql-editor !text-white" ref={quillRef} value={note} onChange={handleNoteChange} modules={quillModules} />
 
       <div className="mt-8">
         <Dropzone onDrop={handlePictureDrop}>

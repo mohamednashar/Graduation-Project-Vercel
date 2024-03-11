@@ -78,7 +78,7 @@ const QuizComponent = () => {
   };
 
   return (
-    <div className="mt-5 flex items-center justify-center bg-gray-100">
+    <div className="mt-5 flex items-center justify-center bg-gray-100 dark:bg-[#121212]">
       <div className="w-full max-w-xl md:w-3/4">
         {showResult ? (
           <div>
@@ -101,7 +101,7 @@ const QuizComponent = () => {
               </p>
             </div>
             {quizData.map((question, index) => (
-  <div key={index} className="mb-8 p-4 bg-white rounded-lg shadow-md">
+  <div key={index} className="mb-8 p-4 bg-white dark:bg-[#1e1e1e] rounded-lg shadow-md">
     <div className="mb-4">
       <p className="text-lg break-words">
         {index + 1}. {question.question}
@@ -112,7 +112,7 @@ const QuizComponent = () => {
         <label
           key={optionIndex}
           htmlFor={`option_${index}_${optionIndex}`}
-          className="cursor-pointer transition-all duration-200 ease-in-out hover:bg-gray-100 rounded-md p-2 block"
+          className="cursor-pointer transition-all duration-200 ease-in-out hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md p-2 block"
         >
           <li className="flex items-center">
             <input
@@ -135,7 +135,7 @@ const QuizComponent = () => {
               <Button
                 ripple={true}
                 onClick={handleSubmit}
-                className="bg-green-500 text-white px-4 py-2 rounded-md text-md capitalize"
+                className="bg-green-500 text-white px-6 py-2 rounded-md text-md capitalize hover:bg-green-600 transition-all duration-200"
               >
                 Submit
               </Button>
