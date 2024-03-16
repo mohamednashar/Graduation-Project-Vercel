@@ -6,8 +6,7 @@ function AssignmentProf() {
 
   return (
     <div className="">
-      <h1 className="text-2xl font-bold  text-center text-[#66bfbf] my-10"> choose which college you want to make assignment</h1>
-      <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  gap-4">
+      <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 p-4 gap-5">
       
           <AssignmentCardProf  subject={"DatabAse"} college={"Engineering"} department ={"Control"}  group={"1"} code={"data-13"}/>
       

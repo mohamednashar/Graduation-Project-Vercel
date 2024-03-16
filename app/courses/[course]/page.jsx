@@ -12,6 +12,7 @@ import {
 import "animate.css";
 import Spin from "@/app/components/Spin";
 import Notes from "@/app/components/Notes";
+import CommentSection from "@/app/components/CommentSection";
 
 const videos = [
   {
@@ -319,6 +320,7 @@ const IndexPage = () => {
 
         </div>
         <Notes/>
+        <CommentSection/>
 
         <button
           onClick={toggleSidebar}

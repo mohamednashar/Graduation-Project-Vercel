@@ -74,10 +74,10 @@ const TABLE_ROWS = [
  
 export default function TableAssignments() {
   return (
-    <Card className="h-full w-full dark:bg-[#121212]">
+    <Card className="h-full w-[95%] dark:bg-[#121212] mt-4 mx-auto">
       
-      <CardBody >
-        <table className="w-full min-w-max table-auto text-left  ">
+      <CardBody className="p-0">
+        <table className="w-full min-w-max text-left ">
           
 
           
@@ -86,7 +86,7 @@ export default function TableAssignments() {
               {TABLE_HEAD.map((head) => (
                 <th
                   key={head}
-                  className="border-y border-blue-gray-100 bg-blue-gray-50/50 dark:bg-[#3f3f3f] p-4"
+                  className="border-b border-gray-200 bg-gray-200  dark:bg-[#3f3f3f] p-4"
                 >
                   <Typography
                     variant="small"
