@@ -1,8 +1,13 @@
 import React from 'react'
+import AssignmentStudent from './AssignmentStudent'
+import AssignmentProf from './AssignmentProf'
 
 const page = () => {
   return (
-    <div>page</div>
+    <div className="mt-5">
+      {/* <AssignmentStudent /> */}
+      <AssignmentProf/>
+    </div>
   )
 }
 

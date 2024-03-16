@@ -21,27 +21,71 @@ import {
   Option,
 } from "@material-tailwind/react";
 
+
+
+var filterParams = {
+  maxNumConditions: 1,
+  comparator: (filterLocalDateAtMidnight, cellValue) => {
+    var dateAsString = cellValue;
+    if (dateAsString == null) return -1;
+    var dateParts = dateAsString.split('/');
+    var cellDate = new Date(
+      Number(dateParts[2]),
+      Number(dateParts[1]) - 1,
+      Number(dateParts[0])
+    );
+    if (filterLocalDateAtMidnight.getTime() === cellDate.getTime()) {
+      return 0;
+    }
+    if (cellDate < filterLocalDateAtMidnight) {
+      return -1;
+    }
+    if (cellDate > filterLocalDateAtMidnight) {
+      return 1;
+    }
+    return 0;
+  },
+};
+
 export default function UpdateProf () {
-  const gridRef = useRef();
   const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
   const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
   const [rowData, setRowData] = useState();
   const [columnDefs, setColumnDefs] = useState([
-    { field: 'athlete', minWidth: 150 },
-    { field: 'age', maxWidth: 90 },
-    { field: 'country', minWidth: 150 },
-    { field: 'year', maxWidth: 90 },
-    { field: 'date', minWidth: 150 },
-    { field: 'sport', minWidth: 150 },
-    { field: 'gold' },
-    { field: 'silver' },
-    { field: 'bronze' },
-    { field: 'total' },
+    { field: 'athlete' },
+    {
+      field: 'country',
+      filterParams: {
+        filterOptions: ['contains', 'startsWith', 'endsWith'],
+        defaultOption: 'startsWith',
+      },
+    },
+    {
+      field: 'sport',
+      filterParams: {
+        maxNumConditions: 10,
+      },
+    },
+    {
+      field: 'age',
+      filter: 'agNumberColumnFilter',
+      filterParams: {
+        numAlwaysVisibleConditions: 2,
+        defaultJoinOperator: 'OR',
+      },
+      maxWidth: 100,
+    },
+    {
+      field: 'date',
+      filter: 'agDateColumnFilter',
+      filterParams: filterParams,
+    },
   ]);
   const defaultColDef = useMemo(() => {
     return {
       flex: 1,
-      minWidth: 100,
+      minWidth: 150,
+      filter: true,
     };
   }, []);
 
@@ -50,6 +94,7 @@ export default function UpdateProf () {
       .then((resp) => resp.json())
       .then((data) => setRowData(data));
   }, []);
+  const gridRef = useRef();  
   
   
     const [open, setOpen] = useState(false);
