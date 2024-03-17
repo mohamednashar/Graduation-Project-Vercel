@@ -271,6 +271,10 @@ const IndexPage = () => {
   };
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [showNotes, setShowNotes] = useState(false); // State to manage the visibility of the Notes component
+  const toggleShowNotes = () => {
+    setShowNotes(!showNotes);
+  };
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -307,7 +311,7 @@ const IndexPage = () => {
         } `}
       >
         <VideoPlayer videoSrc={currentVideo.src} isOpen={isSidebarOpen} />
-        <div className="flex items-center gap-8 flex-wrap justify-center mt-5">
+        <div className="flex items-center gap-8 flex-wrap justify-center mt-5 mb-5">
           <button
             onClick={() => {
               handleDownload(currentVideo.slideUrl);
@@ -316,10 +320,17 @@ const IndexPage = () => {
           >
             Download Slide
           </button>
+
+          <button
+            onClick={toggleShowNotes}
+            className="bg-[#66bfbf] hover:bg-[#4e9999] text-white font-bold py-2 px-3 rounded transition-all duration-500"
+          >
+            {showNotes ? "Remove Note" : "Add Note"}
+          </button>
         
 
         </div>
-        <Notes/>
+        {showNotes &&  <Notes/>}
         <CommentSection/>
 
         <button

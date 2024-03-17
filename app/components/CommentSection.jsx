@@ -9,12 +9,19 @@ const CommentSection = () => {
       content: 'This is the first comment.',
       replies: [],
     },
+    {
+      id: 2,
+      author: { name: 'Alice Smith', avatar: 'https://via.placeholder.com/150' },
+      content: 'Nice post!',
+      replies: [],
+    },
     // Add more comments as needed
   ]);
 
   const [newComment, setNewComment] = useState('');
-  const [newReply, setNewReply] = useState('');
-  const [replyTo, setReplyTo] = useState(null);
+  const [replyInputs, setReplyInputs] = useState({});
+  const [editComment, setEditComment] = useState({ commentId: null, replyIndex: null });
+  const [editedContent, setEditedContent] = useState('');
 
   const handleAddComment = () => {
     if (newComment.trim() !== '') {
@@ -29,29 +36,70 @@ const CommentSection = () => {
     }
   };
 
-  const handleAddReply = (commentIndex) => {
-    if (newReply.trim() !== '') {
-      const updatedComments = [...comments];
-      updatedComments[commentIndex].replies.push({ content: newReply, author: 'You' });
+  const handleEditComment = (commentId, replyIndex) => {
+    setEditComment({ commentId, replyIndex });
+    const commentToEdit = comments.find(comment => comment.id === commentId);
+    const replyToEdit = commentToEdit.replies[replyIndex];
+    setEditedContent(replyToEdit.content);
+  };
+
+  const handleSaveEdit = () => {
+    const updatedComments = comments.map(comment => {
+      if (comment.id === editComment.commentId) {
+        const updatedReplies = comment.replies.map((reply, index) => {
+          if (index === editComment.replyIndex) {
+            return { ...reply, content: editedContent };
+          }
+          return reply;
+        });
+        return { ...comment, replies: updatedReplies };
+      }
+      return comment;
+    });
+    setComments(updatedComments);
+    setEditComment({ commentId: null, replyIndex: null });
+    setEditedContent('');
+  };
+
+  const handleAddReply = (commentId) => {
+    if (replyInputs[commentId] && replyInputs[commentId].trim() !== '') {
+      const updatedComments = comments.map(comment => {
+        if (comment.id === commentId) {
+          return {
+            ...comment,
+            replies: [
+              ...comment.replies,
+              { content: replyInputs[commentId], author: 'You' }
+            ]
+          };
+        }
+        return comment;
+      });
       setComments(updatedComments);
-      setNewReply('');
+      setReplyInputs({ ...replyInputs, [commentId]: '' });
     }
   };
-  
 
   const handleDeleteComment = (id) => {
-    const updatedComments = comments.filter((comment) => comment.id !== id);
+    const updatedComments = comments.filter(comment => comment.id !== id);
     setComments(updatedComments);
   };
 
-  const handleDeleteReply = (commentIndex, replyIndex) => {
-    const updatedComments = [...comments];
-    updatedComments[commentIndex].replies.splice(replyIndex, 1);
+  const handleDeleteReply = (commentId, replyIndex) => {
+    const updatedComments = comments.map(comment => {
+      if (comment.id === commentId) {
+        return {
+          ...comment,
+          replies: comment.replies.filter((_, index) => index !== replyIndex)
+        };
+      }
+      return comment;
+    });
     setComments(updatedComments);
   };
 
   return (
-    <div className="space-y-4 ">
+    <div className="space-y-8">
       <div className="flex items-center space-x-4">
         <Avatar src="https://via.placeholder.com/150" />
         <input
@@ -71,38 +119,60 @@ const CommentSection = () => {
       {comments.map((comment, commentIndex) => (
         <div key={comment.id} className="flex space-x-4">
           <Avatar src={comment.author.avatar} />
-          <div className="flex-1  rounded-lg p-4 bg-white mb-16 ">
+          <div className="flex-1 rounded-lg p-4 bg-white">
             <div className="flex items-center justify-between mb-2">
               <p className="font-semibold">{comment.author.name}</p>
-              <button onClick={() => handleDeleteComment(comment.id)} className="text-gray-500 hover:text-red-500">
-              Delete
-              </button>
+              <div>
+                {comment.author.name === 'You' && (
+                  <button onClick={() => handleDeleteComment(comment.id)} className="text-gray-500 hover:text-red-500">
+                    Delete
+                  </button>
+                )}
+              </div>
             </div>
             <p>{comment.content}</p>
             {comment.replies.map((reply, replyIndex) => (
-              <div key={replyIndex} className="bg-gray-50 rounded-lg p-2 mt-2">
-                <div className="flex items-center justify-between mb-1">
+              <div key={replyIndex} className="bg-gray-200 rounded-lg p-2 mt-2 flex items-start justify-between">
+                <div>
                   <p className="font-semibold">{reply.author}</p>
-                  <button
-                    onClick={() => handleDeleteReply(commentIndex, replyIndex)}
-                    className="text-gray-500 hover:text-red-500"
-                  >
-                    Delete
-                  </button>
+                  {reply.author === 'You' && editComment.commentId === comment.id && editComment.replyIndex === replyIndex ? (
+                    <>
+                      <input
+                        type="text"
+                        value={editedContent}
+                        onChange={(e) => setEditedContent(e.target.value)}
+                        className="border rounded-lg py-2 px-3 outline-none focus:border-blue-500"
+                      />
+                      <button onClick={handleSaveEdit} className="text-blue-500 hover:text-blue-700 ml-2">
+                        Save
+                      </button>
+                    </>
+                  ) : (
+                    <p>{reply.content}</p>
+                  )}
                 </div>
-                <p>{reply.content}</p>
+                {reply.author === 'You' && (
+                  <div className="flex items-center">
+                    <button onClick={() => handleEditComment(comment.id, replyIndex)} className="text-blue-500 hover:text-blue-700 mr-2">
+                      Edit
+                    </button>
+                    <button onClick={() => handleDeleteReply(comment.id, replyIndex)} className="text-gray-500 hover:text-red-500">
+                      Delete
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
             <div className="flex items-center space-x-4 mt-2">
               <input
                 type="text"
                 placeholder="Reply..."
-                value={newReply}
-                onChange={(e) => setNewReply(e.target.value)}
+                value={replyInputs[comment.id] || ''}
+                onChange={(e) => setReplyInputs({ ...replyInputs, [comment.id]: e.target.value })}
                 className="border rounded-lg py-2 px-3 w-full outline-none focus:border-blue-500"
               />
               <button
-                onClick={() => handleAddReply(commentIndex)}
+                onClick={() => handleAddReply(comment.id)}
                 className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
               >
                 Reply
