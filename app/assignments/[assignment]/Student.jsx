@@ -60,6 +60,9 @@ function Student({ params }) {
             Assignment Deadline:{" "}
             <span className="font-normal  ">30/7/2024</span>
           </h1>
+          <h1 className="text-md font-semibold">
+            Points: <span className="font-normal">30</span>
+          </h1>
           <h1 className="text-md font-semibold">Assignment Details:</h1>
           
           <p className={`text-gray-800 ${isTruncated ? 'truncate' : ''}`}>
