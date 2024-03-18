@@ -1,10 +1,15 @@
 "use client";
-import { Inter } from "next/font/google";
+import { Inter,AR_One_Sans,Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import { usePathname } from "next/navigation";
 import ThemeHandler from "./components/ThemeHandler";
 const inter = Inter({ subsets: ["latin"] });
+
+const arsans = AR_One_Sans({ subsets: ["latin"],weight:['400','700'] });
+
+const poppins = Poppins({ subsets: ["latin"],weight:['400','500','600','700'] });
+
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
@@ -16,7 +21,7 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="images/icon.jpg"></link>
       </head>
       <body
-        className={`${inter.className} bg-gray-100 dark:bg-[#121212] overflow-x-hidden`}
+        className={`${poppins.className} bg-gray-100 dark:bg-[#121212] overflow-x-hidden`}
       >
         <ThemeHandler>
         {(!pathname.startsWith("/mainStaff") && pathname !== "/") && <Navbar />}

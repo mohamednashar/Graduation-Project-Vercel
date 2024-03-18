@@ -209,7 +209,7 @@ const VideoSidebar = ({ onSelectVideo, isOpen, toggleSidebar }) => {
             {videos.map((video) => (
               <Button
                 key={video.id}
-                className={`bg-gray-200 text-black  cursor-pointer p-2 dark:text-gray-300 rounded-xl last:border-none transition-all duration-200 mb-6 ${
+                className={`bg-gray-200 text-black  cursor-pointer p-2 dark:text-gray-300 rounded-xl last:border-none transition-all duration-200 mb-6 font-poppins font-semibold ${
                   currentVid.id === video.id
                     ? "bg-[#66bfbf] text-white dark:bg-[#66bfbf] dark:text-black "
                     : "dark:bg-[#353535]"

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Avatar } from '@material-tailwind/react';
+import { Avatar, Input } from '@material-tailwind/react';
 
 const CommentSection = () => {
   const [comments, setComments] = useState([
@@ -23,18 +23,21 @@ const CommentSection = () => {
   const [editComment, setEditComment] = useState({ commentId: null, replyIndex: null });
   const [editedContent, setEditedContent] = useState('');
 
-  const handleAddComment = () => {
-    if (newComment.trim() !== '') {
-      const comment = {
-        id: comments.length + 1,
-        author: { name: 'You', avatar: 'https://via.placeholder.com/150' },
-        content: newComment,
-        replies: [],
-      };
-      setComments([...comments, comment]);
-      setNewComment('');
-    }
-  };
+const handleAddComment = () => {
+  if (newComment.trim() !== '') {
+    const comment = {
+      id: comments.length + 1,
+      author: { name: 'You', avatar: 'https://via.placeholder.com/150' },
+      content: newComment,
+      replies: [],
+    };
+    // Prepend the new comment to the comments array
+    setComments([comment, ...comments]);
+    setNewComment('');
+  }
+};
+
+  
 
   const handleEditComment = (commentId, replyIndex) => {
     setEditComment({ commentId, replyIndex });
@@ -99,15 +102,16 @@ const CommentSection = () => {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center space-x-4">
+    <div className="space-y-8 mb-10">
+      <div className="flex items-center space-x-4 ">
         <Avatar src="https://via.placeholder.com/150" />
-        <input
+        <Input
+        variant="standard"
           type="text"
-          placeholder="Write a comment..."
+          label='Write a comment'
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
-          className="border rounded-lg py-2 px-3 w-full outline-none focus:border-blue-500"
+          className=" border-gray-300 py-2 px-3 w-full outline-none focus:border-blue-500 bg-gray-100"
         />
         <button
           onClick={handleAddComment}
@@ -121,7 +125,7 @@ const CommentSection = () => {
           <Avatar src={comment.author.avatar} />
           <div className="flex-1 rounded-lg p-4 bg-white">
             <div className="flex items-center justify-between mb-2">
-              <p className="font-semibold">{comment.author.name}</p>
+              <p className="font-semibold bg-gray-100 p-2 rounded-xl border-b-2">@{comment.author.name}</p>
               <div>
                 {comment.author.name === 'You' && (
                   <button onClick={() => handleDeleteComment(comment.id)} className="text-gray-500 hover:text-red-500">
@@ -164,12 +168,13 @@ const CommentSection = () => {
               </div>
             ))}
             <div className="flex items-center space-x-4 mt-2">
-              <input
+              <Input
                 type="text"
+                variant='standard'
                 placeholder="Reply..."
                 value={replyInputs[comment.id] || ''}
                 onChange={(e) => setReplyInputs({ ...replyInputs, [comment.id]: e.target.value })}
-                className="border rounded-lg py-2 px-3 w-full outline-none focus:border-blue-500"
+                className=" py-2 px-3 w-full outline-none focus:border-blue-500"
               />
               <button
                 onClick={() => handleAddReply(comment.id)}
