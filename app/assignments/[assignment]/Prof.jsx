@@ -5,9 +5,11 @@ import TableAssignments from './TableAssignment'
 import { Button, Dialog, DialogBody, DialogFooter, DialogHeader } from '@material-tailwind/react';
 
 function Prof({params}) {
-  const [open, setOpen] = useState(false);
+  const [openAddAssignment, setOpenAddAssignment] = useState(false);
  
-  const handleOpen = () => setOpen(!open);
+  const handleOpenAddAssignment = () => setOpenAddAssignment(!openAddAssignment);
+
+  
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -19,25 +21,26 @@ function Prof({params}) {
       <TableAssignments/>
 
     <div className='flex items-center justify-center my-10'>
-        <button onClick={handleOpen} className="bg-[#66bfbf] text-white px-4 py-2 rounded-md font-semibold hover:bg-[#529d9d] transition-all duration-200">
+        <button onClick={handleOpenAddAssignment} className="bg-[#66bfbf] text-white px-4 py-2 rounded-md font-semibold hover:bg-[#529d9d] transition-all duration-200">
           Add new Assignment
         </button>
     </div>
-      <Dialog open={open}
-        handler={handleOpen}
+      <Dialog open={openAddAssignment}
+        handler={handleOpenAddAssignment}
         animate={{
           mount: { scale: 1, y: 0 },
           unmount: { scale: 0.9, y: -100 },
-        }}>
+        }}
+        className='dark:bg-[#282828]'>
 
-<DialogHeader>Add new Assignment</DialogHeader>
+<DialogHeader className='dark:text-white'>Add new Assignment</DialogHeader>
 <DialogBody>
-  <div className="mx-auto w-full max-w-[550px]">
+  <div className="mx-auto w-full max-w-[550px] ">
     <form action="https://formbold.com/s/FORM_ID" method="POST">
       <div className="mb-5">
         <label
           for="subject"
-          className="mb-3 block text-base font-medium text-[#07074D]"
+          className="mb-3 block text-base font-medium text-[#07074D] dark:text-white"
         >
           Subject
         </label>
@@ -46,13 +49,13 @@ function Prof({params}) {
           name="subject"
           id="subject"
           placeholder="Subject Or chapter"
-          className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+          className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md dark:bg-[#3f3f3f] dark:text-white"
         />
       </div>
       <div className="mb-5">
         <label
           for="name"
-          className="mb-3 block text-base font-medium text-[#07074D]"
+          className="mb-3 block text-base font-medium text-[#07074D] dark:text-white"
         >
           Assignment Details
         </label>
@@ -61,13 +64,13 @@ function Prof({params}) {
           name="Assignment Details"
           id="Assignment Details"
           placeholder="Assignment Details"
-          className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+          className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md dark:bg-[#3f3f3f] dark:text-white"
         />
       </div>
       <div className="mb-5">
         <label
           for="deadline"
-          className="mb-3 block text-base font-medium text-[#07074D]"
+          className="mb-3 block text-base font-medium text-[#07074D] dark:text-white"
         >
           Assignment deadline
         </label>
@@ -76,7 +79,23 @@ function Prof({params}) {
           name="deadline"
           id="deadline"
           placeholder="deadline"
-          className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+          className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md dark:bg-[#3f3f3f] dark:text-white"
+        />
+      </div>
+
+      <div className="mb-5">
+        <label
+          for="deadline"
+          className="mb-3 block text-base font-medium text-[#07074D] dark:text-white"
+        >
+          Points Assignment
+        </label>
+        <input
+          type="number"
+          name="Points"
+          id="Points"
+          placeholder="Points"
+          className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md dark:bg-[#3f3f3f] dark:text-white"
         />
       </div>
 
@@ -97,7 +116,7 @@ function Prof({params}) {
           <Button
             variant="text"
             color="red"
-            onClick={handleOpen}
+            onClick={handleOpenAddAssignment}
             className="mr-1"
           >
             <span>Cancel</span>
@@ -111,6 +130,9 @@ function Prof({params}) {
       </div>
         </DialogFooter>
   </Dialog>
+
+
+
 </div>
   )
 }

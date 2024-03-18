@@ -17,8 +17,13 @@ import {
   Avatar,
   IconButton,
   Tooltip,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
 } from "@material-tailwind/react";
 import Pagination from "./Pagination";
+import { useState } from "react";
  
  
 const TABLE_HEAD = ["Students", "File", "Submit date", "mark"];
@@ -71,9 +76,15 @@ const TABLE_ROWS = [
 
   
 ];
+
  
 export default function TableAssignments() {
+
+  const [openMark, setOpenMark] = useState(false);
+ 
+  const handleOpenMark = () => setOpenMark(!openMark);
   return (
+    <>
     <Card className="h-full w-[95%] dark:bg-[#121212] mt-4 mx-auto">
       
       <CardBody className="p-0">
@@ -160,7 +171,7 @@ export default function TableAssignments() {
                     </td>
                     <td className={classes}>
                       <Tooltip content="Mark Assignment">
-                        <IconButton variant="text">
+                        <IconButton variant="text" onClick={handleOpenMark}>
                           <PencilIcon className="h-4 w-4 dark:text-[#bee3e2] " />
                         </IconButton>
                       </Tooltip>
@@ -176,5 +187,49 @@ export default function TableAssignments() {
       <Pagination/>
       </CardFooter>
     </Card>
+
+
+
+
+  {/* Modal mark Assignment */}
+
+  <Dialog className='dark:bg-[#282828]' open={openMark} handler={handleOpenMark} animate={{
+          mount: { scale: 1, y: 0 },
+          unmount: { scale: 0.9, y: -100 },
+        }}>
+        <DialogHeader className="dark:text-white">mark Assignment.</DialogHeader>
+        <DialogBody>
+        <div className="mb-5">
+        <label
+          for="deadline"
+          className="mb-3 block text-base font-medium text-[#07074D] dark:text-white"
+        >
+          Points 
+        </label>
+        <input
+          type="number"
+          name="Points"
+          id="Points"
+          placeholder="Points"
+          className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md dark:bg-[#3f3f3f] dark:text-white"
+        />
+      </div>
+          
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant="text"
+            color="red"
+            onClick={handleOpenMark}
+            className="mr-1"
+          >
+            <span>Cancel</span>
+          </Button>
+          <Button variant="gradient" color="green" onClick={handleOpenMark}>
+            <span>Confirm</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
+    </>
   );
 }

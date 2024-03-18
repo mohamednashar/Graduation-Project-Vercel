@@ -29,7 +29,7 @@ export default function Pagination() {
         <ArrowLeftIcon strokeWidth={2} className="h-4 w-4 dark:text-[#66bfbf]" />
       </IconButton>
       <Typography  className="font-normal dark:text-[#66bfbf]">
-        Page <strong className="text-gray-900 dark:text-[#66bfbf]">{active}</strong> of{" "}
+        Assignment <strong className="text-gray-900 dark:text-[#66bfbf]">{active}</strong> of{" "}
         <strong className="text-gray-900 dark:text-[#66bfbf]">10</strong>
       </Typography>
       <IconButton
