@@ -147,24 +147,26 @@ export default function UpdateCourse () {
           mount: { scale: 1, y: 0 },
           unmount: { scale: 0.9, y: -100 },
         }}
+        className="dark:bg-gray-800"
+
       >
-        <DialogHeader>Update Assistant Data</DialogHeader>
+        <DialogHeader className='dark:text-white'>Update Assistant Data</DialogHeader>
         <DialogBody>
           <form >
 
         <div className='flex flex-wrap items-center gap-5 '>
-            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="Course Title" />          
-            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="Course description" />          
-            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="Course Code" />          
+            <input className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'   placeholder="Course Title" />          
+            <input className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'   placeholder="Course description" />          
+            <input className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'   placeholder="Course Code" />          
                    
-          <div className="w-72">
+          <div className="  ">
       <Select  label="College">
       
         <Option>Option A</Option>
         <Option>Option B</Option>
         <Option>Option C</Option>
       </Select>
-    </div>                    <div className="w-72">
+    </div>                    <div className="  ">
       <Select  label="Department">
       
       <Option>Option A</Option>
@@ -173,7 +175,7 @@ export default function UpdateCourse () {
       </Select>
     </div>     
 
-      <div className="w-72">
+      <div className="  ">
       <Select  label="Prof">
       
         <Option>Option A</Option>

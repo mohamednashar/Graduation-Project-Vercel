@@ -19,6 +19,7 @@ import {
   Radio,
   Select,
   Option,
+  Typography,
 } from "@material-tailwind/react";
 
 
@@ -146,29 +147,31 @@ export default function UpdateAssistant () {
           mount: { scale: 1, y: 0 },
           unmount: { scale: 0.9, y: -100 },
         }}
+        className="dark:bg-gray-800"
+
       >
-        <DialogHeader>Update Assistant Data</DialogHeader>
+        <DialogHeader className='dark:text-white'>Update Assistant Data</DialogHeader>
         <DialogBody>
           <form >
 
         <div className='flex flex-wrap items-center gap-5 '>
-            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="First Name" />          
-            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="Second Name" />          
-            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="Third Name" />          
-            <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'   placeholder="Fourth Name" /> 
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'  placeholder="Username" />          
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'  placeholder="mail" />          
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800'  placeholder="Address" />          
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800' type='date' placeholder="Date of birth"/>          
-          <input className='rounded-md p-2 block w-72 border border-solid border-gray-800' type='number' placeholder="Phone" />          
-          <div className="w-72">
+            <input className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'   placeholder="First Name" />          
+            <input className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'   placeholder="Second Name" />          
+            <input className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'   placeholder="Third Name" />          
+            <input className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'   placeholder="Fourth Name" /> 
+          <input className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'  placeholder="Username" />          
+          <input className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'  placeholder="mail" />          
+          <input className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'  placeholder="Address" />          
+          <input className='rounded-md p-2       border border-solid border-gray-800 dark:text-white' type='date' placeholder="Date of birth"/>          
+          <input className='rounded-md p-2       border border-solid border-gray-800 dark:text-white' type='number' placeholder="Phone" />          
+          <div className="  ">
       <Select  label="College">
       
         <Option>Option A</Option>
         <Option>Option B</Option>
         <Option>Option C</Option>
       </Select>
-    </div>                    <div className="w-72">
+    </div>                    <div className="  ">
       <Select  label="Department">
       
       <Option>Option A</Option>
@@ -176,10 +179,34 @@ export default function UpdateAssistant () {
         <Option>Option C</Option>
       </Select>
     </div>              
-          <div className="flex gap-10">
-      <Radio name="Gender"  label="Male" />
-      <Radio name="Gender"  label="Female"  />
-    </div>     
+    <div className="flex gap-10 ">
+                <Radio
+                  name="Gender"
+                  label={
+                    <Typography
+                      className="text-black dark:text-white"
+                    >
+                      Male
+                    </Typography>
+                  }
+                  color="green"
+                  ripple={true}
+                  className="dark:text-white"
+                />
+                <Radio
+                  name="Gender"
+                  label={
+                    <Typography
+                      className="text-black dark:text-white"
+                    >
+                      Female
+                    </Typography>
+                  }
+                  color="green"
+                  ripple={true}
+                  className="dark:text-white"
+                />
+              </div> 
        
         </div>         
           </form>

@@ -88,7 +88,7 @@ export default function UpdateGroup () {
           name={i}
           value={formData.groupNames[i] || ""}
           onChange={handleGroupNamesChange}
-          className='rounded-md p-2 block w-72 border border-solid border-gray-800'
+          className='rounded-md p-2       border border-solid border-gray-800'
           placeholder={`Group ${i + 1} Name`}
         />
       );
@@ -203,8 +203,10 @@ export default function UpdateGroup () {
           mount: { scale: 1, y: 0 },
           unmount: { scale: 0.9, y: -100 },
         }}
+        className="dark:bg-gray-800"
+
       >
-        <DialogHeader>Update Group Data</DialogHeader>
+        <DialogHeader className='dark:text-white'>Update Group Data</DialogHeader>
         <DialogBody>
         <form onSubmit={handleSubmit}>
       <div className='flex flex-wrap items-center gap-5 '>
@@ -212,21 +214,21 @@ export default function UpdateGroup () {
           type="text"
           name="college"
           onChange={handleInputChange}
-          className='rounded-md p-2 block w-72 border border-solid border-gray-800'
+          className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'
           placeholder="College"
         />
         <input
           type="text"
           name="department"
           onChange={handleInputChange}
-          className='rounded-md p-2 block w-72 border border-solid border-gray-800'
+          className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'
           placeholder="Department"
         />
         <input
           type="number"
           name="numberOfGroups"
           onChange={handleInputChange}
-          className='rounded-md p-2 block w-72 border border-solid border-gray-800'
+          className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'
           placeholder="Number of Groups"
         />
         {renderGroupNamesInputs({open})}

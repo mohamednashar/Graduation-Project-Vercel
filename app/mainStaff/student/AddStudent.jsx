@@ -87,7 +87,7 @@ const AddStudent = () => {
     <div className="flex flex-col items-center pb-5" key={label}>
       <label
         htmlFor={id}
-        className="mb-2 text-sm mr-5 w-[150px] md:w-[250px] text-center"
+        className="mb-2 text-sm mr-5 w-[150px] md:w-[250px] text-center dark:text-white"
       >
         {label}
       </label>
@@ -121,7 +121,7 @@ const AddStudent = () => {
             name={id}
             checked={isMale && name === "checkboxMale"}
             onChange={handleCheckboxChange}
-            className="mr-2"
+            className="mr-2 "
           />
           <label htmlFor={id + "Male"} className="mr-5">
             Male
@@ -142,7 +142,7 @@ const AddStudent = () => {
           id={id}
           value={formData[id]}
           onChange={handleInputChange}
-          className="w-full block p-2 text-gray-900 border border-gray-300 rounded-lg bg-white sm:text-xs dark:bg-[#3f3f3f] dark:text-white"
+          className="w-full block p-2 text-gray-900 border border-gray-300 rounded-lg bg-white sm:text-xs dark:bg-[#282828] dark:text-white "
         />
       )}
     </div>
@@ -150,12 +150,12 @@ const AddStudent = () => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col w-full md:w-[90%] mx-auto">
-      <div className="bg-white dark:bg-[#1e1e1e] p-5 rounded-lg shadow-md flex flex-wrap justify-center lg:justify-between">
+      <div className="bg-white dark:bg-[#282828] p-5 rounded-lg shadow-md flex flex-wrap justify-center lg:justify-between">
         {labels.map((label, index) => (
           <div key={index} className="">
             {index === labels.length - 1 ? (
               <div className="flex flex-col items-center pb-5" key={label}>
-                <label className="mb-2 text-sm mr-5 w-[150px] md:w-[250px] text-center">
+                <label className="mb-2 text-sm mr-5 w-[150px] md:w-[250px] text-center dark:text-white">
                   Gender
                 </label>
                 <div className="flex items-center">
@@ -167,7 +167,7 @@ const AddStudent = () => {
                     onChange={handleCheckboxChange}
                     className="mr-2"
                   />
-                  <label htmlFor="checkboxMale" className="mr-5">
+                  <label htmlFor="checkboxMale" className="mr-5 dark:text-white">
                     Male
                   </label>
                   <input
@@ -178,7 +178,7 @@ const AddStudent = () => {
                     checked={isFemale}
                     onChange={handleCheckboxChange}
                   />
-                  <label htmlFor="checkboxFemale">Female</label>
+                  <label htmlFor="checkboxFemale" className="dark:text-white">Female</label>
                 </div>
               </div>
             ) : (
@@ -207,7 +207,7 @@ const AddStudent = () => {
       </Button>
 
       <Dialog
-        className="!w-96"
+        className="!w-96 dark:bg-gray-800"
         open={open}
         handler={handleOpen}
         animate={{

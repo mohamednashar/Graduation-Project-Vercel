@@ -87,7 +87,7 @@ export default function UpdateDepartment () {
           name={i}
           value={formData.DepartmentNames[i] || ""}
           onChange={handleDepartmentNamesChange}
-          className='rounded-md p-2 block w-72 border border-solid border-gray-800'
+          className='rounded-md p-2       border border-solid border-gray-800'
           placeholder={`Department ${i + 1} Name`}
         />
       );
@@ -201,8 +201,10 @@ export default function UpdateDepartment () {
           mount: { scale: 1, y: 0 },
           unmount: { scale: 0.9, y: -100 },
         }}
+        className="dark:bg-gray-800"
+
       >
-        <DialogHeader>Update Department Data</DialogHeader>
+        <DialogHeader className='dark:text-white'>Update Department Data</DialogHeader>
         <DialogBody>
         <form onSubmit={handleSubmit}>
       <div className='flex flex-wrap items-center gap-5 '>
@@ -210,7 +212,7 @@ export default function UpdateDepartment () {
           type="text"
           name="college"
           onChange={handleInputChange}
-          className='rounded-md p-2 block w-72 border border-solid border-gray-800'
+          className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'
           placeholder="College"
         />
       
@@ -218,7 +220,7 @@ export default function UpdateDepartment () {
           type="number"
           name="numberOfDepartments"
           onChange={handleInputChange}
-          className='rounded-md p-2 block w-72 border border-solid border-gray-800'
+          className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'
           placeholder="Number of Departments"
         />
         {renderDepartmentNamesInputs({open})}

@@ -37,7 +37,7 @@ const AddDepartment = () => {
     <div className="flex flex-col items-center pb-5" key={label}>
       <label
         htmlFor={id}
-        className="mb-2 text-sm mr-5 w-[150px] md:w-[250px] text-center"
+        className="mb-2 text-sm mr-5 w-[150px] md:w-[250px] text-center dark:text-white"
       >
         {label}
       </label>
@@ -47,7 +47,7 @@ const AddDepartment = () => {
           id={id}
           value={formData[id]}
           onChange={handleInputChange}
-          className="w-full block p-2 text-gray-900 border border-gray-300 rounded-lg bg-white sm:text-xs dark:bg-[#3f3f3f] dark:text-white"
+          className="w-full block p-2 text-gray-900 border border-gray-300 rounded-lg bg-white sm:text-xs dark:bg-[#282828] dark:text-white"
         />
       }
     </div>
@@ -68,7 +68,7 @@ const AddDepartment = () => {
       onSubmit={handleSubmit}
       className="flex flex-col w-full md:w-[90%] mx-auto"
     >
-      <div className="bg-white  p-5 rounded-lg shadow-md flex flex-wrap justify-center lg:justify-between">
+      <div className="bg-white dark:bg-[#282828]  p-5 rounded-lg shadow-md flex flex-wrap justify-center lg:justify-between">
         {labels.map((label, index) => (
           <div key={index} className="">
             {index === 1
@@ -90,7 +90,7 @@ const AddDepartment = () => {
       </Button>
 
       <Dialog
-        className="!w-96"
+        className="!w-96 dark:bg-gray-800"
         open={open}
         handler={handleOpen}
         animate={{

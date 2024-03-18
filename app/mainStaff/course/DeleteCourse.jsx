@@ -14,12 +14,12 @@ function DeleteCourse() {
   };
   return (
     <div>
-      <div className="flex items-center justify-center gap-5 bg-white w-full md:w-[90%] mx-auto my-4 p-4">
-        <label htmlFor="nationalID">Course Code</label>
+      <div className="flex items-center justify-center gap-5 bg-white dark:bg-[#282828] w-full md:w-[90%] mx-auto my-4 p-4">
+        <label htmlFor="nationalID" className="dark:text-white">Course Code</label>
         <input
           type="number"
           id="nationalID"
-          className="rounded-lg p-1 border-2"
+          className="rounded-lg p-1 border-2 dark:text-white"
         />
       </div>
 

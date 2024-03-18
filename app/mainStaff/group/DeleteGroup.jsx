@@ -14,12 +14,12 @@ function DeleteGroup() {
   };
   return (
     <div>
-      <div className="flex items-center justify-center gap-5 bg-white w-full md:w-[90%] mx-auto my-4 p-4">
-        <label htmlFor="GroupCode">Group Code</label>
+      <div className="flex items-center justify-center gap-5 bg-white dark:bg-[#282828] w-full md:w-[90%] mx-auto my-4 p-4">
+        <label htmlFor="GroupCode" className="dark:text-white">Group Code</label>
         <input
           type="text"
           id="GroupCode"
-          className="rounded-lg p-1 border-2"
+          className="rounded-lg p-1 border-2 dark:text-white"
         />
       </div>
 
