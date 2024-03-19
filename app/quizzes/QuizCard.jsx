@@ -6,24 +6,24 @@ const QuizCard = ({ subject, chapter, professor, points, date, time,code }) => {
     <div className="bg-white dark:bg-[#1e1e1e] rounded-lg shadow-lg p-6 mb-6 w-full max-w-3xl mx-auto transition-transform duration-300 transform hover:scale-105">
       <div className="text-2xl font-bold mb-2 text-[#66bfbf]">{subject}</div>
       <div className="grid grid-cols-2 gap-4 mb-4">
-        <div className="text-gray-600 dark:text-gray-100">
-          <span className="font-bold">Chapter:</span> {chapter}
+        <div className="text-gray-700 dark:text-gray-100">
+          <span className="font-semibold">Chapter:</span> {chapter}
         </div>
-        <div className="text-gray-600 dark:text-gray-100">
-          <span className="font-bold">Prof:</span> {professor}
-        </div>
-      </div>
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <div className="text-gray-700 dark:text-gray-200">
-          <span className="font-bold">Points:</span> {points}
-        </div>
-        <div className="text-gray-700 dark:text-gray-200">
-          <span className="font-bold">Date:</span> {date}
+        <div className="text-gray-700 dark:text-gray-100">
+          <span className="font-semibold">Prof:</span> {professor}
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div className="text-gray-700 dark:text-gray-200">
-          <span className="font-bold">Time:</span> {time}
+          <span className="font-semibold">Points:</span> {points}
+        </div>
+        <div className="text-gray-700 dark:text-gray-200">
+          <span className="font-semibold">Date:</span> {date}
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="text-gray-700 dark:text-gray-200">
+          <span className="font-semibold">Time:</span> {time}
         </div>
      
       </div>

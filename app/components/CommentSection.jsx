@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Avatar, Input } from '@material-tailwind/react';
+import { faPenToSquare, faTrash, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTheme } from 'next-themes';
 
 const CommentSection = () => {
   const [comments, setComments] = useState([
@@ -100,6 +103,8 @@ const handleAddComment = () => {
     });
     setComments(updatedComments);
   };
+  const { theme, setTheme } = useTheme()
+  console.log(theme)
 
   return (
     <div className="space-y-8 mb-10">
@@ -107,15 +112,17 @@ const handleAddComment = () => {
         <Avatar src="https://via.placeholder.com/150" />
         <Input
         variant="standard"
+        color={theme === 'dark' ? 'white' : ''}
           type="text"
           label='Write a comment'
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
-          className=" border-gray-300 py-2 px-3 w-full outline-none focus:border-blue-500 bg-gray-100"
+          className=" border-gray-300 py-2 px-3 w-full outline-none focus:border-blue-500 bg-gray-100 "
+          
         />
         <button
           onClick={handleAddComment}
-          className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+          className="bg-[#66bfbf] text-white py-2 px-4 rounded-lg hover:bg-[#4e9999] transition-all duration-200 hover:scale-95"
         >
           Comment
         </button>
@@ -123,32 +130,33 @@ const handleAddComment = () => {
       {comments.map((comment, commentIndex) => (
         <div key={comment.id} className="flex space-x-4">
           <Avatar src={comment.author.avatar} />
-          <div className="flex-1 rounded-lg p-4 bg-white">
+          <div className="flex-1 rounded-lg p-4 bg-white dark:bg-[#1e1e1e]">
             <div className="flex items-center justify-between mb-2">
-              <p className="font-semibold bg-gray-100 p-2 rounded-xl border-b-2">@{comment.author.name}</p>
+              <p className="font-semibold bg-gray-100 dark:bg-[#353535] dark:text-gray-100 p-2 rounded-xl border-b-2 dark:border-gray-700">@{comment.author.name}</p>
               <div>
                 {comment.author.name === 'You' && (
-                  <button onClick={() => handleDeleteComment(comment.id)} className="text-gray-500 hover:text-red-500">
-                    Delete
+                  <button onClick={() => handleDeleteComment(comment.id)} className="text-gray-500 hover:text-red-600 transition-all duration-200 hover:scale-105">
+                    <FontAwesomeIcon icon={faTrash}/>
                   </button>
                 )}
               </div>
             </div>
             <p>{comment.content}</p>
             {comment.replies.map((reply, replyIndex) => (
-              <div key={replyIndex} className="bg-gray-200 rounded-lg p-2 mt-2 flex items-start justify-between">
+              <div key={replyIndex} className="bg-gray-200 dark:bg-[#353535] rounded-lg p-2 mt-2 flex items-start justify-between">
                 <div>
                   <p className="font-semibold">{reply.author}</p>
                   {reply.author === 'You' && editComment.commentId === comment.id && editComment.replyIndex === replyIndex ? (
                     <>
                       <input
+               
                         type="text"
                         value={editedContent}
                         onChange={(e) => setEditedContent(e.target.value)}
-                        className="border rounded-lg py-2 px-3 outline-none focus:border-blue-500"
+                        className="border rounded-lg py-2 px-3 outline-none focus:border-[#66bfbf] dark:bg-gray-700"
                       />
-                      <button onClick={handleSaveEdit} className="text-blue-500 hover:text-blue-700 ml-2">
-                        Save
+                        <button onClick={handleSaveEdit} className="text-[#66bfbf] hover:text-[#4e9999] ml-4 transition-all duration-200">
+                        Submit
                       </button>
                     </>
                   ) : (
@@ -156,19 +164,22 @@ const handleAddComment = () => {
                   )}
                 </div>
                 {reply.author === 'You' && (
-                  <div className="flex items-center">
-                    <button onClick={() => handleEditComment(comment.id, replyIndex)} className="text-blue-500 hover:text-blue-700 mr-2">
-                      Edit
+                  <div className="flex items-center gap-2 mr-2">
+                    <button onClick={() => handleEditComment(comment.id, replyIndex)} className="bg-white dark:bg-gray-700 w-3 h-3 rounded-full p-4 flex items-center justify-center text-[#66bfbf] hover:text-[#4e9999] hover:scale-105 transition-all duration-200">
+                    <FontAwesomeIcon icon={faPenToSquare}/>
                     </button>
-                    <button onClick={() => handleDeleteReply(comment.id, replyIndex)} className="text-gray-500 hover:text-red-500">
-                      Delete
+              
+                    <button onClick={() => handleDeleteReply(comment.id, replyIndex)} className="bg-white dark:bg-gray-700 w-3 h-3 rounded-full p-4 flex items-center justify-center text-[#66bfbf] hover:text-red-600 hover:scale-105 transition-all duration-200">
+                      <FontAwesomeIcon icon={faTrashCan}/>
                     </button>
+                
                   </div>
                 )}
               </div>
             ))}
             <div className="flex items-center space-x-4 mt-2">
               <Input
+              color={theme === 'dark' ? 'teal' : ''}
                 type="text"
                 variant='standard'
                 placeholder="Reply..."
@@ -178,7 +189,7 @@ const handleAddComment = () => {
               />
               <button
                 onClick={() => handleAddReply(comment.id)}
-                className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+                className="bg-[#66bfbf] text-white py-2 px-4 rounded-lg hover:bg-[#4e9999] transition-all duration-200"
               >
                 Reply
               </button>

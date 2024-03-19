@@ -88,4 +88,6 @@ input[type="radio"] {
     margin-bottom: 5px;
   }
 
-
+  .tabsheader div:nth-child(2) {
+    background-color: red !important;
+  }

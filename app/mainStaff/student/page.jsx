@@ -32,7 +32,7 @@ const page = () => {
   return (
     <div>
       <Tabs value={defaultTabValue}>
-        <TabsHeader className="w-full md:w-[90%] mx-auto bg-gray-300 dark:bg-[#1e1e1e]">
+        <TabsHeader className="w-full md:w-[90%] mx-auto bg-gray-300 dark:bg-[#1e1e1e] tabsheader">
           {data.map(({ label, value }) => (
             <Tab key={value} value={value} className="dark:text-[#5e5e5e]">
               {label}

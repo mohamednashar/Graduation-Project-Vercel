@@ -40,7 +40,7 @@ function Student({ params }) {
 
   return (
     <div className="mx-auto my-5 p-5 flex flex-col md:flex-row justify-center gap-8">
-      <div className="w-full md:w-1/2 bg-white rounded-lg shadow-lg">
+      <div className="w-full md:w-1/2 bg-white rounded-lg shadow-lg dark:bg-[#1e1e1e]">
         <div className="flex items-center gap-4  p-4 border-b-2">
           <img
             className="h-12 w-12 rounded-full hover:shadow-lg transition-all duration-300"
@@ -65,7 +65,7 @@ function Student({ params }) {
           </h1>
           <h1 className="text-md font-semibold">Assignment Details:</h1>
           
-          <p className={`text-gray-800 ${isTruncated ? 'truncate' : ''}`}>
+          <p className={`text-gray-800 dark:text-gray-300 ${isTruncated ? 'truncate' : ''}`}>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi,
             voluptatibus ipsam vitae odit expedita est! Ducimus illum maxime
             veniam veritatis exercitationem totam delectus asperiores. Aliquam
@@ -78,13 +78,13 @@ function Student({ params }) {
             href={fullLink}
             className="hover:text-[#66bfbf] transition-all duration-300 hover:scale-95 bordr-2 border-black"
           >
-            <button className="border-2 border-gray-200 flex items-center justify-center rounded-lg shadow-md transition-all duration-300">
+            <button className="border-2 border-gray-200 dark:border-gray-700 flex items-center justify-center rounded-lg shadow-md transition-all duration-300">
               <Image
                 width={500}
                 height={500}
                 src={thumbnailLink}
                 alt="PDF Thumbnail"
-                className="h-20 w-24 object-cover rounded-l-md border-r-2"
+                className="h-20 w-24 object-cover rounded-l-md border-r-2 dark:border-gray-700"
               />
               <p className="px-4 text-md font-semibold">Control Task 11</p>
             </button>
@@ -96,7 +96,7 @@ function Student({ params }) {
         </div>
       </div>
 
-      <div className="w-full md:w-1/2 bg-white rounded-lg shadow-lg flex justify-center items-center">
+      <div className="w-full md:w-1/2 bg-white dark:bg-[#1e1e1e] rounded-lg shadow-lg flex justify-center items-center">
         <div className="flex flex-col justify-center items-center gap-5 p-4">
         
 
@@ -119,7 +119,7 @@ function Student({ params }) {
                   strokeLinejoin="round"
                 />
               </svg>
-              <p className="mt-3 text-gray-700 max-w-xs mx-auto">
+              <p className="mt-3 text-gray-700 dark:text-gray-100 max-w-xs mx-auto">
                 Click to{" "}
                 <span className="font-medium text-[##66bfbf]">
                   Upload your file
