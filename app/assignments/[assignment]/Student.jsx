@@ -1,6 +1,5 @@
 "use client";
-
-import { Button } from "@material-tailwind/react";
+import "animate.css"
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
@@ -39,8 +38,8 @@ function Student({ params }) {
   };
 
   return (
-    <div className="mx-auto my-5 p-5 flex flex-col md:flex-row justify-center gap-8">
-      <div className="w-full md:w-1/2 bg-white rounded-lg shadow-lg dark:bg-[#1e1e1e]">
+    <div className="mx-auto my-5 p-5 flex flex-col md:flex-row justify-center gap-8 max-w-[1450px]">
+      <div className="w-full md:w-1/2 bg-white rounded-lg shadow-lg dark:bg-[#1e1e1e] animate__animated animate__backInLeft animate__fast">
         <div className="flex items-center gap-4  p-4 border-b-2">
           <img
             className="h-12 w-12 rounded-full hover:shadow-lg transition-all duration-300"
@@ -76,7 +75,7 @@ function Student({ params }) {
           </p>
           {!isTruncated&&  <Link
             href={fullLink}
-            className="hover:text-[#66bfbf] transition-all duration-300 hover:scale-95 bordr-2 border-black"
+            className="hover:text-[#66bfbf] transition-all duration-300 hover:scale-95 w-64 flex justify-center"
           >
             <button className="border-2 border-gray-200 dark:border-gray-700 flex items-center justify-center rounded-lg shadow-md transition-all duration-300">
               <Image
@@ -96,7 +95,7 @@ function Student({ params }) {
         </div>
       </div>
 
-      <div className="w-full md:w-1/2 bg-white dark:bg-[#1e1e1e] rounded-lg shadow-lg flex justify-center items-center">
+      <div className="w-full md:w-1/2 bg-white dark:bg-[#1e1e1e] rounded-lg shadow-lg flex justify-center items-center animate__animated animate__backInRight animate__fast">
         <div className="flex flex-col justify-center items-center gap-5 p-4">
         
 

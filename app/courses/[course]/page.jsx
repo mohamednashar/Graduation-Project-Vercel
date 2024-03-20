@@ -195,15 +195,15 @@ const VideoSidebar = ({ onSelectVideo, isOpen, toggleSidebar }) => {
               Delete Lecture
             </button>
 
-            <Button
+            <button
               onClick={() => {
                 handleDisappear();
                 toggleSidebar();
               }}
-              className="text-md ml-auto hidden rounded-full md:flex justify-center items-center bg-[#66bfbf] dark:bg-[#66bfbf] dark:text-black  w-3 h-3 p-3.5 transition-all duration-200 hover:rotate-180"
+              className="text-md text-white ml-auto hidden rounded-full md:flex justify-center items-center bg-[#66bfbf] dark:bg-[#66bfbf] dark:text-black  w-3 h-3 p-3.5 transition-all duration-200 hover:rotate-180"
             >
               <FontAwesomeIcon icon={faXmark} />
-            </Button>
+            </button>
           </div>
           <div className="flex flex-col ">
             {videos.map((video) => (

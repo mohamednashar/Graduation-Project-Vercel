@@ -99,7 +99,7 @@ export default function Example() {
                             "rounded-md px-3 py-2 text-sm font-medium hover:text-[#66bfbf] transition-all duration-200 hover:scale-105",
                             (item.name === "Home" && activeLink === "/main") ||
                               (item.name === "Assignments" &&
-                                activeLink === "/assignments") ||
+                                activeLink.startsWith("/assignments")) ||
                               (item.name === "Quiz" &&
                                 activeLink.startsWith("/quizzes")) ||
                               (item.name === "Meeting" &&

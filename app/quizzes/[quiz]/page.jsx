@@ -81,7 +81,7 @@ const QuizComponent = () => {
     <div className="mt-5 flex items-center justify-center bg-gray-100 dark:bg-[#121212]">
       <div className="w-full max-w-xl md:w-3/4">
         {showResult ? (
-          <div>
+          <div className="flex items-center justify-center flex-col">
             <h3 className="text-xl font-semibold mb-2 text-center">Result</h3>
             <p className="text-center text-2xl font-bold text-green-500">
               Your score:{" "}
@@ -135,7 +135,7 @@ const QuizComponent = () => {
               <Button
                 ripple={true}
                 onClick={handleSubmit}
-                className="bg-green-500 text-white px-6 py-2 rounded-md text-md capitalize hover:bg-green-600 transition-all duration-200"
+                className="bg-[#66bfbf] hover:bg-[#4e9999] text-white px-6 py-2 rounded-md text-md capitalize  transition-all duration-200"
               >
                 Submit
               </Button>
