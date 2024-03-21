@@ -10,7 +10,6 @@ import {
 } from "@material-tailwind/react";
 import DeleteStudent from "./DeleteStudent";
 import UpdateStudent from "./UpdateStudent";
-import { useTheme } from "next-themes";
 
 const data = [
   {
@@ -29,9 +28,6 @@ const data = [
 
 const page = () => {
   const defaultTabValue = data[0].value;
-  const { theme } = useTheme()
-
-  console.log(theme)
 
   return (
     <div>
