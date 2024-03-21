@@ -32,9 +32,9 @@ const page = () => {
   return (
     <div>
       <Tabs value={defaultTabValue}>
-        <TabsHeader className="w-full md:w-[90%] mx-auto bg-gray-300 border-2">
+        <TabsHeader className="w-full md:w-[90%] mx-auto bg-gray-300 dark:bg-[#282828] tabsheader">
           {data.map(({ label, value }) => (
-            <Tab key={value} value={value}>
+            <Tab key={value} value={value} className="font-['__Poppins_4a3e9c', '__Poppins_Fallback_4a3e9c']">
               {label}
             </Tab>
           ))}

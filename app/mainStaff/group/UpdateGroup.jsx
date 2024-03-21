@@ -203,7 +203,7 @@ export default function UpdateGroup () {
           mount: { scale: 1, y: 0 },
           unmount: { scale: 0.9, y: -100 },
         }}
-        className="dark:bg-gray-800"
+        className="dark:bg-[#282828]"
 
       >
         <DialogHeader className='dark:text-white'>Update Group Data</DialogHeader>
@@ -214,21 +214,21 @@ export default function UpdateGroup () {
           type="text"
           name="college"
           onChange={handleInputChange}
-          className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'
+          className='rounded-md p-2       border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none'
           placeholder="College"
         />
         <input
           type="text"
           name="department"
           onChange={handleInputChange}
-          className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'
+          className='rounded-md p-2       border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none'
           placeholder="Department"
         />
         <input
           type="number"
           name="numberOfGroups"
           onChange={handleInputChange}
-          className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'
+          className='rounded-md p-2       border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none'
           placeholder="Number of Groups"
         />
         {renderGroupNamesInputs({open})}

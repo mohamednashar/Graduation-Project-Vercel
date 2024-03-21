@@ -84,16 +84,16 @@ const AddStudent = () => {
   };
 
   const renderInput = (label, type, id, name = null) => (
-    <div className="flex flex-col items-center pb-5" key={label}>
+    <div className="flex flex-col items-center pb-5 " key={label}>
       <label
         htmlFor={id}
-        className="mb-2 text-sm mr-5 w-[150px] md:w-[250px] text-center dark:text-white"
+        className="mb-2 text-sm mr-5 w-[150px] md:w-[250px] text-center dark:text-white font-['__Poppins_4a3e9c', '__Poppins_Fallback_4a3e9c']"
       >
         {label}
       </label>
       {type === "select" ? (
         <Select
-          className="w-[150px] md:w-[250px]"
+          className="w-[150px] md:w-[250px] "
           id={id}
           onChange={(selectedOptions) => {
             const selectedValues = selectedOptions.map(
@@ -149,7 +149,7 @@ const AddStudent = () => {
   );
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col w-full md:w-[90%] mx-auto">
+    <form onSubmit={handleSubmit} className="flex flex-col w-full md:w-[90%] mx-auto ">
       <div className="bg-white dark:bg-[#282828] p-5 rounded-lg shadow-md flex flex-wrap justify-center lg:justify-between">
         {labels.map((label, index) => (
           <div key={index} className="">
@@ -200,14 +200,14 @@ const AddStudent = () => {
       <Button
         onClick={handleOpen}
         type="submit"
-        className="font-bold text-lg bg-[#66bfbf] text-white px-4 py-2 mt-4 rounded-lg w-[30%] mx-auto mb-5 transition-all duration-200 hover:bg-[#f76b8a]"
+        className="font-bold text-lg bg-[#66bfbf] text-white px-4 py-2 mt-4 rounded-lg w-[30%] mx-auto mb-5 transition-all duration-200 hover:bg-[#55a0a0]"
         data-dialog-target="animated-dialog"
       >
         Submit
       </Button>
 
       <Dialog
-        className="!w-96 dark:bg-gray-800"
+        className="!w-96 dark:bg-[#282828]"
         open={open}
         handler={handleOpen}
         animate={{
@@ -217,7 +217,7 @@ const AddStudent = () => {
       >
         <DialogBody>
           {/* Modal content */}
-          <div className=" text-center bg-white rounded-lg dark:bg-gray-800 p-5">
+          <div className=" text-center bg-white rounded-lg dark:bg-[#282828] p-5">
             <button
               onClick={handleOpen}
               className="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -257,7 +257,7 @@ const AddStudent = () => {
             </p>
             <button
               onClick={handleOpen}
-              class="middle none center rounded-lg bg-gradient-to-tr from-green-600 to-green-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              class="middle none center rounded-lg bg-gradient-to-tr from-green-600 to-green-400 py-3 px-6  text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
             >
               Continue
             </button>

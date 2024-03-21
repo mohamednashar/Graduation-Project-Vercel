@@ -107,8 +107,8 @@ export default function UpdateStudent() {
           <span id="selectedRows"></span>
         </div>
 
-        <div style={gridStyle} className={`ag-theme-quartz `}>
-          <AgGridReact
+        <div style={gridStyle} className={`ag-theme-quartz overflow-hidden`}>
+          <AgGridReact className="scrollbar_mine"
             ref={gridRef}
             rowData={rowData}
             columnDefs={columnDefs}
@@ -130,7 +130,7 @@ export default function UpdateStudent() {
           mount: { scale: 1, y: 0 },
           unmount: { scale: 0.9, y: -100 },
         }}
-        className="dark:bg-gray-800"
+        className="dark:bg-[#282828]"
       >
         <DialogHeader className="dark:text-white">
           Update Assistant Data
@@ -139,40 +139,40 @@ export default function UpdateStudent() {
           <form>
             <div className="flex flex-wrap items-center  md:gap-5 ">
               <input
-                className="rounded-md p-2  border border-solid border-gray-800 dark:text-white"
+                className="rounded-md p-2  border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
                 placeholder="First Name"
               />
               <input
-                className="rounded-md p-2  border border-solid border-gray-800 dark:text-white"
+                className="rounded-md p-2  border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
                 placeholder="Second Name"
               />
               <input
-                className="rounded-md p-2  border border-solid border-gray-800 dark:text-white"
+                className="rounded-md p-2  border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
                 placeholder="Third Name"
               />
               <input
-                className="rounded-md p-2  border border-solid border-gray-800 dark:text-white"
+                className="rounded-md p-2  border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
                 placeholder="Fourth Name"
               />
               <input
-                className="rounded-md p-2  border border-solid border-gray-800 dark:text-white"
+                className="rounded-md p-2  border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
                 placeholder="Username"
               />
               <input
-                className="rounded-md p-2  border border-solid border-gray-800 dark:text-white"
+                className="rounded-md p-2  border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
                 placeholder="mail"
               />
               <input
-                className="rounded-md p-2  border border-solid border-gray-800 dark:text-white"
+                className="rounded-md p-2  border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
                 placeholder="Address"
               />
               <input
-                className="rounded-md p-2  border border-solid border-gray-800 dark:text-white"
+                className="rounded-md p-2  border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
                 type="date"
                 placeholder="Date of birth"
               />
               <input
-                className="rounded-md p-2  border border-solid border-gray-800 dark:text-white"
+                className="rounded-md p-2  border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
                 type="number"
                 placeholder="Phone"
               />

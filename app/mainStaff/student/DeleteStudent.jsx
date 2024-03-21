@@ -4,6 +4,7 @@ import {
   DialogBody,
   DialogFooter,
   DialogHeader,
+  Input,
 } from "@material-tailwind/react";
 import React, { useState } from "react";
 
@@ -15,11 +16,11 @@ function DeleteStudent() {
   return (
     <div>
       <div className="flex items-center justify-center gap-5 bg-white dark:bg-[#282828] w-full md:w-[90%] mx-auto my-4 p-4">
-        <label htmlFor="nationalID" className="dark:text-white">national ID</label>
+        <label htmlFor="nationalID" className="dark:text-white">National ID</label>
         <input
           type="number"
           id="nationalID"
-          className="rounded-lg p-1 border-2 dark:text-white"
+          className="rounded-lg p-1 border-2 dark:text-white dark:bg-[#282828] outline-none"
         />
       </div>
 

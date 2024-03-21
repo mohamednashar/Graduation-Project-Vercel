@@ -19,7 +19,7 @@ function DeleteGroup() {
         <input
           type="text"
           id="GroupCode"
-          className="rounded-lg p-1 border-2 dark:text-white"
+          className="rounded-lg p-1 border-2 dark:text-white dark:bg-[#282828]"
         />
       </div>
 

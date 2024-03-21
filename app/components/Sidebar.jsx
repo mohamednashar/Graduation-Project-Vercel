@@ -110,13 +110,15 @@ function Sidebar() {
             </button>
 
             {!toggleCollapse && (
-              <p className="text-[#265E73] font-semibold text-sm">
+              <p className="text-[#265E73] font-semibold text-sm dark:text-gray-100">
                 Education Platform
               </p>
               
             )}
           </div>
-                        <ThemeChanger/>
+          <div className="bg-gray-200 px-2 py-2 rounded-xl dark:bg-gray-800 ml-3">
+           <ThemeChanger/>
+           </div>
 
           
         </div>
@@ -130,7 +132,7 @@ function Sidebar() {
               <Link
                 key={index}
                 href={menu.link}
-                className={`flex items-center w-full h-12 px-3 text-[#265E73]   ${
+                className={`flex items-center w-full h-12 px-3 text-[#265E73] dark:text-gray-100   ${
                   activeLink === menu.link && !toggleCollapse
                     ? " bg-[#66bfbf] text-white"
                     : ""

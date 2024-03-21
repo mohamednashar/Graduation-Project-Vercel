@@ -1,35 +1,26 @@
-"use client"
+"use client";
 
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-quartz.css';
-import { AgGridReact } from 'ag-grid-react';
-import React, {
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
+import { AgGridReact } from "ag-grid-react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import {
   Button,
   Dialog,
   DialogHeader,
   DialogBody,
   DialogFooter,
-  
   Radio,
   Select,
   Option,
 } from "@material-tailwind/react";
-
-
-
 
 var filterParams = {
   maxNumConditions: 1,
   comparator: (filterLocalDateAtMidnight, cellValue) => {
     var dateAsString = cellValue;
     if (dateAsString == null) return -1;
-    var dateParts = dateAsString.split('/');
+    var dateParts = dateAsString.split("/");
     var cellDate = new Date(
       Number(dateParts[2]),
       Number(dateParts[1]) - 1,
@@ -48,15 +39,12 @@ var filterParams = {
   },
 };
 
-
-export default function UpdateDepartment () {
-
-
+export default function UpdateDepartment() {
   const [formData, setFormData] = useState({
     college: "",
     department: "",
     numberOfDepartments: 0,
-    DepartmentNames: []
+    DepartmentNames: [],
   });
 
   const handleInputChange = (event) => {
@@ -77,7 +65,6 @@ export default function UpdateDepartment () {
   };
 
   const renderDepartmentNamesInputs = ({ open }) => {
-  
     let inputs = [];
     for (let i = 0; i < formData.numberOfDepartments; i++) {
       inputs.push(
@@ -87,45 +74,45 @@ export default function UpdateDepartment () {
           name={i}
           value={formData.DepartmentNames[i] || ""}
           onChange={handleDepartmentNamesChange}
-          className='rounded-md p-2       border border-solid border-gray-800'
+          className="rounded-md p-2       border border-solid border-gray-800"
           placeholder={`Department ${i + 1} Name`}
         />
       );
     }
-    
+
     return inputs;
   };
 
-  const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
-  const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
+  const containerStyle = useMemo(() => ({ width: "100%", height: "100%" }), []);
+  const gridStyle = useMemo(() => ({ height: "100%", width: "100%" }), []);
   const [rowData, setRowData] = useState();
   const [columnDefs, setColumnDefs] = useState([
-    { field: 'athlete' },
+    { field: "athlete" },
     {
-      field: 'country',
+      field: "country",
       filterParams: {
-        filterOptions: ['contains', 'startsWith', 'endsWith'],
-        defaultOption: 'startsWith',
+        filterOptions: ["contains", "startsWith", "endsWith"],
+        defaultOption: "startsWith",
       },
     },
     {
-      field: 'sport',
+      field: "sport",
       filterParams: {
         maxNumConditions: 10,
       },
     },
     {
-      field: 'age',
-      filter: 'agNumberColumnFilter',
+      field: "age",
+      filter: "agNumberColumnFilter",
       filterParams: {
         numAlwaysVisibleConditions: 2,
-        defaultJoinOperator: 'OR',
+        defaultJoinOperator: "OR",
       },
       maxWidth: 100,
     },
     {
-      field: 'date',
-      filter: 'agDateColumnFilter',
+      field: "date",
+      filter: "agDateColumnFilter",
       filterParams: filterParams,
     },
   ]);
@@ -138,29 +125,27 @@ export default function UpdateDepartment () {
   }, []);
 
   const onGridReady = useCallback((params) => {
-    fetch('https://www.ag-grid.com/example-assets/olympic-winners.json')
+    fetch("https://www.ag-grid.com/example-assets/olympic-winners.json")
       .then((resp) => resp.json())
       .then((data) => setRowData(data));
   }, []);
   const gridRef = useRef();
-    const [open, setOpen] = useState(false);
-   
-    const handleOpen = () => 
-    {
-      setOpen(!open);
-      setFormData(prevFormData => ({
-        ...prevFormData,
-        numberOfDepartments: 0 // Update numberOfDepartments with the new value
-      }));
-  
-    }
-    const onSelectionChanged = useCallback(() => {
-      const selectedRows = gridRef.current.api.getSelectedRows();
-      document.querySelector('#selectedRows').innerHTML =
-        selectedRows.length === 1 ? selectedRows[0].athlete : '';
-        console.log(selectedRows)
-        handleOpen();
-    }, []);
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(!open);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      numberOfDepartments: 0, // Update numberOfDepartments with the new value
+    }));
+  };
+  const onSelectionChanged = useCallback(() => {
+    const selectedRows = gridRef.current.api.getSelectedRows();
+    document.querySelector("#selectedRows").innerHTML =
+      selectedRows.length === 1 ? selectedRows[0].athlete : "";
+    console.log(selectedRows);
+    handleOpen();
+  }, []);
 
   return (
     <div style={containerStyle}>
@@ -170,18 +155,13 @@ export default function UpdateDepartment () {
           <span id="selectedRows"></span>
         </div>
 
-        <div
-          style={gridStyle}
-          className={
-            "ag-theme-quartz"
-          }
-        >
+        <div style={gridStyle} className={"ag-theme-quartz"}>
           <AgGridReact
             ref={gridRef}
             rowData={rowData}
             columnDefs={columnDefs}
             defaultColDef={defaultColDef}
-            rowSelection={'single'}
+            rowSelection={"single"}
             onGridReady={onGridReady}
             onSelectionChanged={onSelectionChanged}
             pagination={true}
@@ -191,9 +171,6 @@ export default function UpdateDepartment () {
         </div>
       </div>
 
-
-
-
       <Dialog
         open={open}
         handler={handleOpen}
@@ -201,32 +178,32 @@ export default function UpdateDepartment () {
           mount: { scale: 1, y: 0 },
           unmount: { scale: 0.9, y: -100 },
         }}
-        className="dark:bg-gray-800"
-
+        className="dark:bg-[#282828]"
       >
-        <DialogHeader className='dark:text-white'>Update Department Data</DialogHeader>
+        <DialogHeader className="dark:text-white">
+          Update Department Data
+        </DialogHeader>
         <DialogBody>
-        <form onSubmit={handleSubmit}>
-      <div className='flex flex-wrap items-center gap-5 '>
-        <input
-          type="text"
-          name="college"
-          onChange={handleInputChange}
-          className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'
-          placeholder="College"
-        />
-      
-        <input
-          type="number"
-          name="numberOfDepartments"
-          onChange={handleInputChange}
-          className='rounded-md p-2       border border-solid border-gray-800 dark:text-white'
-          placeholder="Number of Departments"
-        />
-        {renderDepartmentNamesInputs({open})}
-      
-      </div>
-    </form>
+          <form onSubmit={handleSubmit}>
+            <div className="flex flex-wrap items-center gap-5 ">
+              <input
+                type="text"
+                name="college"
+                onChange={handleInputChange}
+                className="rounded-md p-2       border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none  "
+                placeholder="College"
+              />
+
+              <input
+                type="number"
+                name="numberOfDepartments"
+                onChange={handleInputChange}
+                className="rounded-md p-2       border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none  "
+                placeholder="Number of Departments"
+              />
+              {renderDepartmentNamesInputs({ open })}
+            </div>
+          </form>
         </DialogBody>
         <DialogFooter>
           <Button
@@ -244,12 +221,4 @@ export default function UpdateDepartment () {
       </Dialog>
     </div>
   );
-};
-
-
-
-
-
-
-
-
+}
