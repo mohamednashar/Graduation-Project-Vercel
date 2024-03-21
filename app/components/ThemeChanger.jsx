@@ -14,7 +14,7 @@ function ThemeChanger() {
     return null
   }
   return (
-    <div className=' rounded-full  text-gray-600 dark:text-gray-400 hover:text-[#4e9999] dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 flex items-center '>
+    <div className=' hover:scale-[0.8] transition-all duration-300 rounded-full  text-gray-600 dark:text-gray-400 hover:text-[#4e9999] dark:hover:text-gray-100  flex items-center '>
     {
       theme==="dark"? 
       <button  onClick={() => setTheme('light')}>  
