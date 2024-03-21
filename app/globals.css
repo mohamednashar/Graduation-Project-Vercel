@@ -158,6 +158,10 @@ label{
   font-family: '__Poppins_4a3e9c', '__Poppins_Fallback_4a3e9c';
 }
 
+button{
+  font-family: '__Poppins_4a3e9c', '__Poppins_Fallback_4a3e9c' !important;
+}
+
 
 .dark .ag-body-vertical-scroll-container {
   background-color: #282828;
@@ -174,7 +178,29 @@ label{
     scrollbar-width:thin;
 }
 
+.dark .css-13cymwt-control{
+  background-color: #282828;
+}
+.dark .css-13cymwt-control{
+  background-color: #282828;
+}
+.dark .css-1nmdiq5-menu{
+  background-color: #282828;
+  color: #f8f9fa;
+}
 
+.dark .css-t3ipsp-control{
+  background-color: #282828;
+  color: #f8f9fa;
+}
+
+.dark .css-d7l1ni-option{
+  background-color:#66bfbf;
+}
+
+.dark .css-1dimb5e-singleValue{
+  color: #f8f9fa;
+}
 
 
 

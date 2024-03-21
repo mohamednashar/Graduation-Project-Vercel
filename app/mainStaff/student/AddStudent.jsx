@@ -93,26 +93,23 @@ const AddStudent = () => {
       </label>
       {type === "select" ? (
         <Select
-          className="w-[150px] md:w-[250px] "
-          id={id}
-          onChange={(selectedOptions) => {
-            const selectedValues = selectedOptions.map(
-              (selectedOption) => selectedOption.value
-            );
-            setFormData((prevFormData) => {
-              return { ...prevFormData, [id]: selectedValues };
-            });
-          }}
-          options={
-            id === "college"
-              ? collegeOptions
-              : id === "department"
-              ? departmentOptions
-              : []
-          }
-          isMulti
-          closeMenuOnSelect={false}
-        />
+        className="w-[150px] md:w-[250px] "
+        id={id}
+        onChange={(selectedOption) => {
+          const selectedValue = selectedOption.value;
+          setFormData((prevFormData) => {
+            return { ...prevFormData, [id]: selectedValue };
+          });
+        }}
+        options={
+          id === "college"
+            ? collegeOptions
+            : id === "department"
+            ? departmentOptions
+            : []
+        }
+        closeMenuOnSelect={true} 
+      />
       ) : type === "radio" ? (
         <div className="flex items-center">
           <input
