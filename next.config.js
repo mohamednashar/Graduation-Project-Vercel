@@ -24,6 +24,13 @@ module.exports = {
         hostname: 'drive.google.com',
        
       },
+
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+       
+      },
     ],
+
   },
 };

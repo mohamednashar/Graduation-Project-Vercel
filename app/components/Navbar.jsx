@@ -22,6 +22,7 @@ const navigation = [
   { name: "Meeting", href: "/meeting", current: false },
   { name: "Calendar", href: "/calendar", current: false },
   { name: "Assignments", href: "/assignments", current: false },
+  { name: "Posts", href: "/posts", current: false },
 ];
 
 function classNames(...classes) {
@@ -105,7 +106,9 @@ export default function Example() {
                               (item.name === "Meeting" &&
                                 activeLink === "/meeting") ||
                               (item.name === "Calendar" &&
-                                activeLink === "/calendar")
+                                activeLink === "/calendar")||
+                                (item.name === "Posts" &&
+                                  activeLink.startsWith("/posts"))
                               ? "bg-gray-200 dark:bg-[#353535] dark:text-white transition-all duration-200 "
                               : ""
                             // Add other classes here if needed
