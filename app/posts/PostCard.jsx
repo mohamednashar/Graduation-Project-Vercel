@@ -20,8 +20,8 @@ function PostCard() {
     }
   };
   return (
-    <div className="w-[100%] bg-gray-50 flex items-center justify-center dark:bg-[#121212]">
-      <div className=" bg-white mt-6 rounded-2xl p-4 dark:bg-[#282828]">
+    <div className="w-[100%]  flex items-center justify-center dark:bg-[#121212]">
+      <div className=" bg-white my-6 rounded-2xl p-4 dark:bg-[#282828]">
         <div className="flex items-center justify-between">
           <div className="gap-3.5 flex items-center">
             <img
