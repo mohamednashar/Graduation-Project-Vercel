@@ -232,7 +232,7 @@ const CommentSection = () => {
                         />
                         <button
                           onClick={handleSaveEdit}
-                          className="text-[#66bfbf] hover:text-[#4e9999] mt-2 transition-all duration-200"
+                          className="text-[#66bfbf] hover:text-[#4e9999] transition-all duration-200 font-semibold"
                         >
                           Submit
                         </button>
