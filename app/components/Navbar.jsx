@@ -121,10 +121,10 @@ export default function Example() {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center justify-center gap-7">
+              <div className="flex items-center justify-center gap-6">
                 <Menu>
                   <MenuHandler>
-                    <IconButton variant="text" className="text-[#66bfbf]">
+                    <button variant="text" className="text-[#66bfbf] hover:text-[#5dadad] transition-all duration-300 ">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -137,7 +137,7 @@ export default function Example() {
                           clipRule="evenodd"
                         />
                       </svg>
-                    </IconButton>
+                    </button>
                   </MenuHandler>
                   <MenuList className="flex flex-col gap-2 bg-white dark:bg-[#121212] ">
                     <MenuItem className="flex items-center gap-4 py-2 pl-2 pr-8 dark:hover:bg-[#282828] ">
