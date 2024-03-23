@@ -102,6 +102,8 @@ function CommentSection({ comments, setComments, userPhoto, username }) {
               handleReply={() => handleReply(commentIndex)}
               userPhoto={userPhoto}
               username={username}
+              comments={comments}
+              setComments={setComments}
             />
             {comment.replies.map((reply, replyIndex) => (
               <Reply
@@ -110,6 +112,8 @@ function CommentSection({ comments, setComments, userPhoto, username }) {
                 commentIndex={commentIndex}
                 replyIndex={replyIndex}
                 handleLike={handleLike}
+                comments={comments}
+                setComments={setComments}
               />
             ))}
             {replyIndex === commentIndex && (
