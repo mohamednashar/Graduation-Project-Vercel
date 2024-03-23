@@ -66,7 +66,7 @@ function CommentSection({ comments, setComments, userPhoto, username }) {
 
   return (
     <div>
-      <form onSubmit={handleAddComment} className="flex gap-3">
+      <form onSubmit={handleAddComment} className="flex gap-3 mb-5">
         <div className="flex items-center justify-between mt-4 w-full gap-2">
           <img
             src={userPhoto}
