@@ -1,8 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentDots, faHeart } from "@fortawesome/free-solid-svg-icons";
-import CommentSection from "./Comment";
+import CommentSection from "./CommentSection";
 import Image from "next/image";
 
 function PostCard() {
@@ -19,6 +19,18 @@ function PostCard() {
       setReact(react - 1);
     }
   };
+  const [totalComments, setTotalComments] = useState(0);
+  const [totalReplies, setTotalReplies] = useState(0);
+
+  useEffect(() => {
+    let commentsCount = comments.length;
+    let repliesCount = comments.reduce(
+      (total, comment) => total + comment.replies.length,
+      0
+    );
+    setTotalComments(commentsCount);
+    setTotalReplies(repliesCount);
+  }, [comments]);
   return (
     <div className="w-full  flex items-center justify-center dark:bg-[#121212]">
       <div className=" bg-white my-6 rounded-2xl p-4 dark:bg-[#282828]">
@@ -76,7 +88,7 @@ function PostCard() {
               size="xl"
               className="text-blue-500 w-[30px]"
             />{" "}
-            <div className="text-sm ">{comments.length} Comments</div>
+            <div className="text-sm ">{+totalComments + +totalReplies} Comments</div>
           </div>
         </div>
         <CommentSection
