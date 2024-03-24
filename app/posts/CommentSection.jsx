@@ -78,14 +78,14 @@ function CommentSection({ comments, setComments, userPhoto, username }) {
               value={newComment}
               onChange={handleInputChange}
               type="text"
-              className="h-full w-full bg-gray-50 outline-none text-black dark:text-white dark:bg-[#282828]"
+              className="h-full w-full outline-none text-black dark:text-white dark:bg-[#1e1e1e] bg-white"
               placeholder="Write your comment..."
               name="comment"
             />
             <button>
               <FontAwesomeIcon
                 icon={faPaperPlane}
-                className="text-blue-500"
+                className="text-[#66bfbf]"
                 size="xl"
               />
             </button>
@@ -123,12 +123,12 @@ function CommentSection({ comments, setComments, userPhoto, username }) {
                   value={replyText}
                   onChange={(e) => setReplyText(e.target.value)}
                   placeholder="Write your reply..."
-                  className="bg-gray-200 dark:bg-[#121212] outline-none h-10 w-[80%]"
+                  className="bg-gray-200 dark:bg-[#121212] outline-none h-10 w-[80%] p-2 rounded-lg"
                 />
                 <button onClick={handleAddReply}>
                   <FontAwesomeIcon
                     icon={faPaperPlane}
-                    className="text-blue-500 mx-5"
+                    className="text-[#66bfbf] mx-5"
                     size="xl"
                   />
                 </button>

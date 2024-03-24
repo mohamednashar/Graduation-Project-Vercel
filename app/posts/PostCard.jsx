@@ -46,7 +46,7 @@ function PostCard() {
   }, [comments]);
   return (
     <div className="w-full  flex items-center justify-center dark:bg-[#121212]">
-      <div className=" bg-white my-6 rounded-2xl p-4 dark:bg-[#282828]">
+      <div className=" bg-white my-6 rounded-2xl p-4 dark:bg-[#1e1e1e]">
         <div className="flex items-center justify-between">
           <div className="gap-3.5 flex items-center">
             <img
@@ -62,7 +62,7 @@ function PostCard() {
             </div>
           </div>
         </div>
-        <div className="whitespace-pre-wrap mt-7">Hello guys ?</div>
+        <div className="whitespace-pre-wrap mt-7 mb-3">Hello guys ?</div>
           {/*  if their is an pdf */}
         <button className="border-2 border-gray-200 dark:border-gray-700 flex items-center justify-center rounded-lg shadow-md transition-all duration-300">
               <Image
@@ -112,7 +112,7 @@ function PostCard() {
             <FontAwesomeIcon
               icon={faCommentDots}
               size="xl"
-              className="text-blue-500 w-[30px]"
+              className="w-[30px] text-[#66bfbf]"
             />{" "}
             <div className="text-sm ">{+totalComments + +totalReplies} Comments</div>
           </div>

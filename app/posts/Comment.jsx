@@ -53,7 +53,7 @@ function Comment({comments , setComments ,  comment, commentIndex, handleLike, h
         </div>
       
         <div>
-            <button onClick={handleEdit}><FontAwesomeIcon icon={faPen} className="text-blue-500 mx-3" size="xl" /></button>
+            <button onClick={handleEdit}><FontAwesomeIcon icon={faPen} className="text-[#66bfbf] mx-3" size="xl" /></button>
             <button onClick={handleOpenModal}><FontAwesomeIcon icon={faTrash} className="text-red-500 mx-3" size="xl" /></button>
           </div>
     </div>
@@ -92,7 +92,7 @@ function Comment({comments , setComments ,  comment, commentIndex, handleLike, h
           <FontAwesomeIcon
             icon={faReply}
             size="xl"
-            className={`text-blue-500`}
+            className="text-[#66bfbf]"
           />
         </div>
       </div>

@@ -50,7 +50,7 @@ function Reply({comments , setComments , reply, handleLike, commentIndex, replyI
           </div>
         </div>
         <div>
-              <button onClick={handleEdit}><FontAwesomeIcon icon={faPen} className="text-blue-500 mx-3" size="xl" /></button>
+              <button onClick={handleEdit}><FontAwesomeIcon icon={faPen} className="text-[#66bfbf] mx-3" size="xl" /></button>
               <button onClick={handleOpenModal}><FontAwesomeIcon icon={faTrash} className="text-red-500 mx-3" size="xl" /></button>
             </div>
       </div>
@@ -63,8 +63,8 @@ function Reply({comments , setComments , reply, handleLike, commentIndex, replyI
             onChange={(e) => setEditedReplyText(e.target.value)}
             className="bg-gray-200 dark:bg-[#121212] h-10 w-[50%] md:w-[75%] mx-1"
           />
-          <button onClick={handleSaveEdit} className="text-green-500 mx-1 font-semibold rounded-md p-1 border-2">Save</button>
-          <button onClick={handleCancelEdit} className="text-red-500 mx-1 font-semibold rounded-md border-2 p-1">Cancel</button>
+          <button onClick={handleSaveEdit} className="text-green-500 mx-1 font-semibold rounded-md py-1 px-2 border-2 transition-all duration-300 hover:scale-105">Save</button>
+          <button onClick={handleCancelEdit} className="text-red-500 mx-1 font-semibold rounded-md border-2 py-1 px-2 transition-all duration-300 hover:scale-105">Cancel</button>
         </div>
       ) 
       
