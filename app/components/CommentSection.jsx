@@ -14,7 +14,7 @@ const CommentSection = () => {
   const [comments, setComments] = useState([
     {
       id: 1,
-      author: { name: "John Doe", avatar: "https://via.placeholder.com/150" },
+      author: { name: "John Doe", avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1061&q=80" },
       content: "This is the first comment.",
       replies: [],
       liked: false,
@@ -24,7 +24,7 @@ const CommentSection = () => {
       id: 2,
       author: {
         name: "Alice Smith",
-        avatar: "https://via.placeholder.com/150",
+        avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1061&q=80",
       },
       content: "Nice post!",
       replies: [],
@@ -77,7 +77,7 @@ const CommentSection = () => {
     if (newComment.trim() !== "") {
       const comment = {
         id: comments.length + 1,
-        author: { name: "You", avatar: "https://via.placeholder.com/150" },
+        author: { name: "You", avatar: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80" },
         content: newComment,
         replies: [],
         liked: false,
@@ -159,7 +159,7 @@ const CommentSection = () => {
   return (
     <div className="space-y-8 mb-10">
       <div className="flex items-center space-x-4 ">
-        <Avatar src="https://via.placeholder.com/150" />
+        <Avatar src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80" />
         <Input
           variant="standard"
           color={theme === "dark" ? "white" : ""}
@@ -215,7 +215,7 @@ const CommentSection = () => {
               >
                 <div className="flex">
                   <div>
-                    <Avatar src="https://via.placeholder.com/150" />
+                    <Avatar src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80" />
                   </div>
                   <div className="flex flex-col ml-2">
                     <p className="font-semibold">{reply.author}</p>

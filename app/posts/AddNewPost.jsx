@@ -15,7 +15,14 @@ const AddNewPost = () => {
   const handleFileChange = (event) => {
     // Handle file upload
     const selectedFiles = Array.from(event.target.files);
-    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]); // Append new files to the existing files array
+    const filteredFiles = selectedFiles.filter(file => {
+      return (
+        file.type === "application/pdf" ||
+        file.type === "text/plain" ||
+        file.type.startsWith("image/")
+      );
+    });
+    setFiles((prevFiles) => [...prevFiles, ...filteredFiles]); // Append new files to the existing files array
   };
 
   const handleSubmit = (event) => {
@@ -31,7 +38,7 @@ const AddNewPost = () => {
   };
 
   return (
-    <div className="p-4 flex flex-col md:flex-row justify-center gap-3 bg-white w-full md:w-[800px] mx-auto mt-5 rounded-md shadow-sm dark:bg-[#1e1e1e]">
+    <div className="p-4 flex flex-col md:flex-row justify-center gap-3 bg-white w-full md:w-[750px] mx-auto mt-5 rounded-md shadow-sm dark:bg-[#1e1e1e]">
       <div>
         <img
           src="https://images.unsplash.com/photo-1617077644557-64be144aa306?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
@@ -43,7 +50,7 @@ const AddNewPost = () => {
       <div className="w-full">
         <form onSubmit={handleSubmit}>
           <textarea
-            className="w-full resize-none p-3 border dark:border-gray-700 rounded-md focus:outline-none border-b-2 dark:bg-[#1e1e1e]"
+            className="w-full resize-none p-3 border dark:border-gray-700 rounded-md text-sm focus:outline-none border-b-2 dark:bg-[#1e1e1e]"
             rows="5"
             placeholder="What's on your mind?"
             value={text}
@@ -87,6 +94,7 @@ const AddNewPost = () => {
             id="fileInput"
             className="hidden"
             multiple
+            accept=".pdf,.txt,image/*"
             onChange={handleFileChange}
           />
           <Button
