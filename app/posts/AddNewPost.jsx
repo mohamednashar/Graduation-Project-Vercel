@@ -1,4 +1,6 @@
 "use client"
+import { faFileLines, faFilePdf } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 
 const AddNewPost = () => {
@@ -12,7 +14,7 @@ const AddNewPost = () => {
   const handleFileChange = (event) => {
     // Handle file upload
     const selectedFiles = Array.from(event.target.files);
-    setFiles(selectedFiles);
+    setFiles(prevFiles => [...prevFiles, ...selectedFiles]); // Append new files to the existing files array
   };
 
   const handleSubmit = (event) => {
@@ -28,7 +30,7 @@ const AddNewPost = () => {
   };
 
   return (
-    <div className="rounded-lg overflow-hidden w-full my-3 mx-auto   md:w-[60%]">
+    <div className="rounded-lg overflow-hidden w-full my-3 mx-auto md:w-[60%]">
       <div className="p-4 flex items-center">
         <img
           src="https://images.unsplash.com/photo-1617077644557-64be144aa306?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
@@ -42,11 +44,28 @@ const AddNewPost = () => {
           <textarea
             className="w-full resize-none p-3 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
             rows="5"
-            
             placeholder="What's on your mind?"
             value={text}
             onChange={handleTextChange}
           />
+          {/* Render selected files inside the text area */}
+          <div className="mt-2 flex flex-wrap">
+            {files.map((file, index) => (
+              <div key={index} className="flex items-center mr-2 mb-2">
+                {file.type === "application/pdf" ? (
+                  <FontAwesomeIcon icon={faFilePdf} className="w-16 h-16 object-cover rounded-md mr-2 mb-2" />
+                ) : file.type === "text/plain" ? (
+                  <FontAwesomeIcon icon={faFileLines} className="w-16 h-16 object-cover rounded-md mr-2 mb-2" />
+                ) : (
+                  <img
+                    src={URL.createObjectURL(file)}
+                    alt={`Selected File ${index + 1}`}
+                    className="w-16 h-16 object-cover rounded-md mr-2 mb-2"
+                  />
+                )}
+              </div>
+            ))}
+          </div>
           {/* Custom file input button */}
           <label
             htmlFor="fileInput"
@@ -63,7 +82,7 @@ const AddNewPost = () => {
           />
           <button
             type="submit"
-            className=" bg-[#66bfbf] text-white font-semibold py-2 px-4 rounded-md inline-block mt-4 ml-2"
+            className="bg-[#66bfbf] text-white font-semibold py-2 px-4 rounded-md inline-block mt-4 ml-2"
           >
             Post
           </button>
