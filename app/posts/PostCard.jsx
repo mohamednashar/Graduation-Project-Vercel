@@ -5,6 +5,19 @@ import { faCommentDots, faHeart } from "@fortawesome/free-solid-svg-icons";
 import CommentSection from "./CommentSection";
 import Image from "next/image";
 
+
+
+var fullLink =
+"https://drive.google.com/file/d/1r6mVeVs4uk0u6_Z2Ls8sF2Bk-2rCAstr/view";
+
+// Generate the thumbnail link
+var thumbnailLink = fullLink.replace(
+"https://drive.google.com/file/d/",
+"https://drive.google.com/thumbnail?id="
+);
+thumbnailLink = thumbnailLink.replace("/view", "");
+
+
 function PostCard() {
   const [color, setColor] = useState("gray-200");
   const [react, setReact] = useState(0);
@@ -50,6 +63,18 @@ function PostCard() {
           </div>
         </div>
         <div className="whitespace-pre-wrap mt-7">Hello guys ?</div>
+          {/*  if their is an pdf */}
+        <button className="border-2 border-gray-200 dark:border-gray-700 flex items-center justify-center rounded-lg shadow-md transition-all duration-300">
+              <Image
+                width={500}
+                height={500}
+                src={thumbnailLink}
+                alt="PDF Thumbnail"
+                className="h-20 w-24 object-cover rounded-l-md border-r-2 dark:border-gray-700"
+              />
+              <p className="px-4 text-md font-semibold">Control Task 11</p>
+            </button>
+
         <div className="mt-5 flex flex-col md:flex-row  gap-2 justify-center border-b pb-4 flex-wrap">
           <div>
             <Image
@@ -60,6 +85,7 @@ function PostCard() {
               height={300}
             />
           </div>
+          
           <div >
             <Image
               src="https://images.unsplash.com/photo-1614914135224-925593607248?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1534&q=80"
