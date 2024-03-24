@@ -1,5 +1,5 @@
-"use client";
-import { faFileLines, faFilePdf } from "@fortawesome/free-solid-svg-icons";
+"use client"
+import { faFileLines, faFilePdf, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@material-tailwind/react";
 import { useState } from "react";
@@ -37,6 +37,14 @@ const AddNewPost = () => {
     console.log("Form data:", formData);
   };
 
+  const handleDeleteFile = (index) => {
+    setFiles((prevFiles) => {
+      const updatedFiles = [...prevFiles];
+      updatedFiles.splice(index, 1);
+      return updatedFiles;
+    });
+  };
+
   return (
     <div className="p-4 flex flex-col md:flex-row justify-center gap-3 bg-white w-full md:w-[750px] mx-auto mt-5 rounded-md shadow-sm dark:bg-[#1e1e1e]">
       <div>
@@ -59,7 +67,8 @@ const AddNewPost = () => {
           {/* Render selected files inside the text area */}
           <div className="mt-2 flex flex-wrap border-b dark:border-gray-700  pt-3 border-gray-300">
             {files.map((file, index) => (
-              <div key={index} className="flex items-center mr-2 mb-2">
+              <div key={index} className="relative">
+                {/* Render file preview */}
                 {file.type === "application/pdf" ? (
                   <FontAwesomeIcon
                     icon={faFilePdf}
@@ -77,6 +86,14 @@ const AddNewPost = () => {
                     className="w-10 h-10 object-cover rounded-md mr-2 mb-2"
                   />
                 )}
+
+                {/* Delete button */}
+                <button
+                  onClick={() => handleDeleteFile(index)}
+                  className="absolute bottom-10 right-0 w-3 h-3 p-2.5 flex items-center justify-center  bg-gray-300  rounded-full text-red-500 hover:bg-red-100 transition-all duration-200"
+                >
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
               </div>
             ))}
           </div>
