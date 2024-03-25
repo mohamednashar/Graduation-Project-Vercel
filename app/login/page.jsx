@@ -158,7 +158,18 @@ const Login = () => {
           {/* Add labels for Prof, Student, and Staff */}
 
           <div className="flex items-center gap-2">
-            <input 
+            <input className="cursor-pointer"
+            type="radio" 
+            name="checkboxStudent" 
+            id="student" 
+            value="student"   
+            checked={isCheckedStudent}
+            onChange={handleCheckboxChange} />
+            <label className="font-bold cursor-pointer" for="student">Student</label>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <input className="cursor-pointer"
             type="radio" 
             name="checkboxProf" 
             id="prof" 
@@ -166,11 +177,11 @@ const Login = () => {
             checked={isCheckedProf}
             onChange={handleCheckboxChange}
             />
-            <label className="font-bold" for="prof">Prof</label>
+            <label className="font-bold cursor-pointer" for="prof">Prof</label>
           </div>
 
           <div className="flex items-center gap-2">
-            <input 
+            <input className="cursor-pointer"
             type="radio" 
             name="checkboxTeachingAssistant" 
             id="TeachingAssistant" 
@@ -178,31 +189,22 @@ const Login = () => {
             checked={isCheckedTeachingAssistant}
             onChange={handleCheckboxChange}
             />
-            <label className="font-bold" for="TeachingAssistant">Assistant</label>
+            <label className="font-bold cursor-pointer" for="TeachingAssistant">Assistant</label>
           </div>
 
 
-          <div className="flex items-center gap-2">
-            <input 
-            type="radio" 
-            name="checkboxStudent" 
-            id="student" 
-            value="student"   
-            checked={isCheckedStudent}
-            onChange={handleCheckboxChange} />
-            <label className="font-bold" for="student">Student</label>
-          </div>
+
 
           
           <div className="flex items-center gap-2">
-            <input 
+            <input className="cursor-pointer"
             type="radio" 
             name="checkboxStaff" 
             id="staff" 
             value="staff"  
             checked={isCheckedStaff}
             onChange={handleCheckboxChange} />
-            <label className="font-bold" for="staff">Staff</label>
+            <label className="font-bold cursor-pointer" for="staff">Staff</label>
           </div>
 
 

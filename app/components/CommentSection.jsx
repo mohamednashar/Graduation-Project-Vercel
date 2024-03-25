@@ -182,7 +182,7 @@ const CommentSection = () => {
           <div className="flex-1 rounded-lg p-4 bg-white dark:bg-[#1e1e1e]">
             <div className="flex items-center justify-between mb-2">
               <p className="font-semibold bg-gray-100 dark:bg-[#353535] dark:text-gray-100 p-2 rounded-xl border-b-2 dark:border-gray-700">
-                @{comment.author.name}
+                {comment.author.name}
               </p>
               <div className="flex items-center">
                 <button
