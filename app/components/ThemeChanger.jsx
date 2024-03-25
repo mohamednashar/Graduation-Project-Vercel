@@ -15,8 +15,8 @@ function ThemeChanger() {
     const updateScrollbar = () => {
       const lightScrollbar = '#aaaaaa';
       const lightScrollbarTrack = '#F5F5F5';
-      const darkScrollbar = '#333333';
-      const darkScrollbarTrack = '#ffffff';
+      const darkScrollbar = '#444444';
+      const darkScrollbarTrack = '#282828';
 
       const root = document.documentElement;
       if (theme === 'dark') {
