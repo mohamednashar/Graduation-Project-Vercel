@@ -4,9 +4,6 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import { usePathname } from "next/navigation";
 import ThemeHandler from "./components/ThemeHandler";
-const inter = Inter({ subsets: ["latin"] });
-
-const arsans = AR_One_Sans({ subsets: ["latin"],weight:['400','700'] });
 
 const poppins = Poppins({ subsets: ["latin"],weight:['400','500','600','700'] });
 
