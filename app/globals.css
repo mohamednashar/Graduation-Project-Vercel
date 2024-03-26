@@ -155,11 +155,11 @@ input[type="radio"] {
 
 
 label{
-  font-family: '__Poppins_4a3e9c', '__Poppins_Fallback_4a3e9c';
+  font-family: '__Poppins_e04c4e', '__Poppins_Fallback_e04c4e' !important;
 }
 
 button{
-  font-family: '__Poppins_4a3e9c', '__Poppins_Fallback_4a3e9c' !important;
+  font-family: '__Poppins_e04c4e', '__Poppins_Fallback_e04c4e' !important;
 }
 
 
