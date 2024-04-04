@@ -1,36 +1,22 @@
-"use client"
-import React from 'react';
-import { JitsiMeeting } from '@jitsi/react-sdk';
+import React from 'react'
 
-const MyComponent = () => {
+async function getData() {
+  const res = await fetch('https://jsonplaceholder.typicode.com/todos/12')
+
+  if(!res.ok)
+  {
+    throw new Error("Failed")
+  }
+ 
+  return res.json()
+}
+
+export default async function page() {
+  const data = await getData()
   return (
-      <div className="flex flex-col">
-          <JitsiMeeting
-            domain="meet.jit.si"
-            roomName="Enter Your Room Name"
-            configOverwrite={{
-              startWithAudioMuted: true,
-              disableModeratorIndicator: true,
-              startScreenSharing: true,
-              enableEmailInStats: false
-            }}
-            interfaceConfigOverwrite={{
-              DISABLE_JOIN_LEAVE_NOTIFICATIONS: true
-            }}
-            userInfo={{
-              displayName: 'Mohamed'
-            }}
-            onApiReady={(externalApi) => {
-              // here you can attach custom event listeners to the Jitsi Meet External API
-              // you can also store it locally to execute commands
-            }}
-            getIFrameRef={(iframeRef) => { 
-              iframeRef.style.height = 'calc(100vh - 64px)';
-              iframeRef.style.outline = 'none'; 
-          }}
-          />
-      </div>
-  );
-};
-
-export default MyComponent;
+    <div>
+      {data.title}
+      
+    </div>
+  )
+}

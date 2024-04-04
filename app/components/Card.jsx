@@ -35,7 +35,7 @@ export function CardDefault({ courseTitle, code }) {
         <div className="flex w-full flex-col p-4 sm:w-1/2 sm:p-8 lg:w-3/5 text-[#66bfbf]">
           <div className="flex items-start justify-between mb-4">
             <div className="text-sm font-medium uppercase sm:text-base text-[#66bfbf]">
-              11 Lecture
+              10 Groups
             </div>
             <div className="text-end">
               <div className="w-full sm:w-80 bg-[#EEEEEE] h-2 rounded-md">
