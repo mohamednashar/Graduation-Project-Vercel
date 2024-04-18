@@ -203,5 +203,6 @@ button{
   color: #f8f9fa;
 }
 
-
-
+.css-13cymwt-control{
+  border-radius: 8px !important;
+}

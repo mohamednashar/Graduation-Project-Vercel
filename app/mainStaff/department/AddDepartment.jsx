@@ -1,89 +1,168 @@
-"use client";
 import { Button, Dialog, DialogBody } from "@material-tailwind/react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Select from "react-select";
 
-const labels = ["College", "Number of Departments"];
+const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const AddDepartment = () => {
   const [formData, setFormData] = useState({
-    college: "",
-    number_of_departments: 0, // Initialize "number_of_departments" to 0
-    departmentNames: [] // Initialize departmentNames array
+    departmentName: "",
+    studentServiceNumber: "",
+    professorHeadName: ""
   });
-
   const [open, setOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [faculties, setFaculties] = useState([]);
+
+  
+  useEffect(() => {
+    // Fetch faculties when component mounts
+    const fetchFaculties = async () => {
+      try {
+        const response = await axios.get(`${API}Faculty/GetFaculties`);
+        setFaculties(response.data);
+      } catch (error) {
+        console.error("Error fetching faculties:", error);
+      }
+    };
+    fetchFaculties();
+  }, []); // Empty dependency array ensures this effect runs only once
+
 
   const handleOpen = () => setOpen(!open);
 
-  const handleInputChange = (event) => {
-    const { id, value } = event.target;
-    setFormData({ ...formData, [id]: value });
-  };
+const handleSubmit = async (event) => {
+  event.preventDefault();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("Form Data:", formData);
-  };
+  // Check if any of the required fields are empty
+  if (
+    formData.departmentName.trim() === "" ||
+    formData.studentServiceNumber.trim() === "" ||
+    formData.professorHeadName.trim() === ""
+  ) {
+    setErrorMessage("Please fill in all the required fields.");
+    setSuccessMessage("");
+    return; // Exit the function early if any field is empty
+  }
 
-  useEffect(() => {
-    const numberOfDepartments = parseInt(formData["number_of_departments"]); // Convert to integer
-    setFormData(prevState => ({
-      ...prevState,
-      departmentNames: Array.from({ length: numberOfDepartments }, (_, index) => "")
-    }));
-  }, [formData["number_of_departments"]]); // Trigger effect whenever "number_of_departments" changes
-
-  const renderInput = (label, type, id, name = null) => (
-    <div className="flex flex-col items-center pb-5" key={label}>
-      <label
-        htmlFor={id}
-        className="mb-2 text-sm mr-5 w-[150px] md:w-[250px] text-center dark:text-white"
-      >
-        {label}
-      </label>
+  try {
+    const response = await axios.post(
+      `${API}Departement/CreateDepartement`,
       {
-        <input
-          type={type}
-          id={id}
-          value={formData[id]}
-          onChange={handleInputChange}
-          className="w-full block p-2 text-gray-900 border border-gray-300 rounded-lg bg-white sm:text-xs dark:bg-[#282828] dark:text-white"
-        />
+        name: formData.departmentName,
+        studentServiceNumber: formData.studentServiceNumber,
+        profHeadName: formData.professorHeadName,
+        facultyId: formData.facultyId
       }
-    </div>
-  );
-
-  const renderDepartmentNameInputs = () => {
-    const departmentInputs = [];
-    for (let i = 0; i < formData.departmentNames.length; i++) {
-      departmentInputs.push(
-        renderInput("Department Name", "text", `department_${i + 1}`)
-      );
+    );
+    if (response.status === 200) {
+      setSuccessMessage("Submitted Successfully");
+      setErrorMessage("");
+      setOpen(true); // Open the success dialog
     }
-    return departmentInputs;
+  } catch (error) {
+    setErrorMessage("Failed to submit. Please try again later.");
+    setSuccessMessage("");
+    setOpen(true); // Open the error dialog
+  }
+};
+
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
   };
+
+const handleSelectChange = (selectedOption) => {
+  // Extract facultyId from the selected option
+  const facultyId = selectedOption ? selectedOption.value : ""; // Use selectedOption.value if selectedOption exists, otherwise set it to an empty string
+  setFormData({
+    ...formData,
+    facultyId: facultyId
+  });
+};
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col w-full md:w-[90%] mx-auto"
-    >
-      <div className="bg-white dark:bg-[#282828]  p-5 rounded-lg shadow-md flex flex-wrap justify-center lg:justify-between">
-        {labels.map((label, index) => (
-          <div key={index} className="">
-            {index === 1
-              ? renderInput(label, "number", "number_of_departments")
-              : renderInput(label, "text", label.toLowerCase())}
+    <form onSubmit={handleSubmit} className="flex flex-col w-full md:w-[90%] mx-auto">
+      <div className="bg-white p-5 rounded-lg shadow-md">
+
+        <div className="flex flex-col text-sm items-center w-full md:mb-5">
+          <label htmlFor="SelectFaculty" className="mb-2">Select Faculty</label>
+
+          <Select
+            className="w-full md:w-80"
+            options={faculties.map(faculty => ({
+              value: faculty.facultyId,
+              label: faculty.name
+            }))}
+            closeMenuOnSelect={true} 
+            onChange={handleSelectChange}
+          />
+
+
+        </div>
+
+
+        <div className="flex flex-col md:flex-row md:justify-between gap-8">
+          <div className="flex flex-col text-sm items-center w-full">
+            <label htmlFor="departmentName" className="mb-2">
+              Department Name{" "}
+              {formData.departmentName.trim() === "" && (
+                <span className="text-red-500"> *</span>
+              )}
+            </label>
+            <input
+              type="text"
+              name="departmentName"
+              value={formData.departmentName}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
+            />
           </div>
-        ))}
-        {/* Render Department Name inputs */}
-        {renderDepartmentNameInputs()}
+
+          <div className="flex flex-col text-sm items-center w-full">
+            <label htmlFor="studentServiceNumber" className="mb-2">
+              Student Service Number{" "}
+              {formData.studentServiceNumber.trim() === "" && (
+                <span className="text-red-500"> *</span>
+              )}
+            </label>
+            <input
+              type="text"
+              name="studentServiceNumber"
+              value={formData.studentServiceNumber}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
+            />
+          </div>
+
+          <div className="flex flex-col text-sm items-center w-full">
+            <label htmlFor="professorHeadName" className="mb-2">
+              Professor Head Name{" "}
+              {formData.professorHeadName.trim() === "" && (
+                <span className="text-red-500"> *</span>
+              )}
+            </label>
+            <input
+              type="text"
+              name="professorHeadName"
+              value={formData.professorHeadName}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
+            />
+          </div>
+
+        </div>
       </div>
 
       <Button
-        onClick={handleOpen}
         type="submit"
-        className="font-bold text-lg bg-[#66bfbf] text-white px-4 py-2 mt-4 rounded-lg w-[30%] mx-auto mb-5 transition-all duration-200 hover:bg-[#f76b8a]"
+        className="font-bold text-lg bg-[#66bfbf] text-white px-4 py-2 mt-4 rounded-lg w-[30%] mx-auto mb-5 transition-all duration-200 hover:bg-[#5eb1b1]"
         data-dialog-target="animated-dialog"
       >
         Submit
@@ -99,11 +178,10 @@ const AddDepartment = () => {
         }}
       >
         <DialogBody>
-          {/* Modal content */}
-          <div className=" text-center bg-white rounded-lg dark:bg-gray-800 p-5">
+          <div className="text-center bg-white rounded-lg p-5">
             <button
               onClick={handleOpen}
-              className="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              className="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm ml-auto inline-flex items-center"
             >
               <svg
                 aria-hidden="true"
@@ -119,28 +197,11 @@ const AddDepartment = () => {
                 />
               </svg>
             </button>
-            <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 p-2 flex items-center justify-center mx-auto mb-3.5">
-              <svg
-                aria-hidden="true"
-                className="w-8 h-8 text-green-500 dark:text-green-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className="sr-only">Success</span>
-            </div>
-            <p className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-              Submitted Successfully
-            </p>
+            {successMessage && <p className="mb-4 text-lg font-semibold text-gray-900">{successMessage}</p>}
+            {errorMessage && <p className="mb-4 text-lg font-semibold text-red-600">{errorMessage}</p>}
             <button
               onClick={handleOpen}
-              class="middle none center rounded-lg bg-gradient-to-tr from-green-600 to-green-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              className="bg-green-600 text-white py-3 px-6 font-bold rounded-lg uppercase shadow-md transition-all hover:bg-green-500 hover:shadow-lg active:opacity-75"
             >
               Continue
             </button>

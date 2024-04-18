@@ -15,11 +15,11 @@ function DeleteDepartment() {
   return (
     <div>
       <div className="flex items-center justify-center gap-5 bg-white dark:bg-[#282828] w-full md:w-[90%] mx-auto my-4 p-4">
-        <label htmlFor="DepartmentCode" className="dark:text-white">Department Code</label>
+        <label htmlFor="DepartmentCode" className="dark:text-white">Department ID</label>
         <input
           type="text"
           id="DepartmentCode"
-          className="rounded-lg p-1 border-2 dark:text-white dark:bg-[#282828]"
+          className="rounded-lg p-1 border-2 dark:text-white dark:bg-[#282828] outline-none"
         />
       </div>
 
