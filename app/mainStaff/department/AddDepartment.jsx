@@ -2,6 +2,7 @@ import { Button, Dialog, DialogBody } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Select from "react-select";
+import { postData } from "@/app/API/CustomHooks/usePost";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
@@ -47,26 +48,29 @@ const handleSubmit = async (event) => {
     return; // Exit the function early if any field is empty
   }
 
-  try {
-    const response = await axios.post(
-      `${API}Departement/CreateDepartement`,
-      {
-        name: formData.departmentName,
-        studentServiceNumber: formData.studentServiceNumber,
-        profHeadName: formData.professorHeadName,
-        facultyId: formData.facultyId
-      }
-    );
-    if (response.status === 200) {
-      setSuccessMessage("Submitted Successfully");
-      setErrorMessage("");
-      setOpen(true); // Open the success dialog
-    }
-  } catch (error) {
-    setErrorMessage("Failed to submit. Please try again later.");
-    setSuccessMessage("");
-    setOpen(true); // Open the error dialog
-  }
+
+
+  const status=await postData("Departement/CreateDepartement", {
+    name: formData.departmentName,
+    studentServiceNumber: formData.studentServiceNumber,
+    profHeadName: formData.professorHeadName,
+    facultyId: formData.facultyId
+  })
+
+  {status === 200
+  ? (
+      setSuccessMessage("Submitted Successfully"),
+      setErrorMessage(""),
+      setOpen(true) // Open the success dialog
+    )
+  : (
+      setErrorMessage("Failed to submit. Please try again later."),
+      setSuccessMessage(""),
+      setOpen(true) // Open the error dialog
+    );}
+
+
+ 
 };
 
 

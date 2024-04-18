@@ -1,17 +1,20 @@
-async function getData(link) {
-  const API =process.env.NEXT_PUBLIC_BACKEND_API
+import axios from 'axios';
 
-  const res = await fetch(`${API}${link}`)
-  // The return value is *not* serialized
-  // You can return Date, Map, Set, etc.
- 
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data')
-    console.log(res.json())
+async function getData(link) {
+  const API = process.env.NEXT_PUBLIC_BACKEND_API;
+
+  try {
+    const response = await axios.get(`${API}${link}`);
+    
+    // Check if the response status is not OK
+    if (!response.status === 200) {
+      throw new Error('Failed to fetch data');
+    }
+
+    return response.data;
+  } catch (error) {
+    console.log(error)
   }
- 
-  return res.json()
 }
 
-export default getData
+export default getData;
