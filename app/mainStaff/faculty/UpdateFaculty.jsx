@@ -78,32 +78,31 @@ export default function UpdateFaculty() {
   const gridStyle = useMemo(() => ({ height: "100%", width: "100%" }), []);
   const [rowData, setRowData] = useState();
   const [columnDefs, setColumnDefs] = useState([
-    { field: "athlete" },
+    { field: "facultyId" },
     {
-      field: "country",
+      field: "name",
       filterParams: {
         filterOptions: ["contains", "startsWith", "endsWith"],
         defaultOption: "startsWith",
       },
     },
     {
-      field: "sport",
+      field: "studentServiceNumber",
       filterParams: {
         maxNumConditions: 10,
       },
     },
     {
-      field: "age",
+      field: "numOfYears",
       filter: "agNumberColumnFilter",
       filterParams: {
         numAlwaysVisibleConditions: 2,
         defaultJoinOperator: "OR",
       },
-      maxWidth: 100,
+    
     },
     {
-      field: "date",
-      filter: "agDateColumnFilter",
+      field: "profHeadName",
       filterParams: filterParams,
     },
   ]);
@@ -116,7 +115,9 @@ export default function UpdateFaculty() {
   }, []);
 
   const onGridReady = useCallback((params) => {
-    fetch("https://www.ag-grid.com/example-assets/olympic-winners.json")
+    const API =process.env.NEXT_PUBLIC_BACKEND_API
+
+    fetch(`${API}Faculty/GetFaculties`)
       .then((resp) => resp.json())
       .then((data) => setRowData(data));
   }, []);

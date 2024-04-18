@@ -1,3 +1,4 @@
+import { deleteData } from "@/app/API/CustomHooks/useDelete";
 import {
   Button,
   Dialog,
@@ -8,6 +9,12 @@ import {
 import React, { useState } from "react";
 
 function DeleteFaculty() {
+  const [facultyID, setFacultyID] = useState('');
+
+  // Function to handle changes in the input field
+  const handleInputChange = (event) => {
+    setFacultyID(event.target.value);
+  };
   const [openDeleteAssistant, setOpenDeleteAssistant] = useState(false);
   const handleOpenDeleteAssistant = () => {
     setOpenDeleteAssistant(!openDeleteAssistant);
@@ -17,9 +24,11 @@ function DeleteFaculty() {
       <div className="flex items-center justify-center gap-5 bg-white dark:bg-[#282828] w-full md:w-[90%] mx-auto my-4 p-4">
         <label htmlFor="FacultyCode" className="dark:text-white">Faculty ID</label>
         <input
-          type="text"
+          type="number"
           id="FacultyCode"
           className="rounded-lg p-1 border-2 dark:text-white dark:bg-[#282828]"
+          value={facultyID} // Bind the input value to the state
+          onChange={handleInputChange} // Handle input changes
         />
       </div>
 
@@ -58,7 +67,7 @@ function DeleteFaculty() {
           </Button>
           <button
             className="bg-red-600 py-2 px-4 mx-2 hover:bg-red-900 transition-all duration-500 rounded-lg text-white font-semibold"
-            onClick={handleOpenDeleteAssistant}
+            onClick={ ()=>{ handleOpenDeleteAssistant ; deleteData("Faculty/DeleteFaculty" , facultyID);          }}
           >
             Delete
           </button>
