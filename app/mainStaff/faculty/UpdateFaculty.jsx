@@ -10,10 +10,9 @@ import {
   DialogHeader,
   DialogBody,
   DialogFooter,
-  Radio,
-  Select,
-  Option,
+
 } from "@material-tailwind/react";
+import { updateData } from "@/app/API/CustomHooks/useUpdate";
 
 var filterParams = {
   maxNumConditions: 1,
@@ -49,6 +48,10 @@ export default function UpdateFaculty() {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+    setInputValues({
+      ...inputValues,
+      [name]: value
+    });
     setFormData({ ...formData, [name]: value });
   };
 
@@ -59,9 +62,37 @@ export default function UpdateFaculty() {
     setFormData({ ...formData, FacultyNames });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Form Data:", formData);
+  
+    // Check if any of the input fields are empty
+    if (
+      inputValues.name.trim() === "" ||
+      inputValues.studentServiceNumber.trim() === "" ||
+      isNaN(inputValues.numOfYears) ||
+      inputValues.profHeadName.trim() === ""
+    ) {
+      // Handle the case where any of the input fields are empty
+      console.error("Please fill in all the fields");
+      return; // Exit early if any field is empty
+    }
+  
+    // Construct the body object with form data
+    const body = {
+      name: inputValues.name,
+      studentServiceNumber: inputValues.studentServiceNumber,
+      numOfYears: inputValues.numOfYears,
+      profHeadName: inputValues.profHeadName,
+    };
+  
+    try {
+      // Call the updateData function with form data and optional facultyId
+    const status =   await updateData("Faculty/UpdateFaculty", body, inputValues.id);
+      console.log(status);
+    } catch (error) {
+      console.error("Error updating data:", error);
+      // Optionally handle the error
+    }
   };
 
   const [open, setOpen] = useState(false);
@@ -78,7 +109,7 @@ export default function UpdateFaculty() {
   const gridStyle = useMemo(() => ({ height: "100%", width: "100%" }), []);
   const [rowData, setRowData] = useState();
   const [columnDefs, setColumnDefs] = useState([
-    { field: "facultyId" },
+
     {
       field: "name",
       filterParams: {
@@ -122,14 +153,32 @@ export default function UpdateFaculty() {
       .then((data) => setRowData(data));
   }, []);
   const gridRef = useRef();
+  
+  const [inputValues , setInputValues] = useState({
+    id : "",
+    name:"",
+    studentServiceNumber:"",
+    numOfYears:"",
+    profHeadName:""
 
+  })
   const onSelectionChanged = useCallback(() => {
     const selectedRows = gridRef.current.api.getSelectedRows();
     document.querySelector("#selectedRows").innerHTML =
-      selectedRows.length === 1 ? selectedRows[0].athlete : "";
+      selectedRows.length === 1 ? selectedRows[0].name : "";
+      setInputValues({
+        id : selectedRows[0].facultyId ,
+        name:selectedRows[0].name ,
+        studentServiceNumber : selectedRows[0].studentServiceNumber ,
+        numOfYears: selectedRows[0].numOfYears ,
+        profHeadName : selectedRows[0].profHeadName ,
+      })
     console.log(selectedRows);
+    selectedRows.length === 1 && 
     handleOpen();
   }, []);
+
+  
 
   return (
     <div style={containerStyle}>
@@ -176,6 +225,7 @@ export default function UpdateFaculty() {
                 onChange={handleInputChange}
                 className="rounded-md p-2       border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
                 placeholder="College"
+                value={inputValues.name}
               />
               <input
                 type="number"
@@ -183,6 +233,7 @@ export default function UpdateFaculty() {
                 onChange={handleInputChange}
                 className="rounded-md p-2       border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
                 placeholder="Student service number"
+                value={inputValues.studentServiceNumber}
               />
               <input
                 type="number"
@@ -190,6 +241,7 @@ export default function UpdateFaculty() {
                 onChange={handleInputChange}
                 className="rounded-md p-2       border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
                 placeholder="Number of Years"
+                value={inputValues.numOfYears}
               />
 
               <input
@@ -198,6 +250,7 @@ export default function UpdateFaculty() {
                 onChange={handleInputChange}
                 className="rounded-md p-2       border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
                 placeholder="Prof headName"
+                value={inputValues.profHeadName}
               />
             </div>
           </form>
@@ -211,7 +264,7 @@ export default function UpdateFaculty() {
           >
             <span>Cancel</span>
           </Button>
-          <Button variant="gradient" color="green" onClick={handleOpen}>
+          <Button variant="gradient" color="green" onClick={ handleSubmit }>
             <span>Update</span>
           </Button>
         </DialogFooter>

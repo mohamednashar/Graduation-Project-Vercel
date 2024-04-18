@@ -1,13 +1,21 @@
 import axios from 'axios';
 
-export const updateData = async (link, data) => {
+export const updateData = async (link, data , id = null) => {
   const API = process.env.NEXT_PUBLIC_BACKEND_API;
+
+   // Construct the headers object
+   const headers = {
+    'Content-Type': 'application/json'
+  };
+
+  // Add the id to the headers if it's not null
+  if (id !== null) {
+    headers['id'] = id;
+  }
 
   try {
     const response = await axios.post(`${API}${link}`, data, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      headers: headers
     });
 
     // Return the response status
