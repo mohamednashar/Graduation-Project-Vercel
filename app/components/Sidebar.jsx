@@ -10,6 +10,7 @@ import {
   Icon5,
   Icon6,
   Icon7,
+  Icon8,
 
 } from "./icons";
 import ThemeChanger from "./ThemeChanger";
@@ -17,6 +18,12 @@ import ThemeChanger from "./ThemeChanger";
 
 
 const menuItems = [
+  {
+    id: 7,
+    label: "Faculty",
+    icon: Icon8,
+    link: "/mainStaff/faculty",
+  },
   { id: 1, label: "Student", icon: Icon1, link: "/mainStaff/student" },
   { id: 2, label: "Prof", icon: Icon2, link: "/mainStaff/prof" },
   { id: 3, label: "Assistant", icon: Icon3, link: "/mainStaff/assistant" },
@@ -26,6 +33,7 @@ const menuItems = [
     icon: Icon4,
     link: "/mainStaff/course",
   },
+
   {
     id: 5,
     label: "Department",
@@ -42,12 +50,15 @@ const menuItems = [
 
 
 
+  
+
   {
     id: 7,
     label: "Logout",
     icon: Icon7,
     link: "/",
   },
+
 
  
 ];
