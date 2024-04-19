@@ -9,7 +9,7 @@ import { useState } from "react";
 import Select from "react-select";
 
 const labels = [
-  "Course Title",
+  "Course Name",
   "Course Description",
   "Course Code",
   "College",
