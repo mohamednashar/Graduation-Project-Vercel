@@ -6,6 +6,7 @@ export { default as Icon5 } from "./Icon5";
 export { default as Icon6 } from "./Icon6";
 export { default as Icon7 } from "./Icon7";
 export { default as Icon8 } from "./Icon8";
+export { default as Icon9 } from "./Icon9";
 
 
 

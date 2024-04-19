@@ -10,3 +10,8 @@ export const getFaculties = async()=>{
   const data = await getData("Departement/GetDepartements")
   return {data}
  }
+
+ export const getCourseCategories = async()=>{
+  const data = await getData("CourseCategory/GetAllCourseCategories")
+  return {data}
+ }
