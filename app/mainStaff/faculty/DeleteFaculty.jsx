@@ -1,4 +1,7 @@
+"use client"
+import { getFaculties } from "@/app/API/CustomHooks/useAllData";
 import { deleteData } from "@/app/API/CustomHooks/useDelete";
+import getData from "@/app/API/CustomHooks/useGet";
 import {
   Button,
   Dialog,
@@ -6,31 +9,58 @@ import {
   DialogFooter,
   DialogHeader,
 } from "@material-tailwind/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Select from "react-select";
 
 function DeleteFaculty() {
-  const [facultyID, setFacultyID] = useState('');
+  const [allFaculties, setAllFaculties] = useState([]);
+  const [facultyID, setFacultyID] = useState();
 
-  // Function to handle changes in the input field
-  const handleInputChange = (event) => {
-    setFacultyID(event.target.value);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await getFaculties();
+        setAllFaculties(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        // Handle error as needed
+      }
+    };
+    fetchData();
+  }, []); 
+
+  const handleSelectChange = (selectedOption) => {
+    setFacultyID(selectedOption ? selectedOption.value : "");
+    console.log(facultyID)
   };
+
   const [openDeleteAssistant, setOpenDeleteAssistant] = useState(false);
   const handleOpenDeleteAssistant = () => {
     setOpenDeleteAssistant(!openDeleteAssistant);
   };
+  const headers={'Content-Type': 'application/json',Id:facultyID}
+  const DeleteFaculty = async()=>{
+    await deleteData("Faculty/DeleteFaculty" , headers )
+
+  }
+
   return (
     <div>
-      <div className="flex items-center justify-center gap-5 bg-white dark:bg-[#282828] w-full md:w-[90%] mx-auto my-4 p-4">
-        <label htmlFor="FacultyCode" className="dark:text-white">Faculty ID</label>
-        <input
-          type="number"
-          id="FacultyCode"
-          className="rounded-lg p-1 border-2 dark:text-white dark:bg-[#282828]"
-          value={facultyID} // Bind the input value to the state
-          onChange={handleInputChange} // Handle input changes
-        />
-      </div>
+      {allFaculties && (
+        <div className="flex justify-center min-h-[250px] bg-white dark:bg-[#282828] w-full md:w-[90%] mx-auto my-4 p-4">
+          <div>
+          <Select
+            className="w-full md:w-80"
+            options={allFaculties.map((faculty) => ({
+              value: faculty?.facultyId,
+              label: faculty?.name
+            }))}
+            closeMenuOnSelect={true}
+            onChange={handleSelectChange} // Pass the handleSelectChange function here
+          />
+          </div>
+        </div>
+      )}
 
       <div className=" w-full md:w-[90%] mx-auto flex items-center justify-center">
         <button
@@ -46,7 +76,7 @@ function DeleteFaculty() {
         handler={handleOpenDeleteAssistant}
         animate={{
           mount: { scale: 1, y: 0 },
-          unmount: { scale: 0.9, y: -100 },
+          unmount: { scale: 0.9, y: -100 }
         }}
         className="bg-white dark:bg-[#282828]"
       >
@@ -54,7 +84,7 @@ function DeleteFaculty() {
           Delete Faculty
         </DialogHeader>
         <DialogBody className="text-lg text-red-600 font-bold">
-          This Faculty will be deleted from your system . Are you sure about that?
+          This Faculty will be deleted from your system. Are you sure about that?
         </DialogBody>
         <DialogFooter>
           <Button
@@ -67,7 +97,10 @@ function DeleteFaculty() {
           </Button>
           <button
             className="bg-red-600 py-2 px-4 mx-2 hover:bg-red-900 transition-all duration-500 rounded-lg text-white font-semibold"
-            onClick={ ()=>{ handleOpenDeleteAssistant ; deleteData("Faculty/DeleteFaculty" , facultyID);          }}
+            onClick={() => {
+              handleOpenDeleteAssistant();
+              DeleteFaculty;
+            }}
           >
             Delete
           </button>

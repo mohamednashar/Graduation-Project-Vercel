@@ -14,7 +14,7 @@ export const updateData = async (link, data , id = null) => {
   }
 
   try {
-    const response = await axios.post(`${API}${link}`, data, {
+    const response = await axios.put(`${API}${link}`, data, {
       headers: headers
     });
 

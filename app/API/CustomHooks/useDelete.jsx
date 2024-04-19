@@ -1,14 +1,14 @@
 import axios from 'axios';
 
 // Function to make a DELETE request
-export const deleteData = async (url, headers, bodyData) => {
+export const deleteData = async (url, headers) => {
   const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
   try {
    
     const response = await axios.delete(`${API}${url}`, {
       headers: headers,
-      data: bodyData
+    
     });
 
     console.log('Delete request successful', response.data);

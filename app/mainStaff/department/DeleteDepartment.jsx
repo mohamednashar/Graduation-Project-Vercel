@@ -5,7 +5,7 @@ import { deleteData } from "@/app/API/CustomHooks/useDelete";
 
 function DeleteDepartment() {
   const [openDeleteAssistant, setOpenDeleteAssistant] = useState(false);
-  const [departmentId, setDepartmentId] = useState("");
+  const [departmentId, setDepartmentId] = useState(0);
   console.log(departmentId)
 
   const handleOpenDeleteAssistant = async () => {
@@ -27,7 +27,7 @@ function DeleteDepartment() {
         "name": "mohamed",
         "studentServiceNumber": "01063977292",
         "profHeadName": "fodasfados",
-        "facultyId": 1
+        "facultyId": 3
       };
   
       // Send delete request

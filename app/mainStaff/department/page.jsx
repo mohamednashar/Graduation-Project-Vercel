@@ -33,6 +33,7 @@ const page = () => {
     mount: { y: 0, scale: 1 },
     unmount: { y: 50, scale: 0.7 },
   };
+  
   return (
     <div>
       <Tabs value={defaultTabValue}>
