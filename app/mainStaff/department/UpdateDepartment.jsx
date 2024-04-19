@@ -101,7 +101,7 @@ export default function UpdateDepartment() {
 
     // Make the POST request
     axios
-      .post(`${API}Departement/UpdateDepartement`, postData, {
+      .put(`${API}Departement/UpdateDepartement`, postData, {
         headers: {
           Id: selectedRow.departementId,
         },
