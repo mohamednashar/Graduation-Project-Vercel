@@ -93,7 +93,7 @@ const handleSelectChange = (selectedOption) => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col w-full md:w-[90%] mx-auto">
-      <div className="bg-white p-5 rounded-lg shadow-md">
+      <div className="bg-white dark:bg-[#282828] dark:text-[#F5F5F5] p-5 rounded-lg shadow-md">
 
         <div className="flex flex-col text-sm items-center w-full md:mb-5">
           <label htmlFor="SelectFaculty" className="mb-2">Select Faculty</label>

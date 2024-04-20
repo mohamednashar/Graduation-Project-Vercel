@@ -1,3 +1,4 @@
+"use client";
 import axios from "axios"; // Import Axios for making HTTP requests
 import React, {
   useCallback,
@@ -16,16 +17,66 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-
+import Select from "react-select";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
 export default function UpdateDepartment() {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    DepartmentNames: [],
+  });
+  const [faculties, setFaculties] = useState([]);
+  const [facultyId, setFacultyId] = useState(null);
+  const [departments, setDepartments] = useState([]);
+  const [columnDefs, setColumnDefs] = useState([
 
+    {
+      field: "name",
+      filterParams: {
+        filterOptions: ["contains", "startsWith", "endsWith"],
+        defaultOption: "startsWith",
+      },
+    },
+    {
+      field: "studentServiceNumber",
+      filterParams: {
+        maxNumConditions: 10,
+      },
+    },
+    {
+      field: "profHeadName",
+      filter: "agNumberColumnFilter",
+      filterParams: {
+        numAlwaysVisibleConditions: 2,
+        defaultJoinOperator: "OR",
+      },
+    
+    },
+    
+  ]);
+
+  const [open, setOpen] = useState(false);
+  const gridRef = useRef();
+  const [rowData, setRowData] = useState([]);
+
+  const containerStyle = useMemo(() => ({ width: "100%", height: "100%" }), []);
+  const gridStyle = useMemo(() => ({ height: "100%", width: "100%" }), []);
+  const defaultColDef = useMemo(() => ({
+    flex: 1,
+    minWidth: 150,
+    filter: true,
+  }), []);
+
+  // Handle the form input change
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  // Placeholder for submitting the form, avoiding the ReferenceError
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("Form Submitted:", formData);
   };
 
   const handleDepartmentNamesChange = (event) => {
@@ -35,189 +86,197 @@ export default function UpdateDepartment() {
     setFormData({ ...formData, DepartmentNames });
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("Form Data:", formData);
-  };
-
-  const renderDepartmentNamesInputs = ({ open }) => {
-    let inputs = [];
-    for (let i = 0; i < formData.numberOfDepartments; i++) {
-      inputs.push(
-        <input
-          key={i}
-          type="text"
-          name={i}
-          value={formData.DepartmentNames[i] || ""}
-          onChange={handleDepartmentNamesChange}
-          className="rounded-md p-2 border border-solid border-gray-800"
-          placeholder={`Department ${i + 1} Name`}
-        />
-      );
-    }
-
-    return inputs;
-  };
-
-  const containerStyle = useMemo(() => ({ width: "100%", height: "100%" }), []);
-  const gridStyle = useMemo(() => ({ height: "100%", width: "100%" }), []);
-  const [rowData, setRowData] = useState([]);
-  const defaultColDef = useMemo(() => {
-    return {
-      flex: 1,
-      minWidth: 150,
-      filter: true,
-    };
-  }, []);
-
-  // Fetch departments data from the API endpoint
-  const onGridReady = useCallback((params) => {
-    fetch(`${API}Departement/GetDepartements`)
-      .then((resp) => resp.json())
-      .then((data) => setRowData(data));
-  }, []);
-
-  const gridRef = useRef();
-  const [open, setOpen] = useState(false);
-
   const handleOpen = () => {
     setOpen(!open);
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-    }));
   };
 
-  const handleUpdate = () => {
-    // Prepare the data to be sent in the POST request
-    const selectedRows = gridRef.current.api.getSelectedRows();
-    const selectedRow = selectedRows[0]; // Assuming only one row can be selected
-    console.log(selectedRow.facultyId);
-    const postData = {
-      name: formData["Department Name"],
-      studentServiceNumber: formData["Student Service Number"],
-      profHeadName: formData["Head Name"],
-      facultyId: selectedRow.facultyId,
-    };
+  const onGridReady = useCallback(() => {
+    if (facultyId) {
+      fetchDepartmentsByFaculty(facultyId); // Fetch departments when the grid is ready and faculty ID is set
+    }
+  }, [facultyId]);
 
-    // Make the POST request
-    axios
-      .put(`${API}Departement/UpdateDepartement`, postData, {
-        headers: {
-          Id: selectedRow.departementId,
-        },
-      })
-      .then((response) => {
-        // Handle success
-        console.log("Update successful:", response.data);
-        // Optionally, you can close the modal or show a success message here
-      })
-      .catch((error) => {
-        // Handle error
-        console.error("Error updating department:", error);
-        // Optionally, you can show an error message to the user
-      });
-
+  const fetchDepartmentsByFaculty = async (facultyId) => {
+    try {
+      const response = await axios.get(
+        `${API}Departement/GetDepartementsOfFaculty`,
+        {
+          headers: {
+            FacultyId: facultyId,
+          },
+        }
+      );
+      setRowData(response.data); // Set fetched data to rowData
+      console.log(rowData)
+    } catch (error) {
+      console.error("Error fetching departments:", error);
+    }
   };
+
 
   const onSelectionChanged = useCallback(() => {
-    const selectedRows = gridRef.current.api.getSelectedRows();
-    document.querySelector("#selectedRows").innerHTML =
-      selectedRows.length === 1 ? selectedRows[0].departementId : "";
-    console.log(selectedRows);
-    handleOpen();
+    const selectedRows = gridRef.current?.api.getSelectedRows();
+    if (selectedRows?.length) {
+      setOpen(true);
+      document.querySelector("#selectedRows").innerHTML =
+        selectedRows[0]?.departementId || "";
+    }
+  }, []);
+  useEffect(() => {
+    const fetchFaculties = async () => {
+      try {
+        const response = await axios.get(`${API}Faculty/GetFaculties`);
+        setFaculties(response.data);
+      } catch (error) {
+        console.error("Error fetching faculties:", error);
+      }
+    };
+
+    fetchFaculties();
   }, []);
 
-  return (
-    <div style={containerStyle}>
-      <div className="example-wrapper">
-        <div className="example-header">
-          <span id="selectedRows" className="hidden"></span>
-        </div>
-        <div style={gridStyle} className={"ag-theme-quartz"}>
-          <AgGridReact
-            ref={gridRef}
-            rowData={rowData}
-            columnDefs={[
-              { field: "departementId", headerName: "Department ID" },
-              { field: "name", headerName: "Department Name" },
-              {
-                field: "studentServiceNumber",
-                headerName: "Student Service Number",
-              },
-              { field: "profHeadName", headerName: "Head Name" },
-            ]}
-            defaultColDef={defaultColDef}
-            rowSelection={"single"}
-            onGridReady={onGridReady}
-            onSelectionChanged={onSelectionChanged}
-            pagination={true}
-            paginationPageSize={100}
-            paginationPageSizeSelector={[20, 50, 100]}
-          />
-        </div>
-      </div>
-      <Dialog
-        open={open}
-        handler={handleOpen}
-        animate={{
-          mount: { scale: 1, y: 0 },
-          unmount: { scale: 0.9, y: -100 },
-        }}
-        className="dark:bg-[#282828]"
-      >
-        <DialogHeader className="dark:text-white">
-          Update Department Data
-        </DialogHeader>
-        <DialogBody>
-          <form onSubmit={handleSubmit}>
-            <div className="flex flex-wrap items-center gap-5 ">
-              <input
-                type="text"
-                name="Department Name"
-                onChange={handleInputChange}
-                className="rounded-md p-2       border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none  "
-                placeholder="Department Name"
-              />
-              <input
-                type="text"
-                name="Student Service Number"
-                onChange={handleInputChange}
-                className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none  "
-                placeholder="Student Service Number"
-              />
-              <input
-                type="text"
-                name="Head Name"
-                onChange={handleInputChange}
-                className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none  "
-                placeholder="Head Name"
-              />
+  const handleUpdate = () => {
+    const selectedRows = gridRef.current?.api.getSelectedRows();
+    if (selectedRows?.length) {
+      const selectedRow = selectedRows[0];
 
-              {renderDepartmentNamesInputs({ open })}
-            </div>
-          </form>
-        </DialogBody>
-        <DialogFooter>
-          <Button
-            variant="text"
-            color="red"
-            onClick={handleOpen}
-            className="mr-1"
-          >
-            <span>Cancel</span>
-          </Button>
-          <Button
-            variant="gradient"
-            color="green"
-            onClick={() => {
-              handleUpdate();
-              handleOpen();
-            }}
-          >
-            <span>Update</span>
-          </Button>
-        </DialogFooter>
-      </Dialog>
+      const postData = {
+        name: formData["Department Name"],
+        studentServiceNumber: formData["Student Service Number"],
+        profHeadName: formData["Head Name"],
+        facultyId: selectedRow.facultyId,
+      };
+
+      axios
+        .put(
+          `${API}Departement/UpdateDepartement`,
+          postData,
+          {
+            headers: {
+              Id: selectedRow.departementId,
+            },
+          }
+        )
+        .then((response) => {
+          console.log("Update successful:", response.data);
+        })
+        .catch((error) => {
+          console.error("Error updating department:", error);
+        });
+    }
+  };
+
+  const handleSelectChange = (selectedOption, selector) => {
+    const ID = selectedOption ? selectedOption.value : null;
+    if (selector === "facultyId") {
+      setFacultyId(ID);
+      fetchDepartmentsByFaculty(ID); // Fetch departments when faculty ID changes
+    }
+  };
+
+  
+
+  return (
+    <div className="h-[600px]">
+      <div className="flex flex-col text-sm items-center w-full md:mb-5">
+        <label htmlFor="selectFaculty" className="mb-2">
+          Select Faculty
+        </label>
+        <Select
+          id="selectFaculty"
+          className="w-full"
+          options={faculties.map((faculty) => ({
+            value: faculty.facultyId,
+            label: faculty.name,
+          }))}
+          onChange={(selectedOption) =>
+            handleSelectChange(selectedOption, "facultyId")
+          }
+        />
+      </div>
+
+      <div style={containerStyle} >
+        <div className="example-wrapper">
+          <div className="example-header">
+            <span id="selectedRows" className="hidden"></span>
+          </div>
+          <div style={gridStyle} className={"ag-theme-quartz"}>
+            <AgGridReact
+              ref={gridRef}
+              rowData={rowData}
+              columnDefs={columnDefs}
+
+              defaultColDef={defaultColDef}
+              rowSelection={"single"}
+              onSelectionChanged={onSelectionChanged}
+              onGridReady={onGridReady}
+              pagination={true}
+              paginationPageSize={100}
+            />
+          </div>
+        </div>
+
+        <Dialog
+          open={open}
+          handler={handleOpen}
+          animate={{
+            mount: { scale: 1, y: 0 },
+            unmount: { scale: 0.9, y: -100 },
+          }}
+          className="dark:bg-[#282828]"
+        >
+          <DialogHeader className="dark:text-white">
+            Update Department Data
+          </DialogHeader>
+          <DialogBody>
+            <form onSubmit={handleSubmit}>
+              <div className="flex flex-wrap items-center gap-5">
+                <input
+                  type="text"
+                  name="Department Name"
+                  onChange={handleInputChange}
+                  className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828]"
+                  placeholder="Department Name"
+                />
+                <input
+                  type="text"
+                  name="Student Service Number"
+                  onChange={handleInputChange}
+                  className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828]"
+                  placeholder="Student Service Number"
+                />
+                <input
+                  type="text"
+                  name="Head Name"
+                  onChange={handleInputChange}
+                  className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828]"
+                  placeholder="Head Name"
+                />
+              </div>
+            </form>
+          </DialogBody>
+          <DialogFooter>
+            <Button
+              variant="text"
+              color="red"
+              onClick={handleOpen}
+              className="mr-1"
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="gradient"
+              color="green"
+              onClick={() => {
+                handleUpdate();
+                handleOpen();
+              }}
+            >
+              Update
+            </Button>
+          </DialogFooter>
+        </Dialog>
+      </div>
     </div>
   );
 }

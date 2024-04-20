@@ -8,10 +8,11 @@ export const deleteData = async (url, headers) => {
    
     const response = await axios.delete(`${API}${url}`, {
       headers: headers,
-    
     });
 
     console.log('Delete request successful', response.data);
+    return response.status; // Return status code
+
     // Handle response data or state update as needed
   } catch (error) {
     console.error('Error making delete request', error);

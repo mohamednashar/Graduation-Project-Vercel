@@ -206,3 +206,8 @@ button{
 .css-13cymwt-control{
   border-radius: 8px !important;
 }
+
+.dark .ag-center-cols-viewport{
+  background-color: #282828 !important;
+  color: #F5F5F5;
+}
