@@ -18,7 +18,6 @@ export const updateData = async (link, data , id = null) => {
       headers: headers
     });
 
-    // Return the response status
     return response.status;
   } catch (error) {
     // Catch any errors that occur during the fetch request

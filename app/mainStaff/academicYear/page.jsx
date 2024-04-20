@@ -38,17 +38,20 @@ const page = () => {
       <Tabs value={defaultTabValue}>
         <TabsHeader className="w-full md:w-[90%] mx-auto bg-gray-300 dark:bg-[#282828] tabsheader">
           {data.map(({ label, value }) => (
-            <Tab key={value} value={value} className="font-['__Poppins_4a3e9c', '__Poppins_Fallback_4a3e9c']">
+            <Tab
+              key={value}
+              value={value}
+              className="font-['__Poppins_4a3e9c', '__Poppins_Fallback_4a3e9c']"
+            >
               {label}
             </Tab>
           ))}
         </TabsHeader>
-        <TabsBody
-        >
+        <TabsBody>
           {data.map(({ value }) => (
-            <TabPanel key={value} value={value} className="h-[80vh]">
+            <TabPanel key={value} value={value}>
               {value === "Add Academic Year" && <AddAcademicYear />}
-              {value === "Show Academic Years" && <UpdateAcademicYear />}
+              {value === "Show Academic Years" && <div className="h-[85vh]"><UpdateAcademicYear/></div> }
               {value === "Delete Academic Year" && <DeleteAcademicYear />}
             </TabPanel>
           ))}

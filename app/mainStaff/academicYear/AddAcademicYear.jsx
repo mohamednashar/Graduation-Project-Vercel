@@ -9,55 +9,85 @@ const API = process.env.NEXT_PUBLIC_BACKEND_API;
 const AddAcademicYear = () => {
   const [formData, setFormData] = useState({
     year: "",
-    departementId:""
+    departementId: "",
+    facultyId: "",
   });
   const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [departments, setDepartments] = useState([]); // Changed from faculties to departments
+  const [faculties, setFaculties] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [selectedDepartment, setSelectedDepartment] = useState(null);
 
   useEffect(() => {
-    // Fetch departments when component mounts
-    const fetchDepartments = async () => { // Changed from fetchFaculties to fetchDepartments
+    const fetchFaculties = async () => {
       try {
-        const response = await axios.get(`${API}Departement/GetDepartements`);
-        setDepartments(response.data);
+        const response = await axios.get(`${API}Faculty/GetFaculties`);
+        setFaculties(response.data);
       } catch (error) {
-        console.error("Error fetching departments:", error);
+        console.error("Error fetching faculties:", error);
       }
     };
-    fetchDepartments();
-  }, []); 
+    fetchFaculties();
+  }, []);
 
   const handleOpen = () => setOpen(!open);
+
+  const handleFacultySelectChange = async (selectedOption) => {
+    const facultyId = selectedOption ? selectedOption.value : "";
+    setFormData({
+      ...formData,
+      facultyId: facultyId,
+    });
+    await fetchDepartmentsByFaculty(facultyId);
+  };
+
+  const handleDepartmentSelectChange = (selectedOption) => {
+    setSelectedDepartment(selectedOption);
+    setFormData({
+      ...formData,
+      departementId: selectedOption ? selectedOption.value : "",
+    });
+  };
+
+
+  const fetchDepartmentsByFaculty = async (facultyId) => {
+    try {
+      const response = await axios.get(`${API}Departement/GetDepartementsOfFaculty`, {
+        headers: {
+          FacultyId: facultyId,
+        },
+      });
+      setDepartments(response.data);
+    } catch (error) {
+      console.error("Error fetching departments:", error);
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Check if the required field is empty
     if (formData.year.trim() === "") {
       setErrorMessage("Please fill in the required field.");
       setSuccessMessage("");
-      return; 
+      return;
     }
 
-    const data={
+    const data = {
       year: formData.year,
-      departementId: formData.departementId 
+      departementId: formData.departementId,
+    };
 
-    }
-
-    const status = await postData("AcadimicYear/CreateAcadimicYear",data);
+    const status = await postData("AcadimicYear/CreateAcadimicYear", data);
     console.log(data)
- 
 
     status === 200
       ? (setSuccessMessage("Submitted Successfully"),
         setErrorMessage(""),
-        setOpen(true)) // Open the success dialog
+        setOpen(true))
       : (setErrorMessage("Failed to submit. Please try again later."),
         setSuccessMessage(""),
-        setOpen(true)); // Open the error dialog
+        setOpen(true));
   };
 
   const handleChange = (event) => {
@@ -68,19 +98,6 @@ const AddAcademicYear = () => {
     });
   };
 
-  console.log(formData)
-
-  const handleSelectChange = (selectedOption) => {
-    // Extract departmentId from the selected option
-    const ID = selectedOption ? selectedOption.value : ""; // Use selectedOption.value if selectedOption exists, otherwise set it to an empty string
-    setFormData({
-      ...formData,
-      departementId: ID,
-    });
-  };
-
-
-
   return (
     <form
       onSubmit={handleSubmit}
@@ -88,18 +105,35 @@ const AddAcademicYear = () => {
     >
       <div className="bg-white p-5 flex gap-14 rounded-lg shadow-md dark:bg-[#282828]">
         <div className="flex flex-col text-sm items-center w-full md:mb-5">
-          <label htmlFor="SelectDepartment" className="mb-2"> 
-            Select Department
+          <label htmlFor="SelectFaculty" className="mb-2">
+            Select Faculty
           </label>
-          
+
           <Select
             className="w-full"
-            options={departments.map((department) => ({ 
-              value: department.departementId, 
+            options={faculties.map((faculty) => ({
+              value: faculty.facultyId,
+              label: faculty.name,
+            }))}
+            closeMenuOnSelect={true}
+            onChange={handleFacultySelectChange}
+          />
+        </div>
+
+        <div className="flex flex-col text-sm items-center w-full">
+          <label htmlFor="SelectDepartment" className="mb-2">
+            Select Department
+          </label>
+
+          <Select
+            className="w-full"
+            options={departments.map((department) => ({
+              value: department.departementId,
               label: department.name,
             }))}
             closeMenuOnSelect={true}
-            onChange={handleSelectChange}
+            onChange={handleDepartmentSelectChange}
+            value={selectedDepartment}
           />
         </div>
 
@@ -114,7 +148,7 @@ const AddAcademicYear = () => {
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
           />
-        </div>       
+        </div>
       </div>
 
       <Button

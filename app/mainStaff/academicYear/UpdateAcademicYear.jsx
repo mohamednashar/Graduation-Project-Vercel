@@ -3,23 +3,26 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Select from "react-select";
 import { postData } from "@/app/API/CustomHooks/usePost";
+import { updateData } from "@/app/API/CustomHooks/useUpdate";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const UpdateAcademicYear = () => {
   const [formData, setFormData] = useState({
-    year: "",
+    acadimicYearId: "",
     departementId: "",
     facultyId: "",
+    year: "", // New state for the academic year
   });
   const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [departments, setDepartments] = useState([]);
   const [faculties, setFaculties] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [academicYears, setAcademicYears] = useState([]);
+  const [selectedDepartment, setSelectedDepartment] = useState(null);
 
   useEffect(() => {
-    // Fetch faculties when component mounts
     const fetchFaculties = async () => {
       try {
         const response = await axios.get(`${API}Faculty/GetFaculties`);
@@ -28,9 +31,29 @@ const UpdateAcademicYear = () => {
         console.error("Error fetching faculties:", error);
       }
     };
-
     fetchFaculties();
   }, []);
+
+  const handleOpen = () => setOpen(!open);
+
+  const handleFacultySelectChange = async (selectedOption) => {
+    const facultyId = selectedOption ? selectedOption.value : "";
+    setFormData({
+      ...formData,
+      facultyId: facultyId,
+    });
+    await fetchDepartmentsByFaculty(facultyId);
+  };
+
+  const handleDepartmentSelectChange = async (selectedOption) => {
+    setSelectedDepartment(selectedOption);
+    setFormData({
+      ...formData,
+      departementId: selectedOption ? selectedOption.value : "",
+    });
+
+    await fetchAcademicYears(selectedOption.value);
+  };
 
   const fetchDepartmentsByFaculty = async (facultyId) => {
     try {
@@ -45,53 +68,70 @@ const UpdateAcademicYear = () => {
     }
   };
 
-  const handleOpen = () => setOpen(!open);
+  const fetchAcademicYears = async (departementId) => {
+    try {
+      const response = await axios.get(`${API}AcadimicYear/GetAcadimicYears`, {
+        headers: {
+          "DeptId": departementId
+        }
+      });
+      setAcademicYears(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  console.log(formData)
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    if (formData.year.trim() === "" || formData.departementId === "" || formData.facultyId === "") {
-      setErrorMessage("Please fill in all the required fields.");
+  
+    // Extract relevant data from formData
+    const { departementId, year, acadimicYearId } = formData;
+  
+    // Check if required fields are empty
+    if (!departementId || !year || !acadimicYearId) {
+      setErrorMessage("Please fill out all fields.");
       setSuccessMessage("");
       return;
     }
-
+  
+    // Prepare the data to be sent
     const data = {
-      year: formData.year,
-      departementId: formData.departementId,
-      facultyId: formData.facultyId,
+      year,
+      departementId
+     
     };
+  
+    const headers =  acadimicYearId
+  
 
-    const status = await postData("AcademicYear/CreateAcademicYear", data);
+  
+    try {
+      // Send a POST request with data in the body and academic year ID in the header
+      const response = await updateData(`AcadimicYear/UpdateAcadimicYear`, data, headers );
 
-    status === 200
-      ? (setSuccessMessage("Submitted Successfully"),
-        setErrorMessage(""),
-        setOpen(true))
-      : (setErrorMessage("Failed to submit. Please try again later."),
-        setSuccessMessage(""),
-        setOpen(true));
-  };
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSelectChange = (selectedOption, selector) => {
-    const ID = selectedOption ? selectedOption.value : "";
-    setFormData({
-      ...formData,
-      [selector]: ID,
-    });
-
-    if (selector === "facultyId") {
-      fetchDepartmentsByFaculty(ID);
+      console.log(data)
+      console.log(headers)
+   
+     
+      if (response === 200) {
+        setSuccessMessage("Submitted Successfully");
+        setErrorMessage("");
+      } else {
+        setErrorMessage("Failed to submit. Please try again later.");
+        setSuccessMessage("");
+      }
+    } catch (error) {
+      console.error("Error submitting:", error);
+      setErrorMessage("Failed to submit. Please try again later.");
+      setSuccessMessage("");
     }
+  
+    setOpen(true); // Open the dialog after form submission
   };
+  
+  
 
   return (
     <form
@@ -99,54 +139,70 @@ const UpdateAcademicYear = () => {
       className="flex flex-col w-full md:w-[90%] mx-auto"
     >
       <div className="bg-white p-5 flex gap-14 rounded-lg shadow-md dark:bg-[#282828]">
-
         <div className="flex flex-col text-sm items-center w-full md:mb-5">
-          <label htmlFor="selectFaculty" className="mb-2"> 
+          <label htmlFor="SelectFaculty" className="mb-2">
             Select Faculty
           </label>
-          
+
           <Select
-            id="selectFaculty"
             className="w-full"
             options={faculties.map((faculty) => ({
               value: faculty.facultyId,
               label: faculty.name,
             }))}
-            onChange={(selectedOption) =>
-              handleSelectChange(selectedOption, "facultyId")
-            }
+            closeMenuOnSelect={true}
+            onChange={handleFacultySelectChange}
           />
         </div>
-        
-        <div className="flex flex-col text-sm items-center w-full md:mb-5">
-          <label htmlFor="selectDepartment" className="mb-2"> 
+
+        <div className="flex flex-col text-sm items-center w-full">
+          <label htmlFor="SelectDepartment" className="mb-2">
             Select Department
           </label>
-          
+
           <Select
-            id="selectDepartment z-50"
             className="w-full"
             options={departments.map((department) => ({
               value: department.departementId,
               label: department.name,
             }))}
-            onChange={(selectedOption) =>
-              handleSelectChange(selectedOption, "departementId")
-            }
+            closeMenuOnSelect={true}
+            onChange={handleDepartmentSelectChange}
+            value={selectedDepartment}
           />
         </div>
 
-        <div className="flex flex-col text-sm items-center w-full md:mb-5">
-          <label htmlFor="year" className="mb-2">
-            How Many Years
+        <div className="flex flex-col text-sm items-center w-full">
+          <label htmlFor="SelectAcademicYear" className="mb-2">
+            Select Academic Year
+          </label>
+
+          <Select
+            className="w-full"
+            options={academicYears.map((academicYear) => ({
+              value: academicYear.acadimicYearId,
+              label: academicYear.year,
+            }))}
+            closeMenuOnSelect={true}
+            onChange={(selectedOption) => {
+              setFormData({
+                ...formData,
+                acadimicYearId: selectedOption ? selectedOption.value : "",
+              });
+            }}
+          />
+        </div>
+
+        {/* New input for editing the academic year */}
+        <div className="flex flex-col text-sm items-center w-full">
+          <label htmlFor="EditAcademicYear" className="mb-2">
+            Edit Academic Year
           </label>
           <input
             type="text"
-            id="year"
-            name="year"
+            className="w-full p-2 border border-gray-300 rounded-lg"
             value={formData.year}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
+            onChange={(e) => setFormData({ ...formData, year: e.target.value })}
           />
         </div>
       </div>
