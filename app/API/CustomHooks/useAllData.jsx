@@ -15,3 +15,8 @@ export const getFaculties = async()=>{
   const data = await getData("CourseCategory/GetAllCourseCategories")
   return {data}
  }
+
+ export const getAcademicYears = async()=>{
+  const data = await getData("CourseCategory/GetAllCourseCategories")
+  return {data}
+ }
