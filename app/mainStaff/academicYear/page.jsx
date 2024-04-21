@@ -51,8 +51,8 @@ const page = () => {
           {data.map(({ value }) => (
             <TabPanel key={value} value={value}>
               {value === "Add Academic Year" && <AddAcademicYear />}
-              {value === "Show Academic Years" && <div className="h-[85vh]"><UpdateAcademicYear/></div> }
-              {value === "Delete Academic Year" && <DeleteAcademicYear />}
+              {value === "Show Academic Years" && <UpdateAcademicYear/> }
+              {value === "Delete Academic Year" && <div className="h-[85vh]"><DeleteAcademicYear /></div> }
             </TabPanel>
           ))}
         </TabsBody>

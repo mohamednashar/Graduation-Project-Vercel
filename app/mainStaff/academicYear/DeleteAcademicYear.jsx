@@ -2,24 +2,26 @@ import { Button, Dialog, DialogBody } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Select from "react-select";
-import { postData } from "@/app/API/CustomHooks/usePost";
+import { updateData } from "@/app/API/CustomHooks/useUpdate";
+import { deleteData } from "@/app/API/CustomHooks/useDelete";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
-const UpdateAcademicYear = () => {
+const DeleteAcademicYear = () => {
   const [formData, setFormData] = useState({
-    year: "",
+    acadimicYearId: "",
     departementId: "",
     facultyId: "",
   });
   const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [departments, setDepartments] = useState([]);
   const [faculties, setFaculties] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [academicYears, setAcademicYears] = useState([]);
+  const [selectedDepartment, setSelectedDepartment] = useState(null);
 
   useEffect(() => {
-    // Fetch faculties when component mounts
     const fetchFaculties = async () => {
       try {
         const response = await axios.get(`${API}Faculty/GetFaculties`);
@@ -28,9 +30,29 @@ const UpdateAcademicYear = () => {
         console.error("Error fetching faculties:", error);
       }
     };
-
     fetchFaculties();
   }, []);
+
+  const handleOpen = () => setOpen(!open);
+
+  const handleFacultySelectChange = async (selectedOption) => {
+    const facultyId = selectedOption ? selectedOption.value : "";
+    setFormData({
+      ...formData,
+      facultyId: facultyId,
+    });
+    await fetchDepartmentsByFaculty(facultyId);
+  };
+
+  const handleDepartmentSelectChange = async (selectedOption) => {
+    setSelectedDepartment(selectedOption);
+    setFormData({
+      ...formData,
+      departementId: selectedOption ? selectedOption.value : "",
+    });
+
+    await fetchAcademicYears(selectedOption.value);
+  };
 
   const fetchDepartmentsByFaculty = async (facultyId) => {
     try {
@@ -45,121 +67,116 @@ const UpdateAcademicYear = () => {
     }
   };
 
-
-
-  const handleOpen = () => setOpen(!open);
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    if (formData.year.trim() === "" || formData.departementId === "" || formData.facultyId === "") {
-      setErrorMessage("Please fill in all the required fields.");
-      setSuccessMessage("");
-      return;
+  const fetchAcademicYears = async (departementId) => {
+    try {
+      const response = await axios.get(`${API}AcadimicYear/GetAcadimicYears`, {
+        headers: {
+          "DeptId": departementId
+        }
+      });
+      setAcademicYears(response.data);
+    } catch (err) {
+      console.log(err);
     }
+  };
 
-    const data = {
-      year: formData.year,
-      departementId: formData.departementId,
-      facultyId: formData.facultyId,
+  const handleDelete = async () => {
+    const API = process.env.NEXT_PUBLIC_BACKEND_API;
+    const url = `${API}AcadimicYear/DeleteAcadimicYear`;
+  
+    const headers = {
+      id: formData.acadimicYearId
     };
-
-    const status = await postData("AcademicYear/CreateAcademicYear", data);
-
-    status === 200
-      ? (setSuccessMessage("Submitted Successfully"),
-        setErrorMessage(""),
-        setOpen(true))
-      : (setErrorMessage("Failed to submit. Please try again later."),
-        setSuccessMessage(""),
-        setOpen(true));
-  };
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSelectChange = (selectedOption, selector) => {
-    const ID = selectedOption ? selectedOption.value : "";
-    setFormData({
-      ...formData,
-      [selector]: ID,
-    });
-
-    if (selector === "facultyId") {
-      fetchDepartmentsByFaculty(ID);
+    console.log(headers)
+  
+    try {
+      const response = await axios.delete(url, {
+        headers: headers
+      });
+  
+      if (response.status === 200) {
+        setSuccessMessage("Deleted Successfully");
+        setErrorMessage("");
+      } else {
+        setErrorMessage("Failed to delete. Please try again later.");
+        setSuccessMessage("");
+      }
+    } catch (error) {
+      console.error("Error deleting:", error);
+      setErrorMessage("Failed to delete. Please try again later.");
+      setSuccessMessage("");
     }
+    setOpen(true);
   };
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={(e) => e.preventDefault()}
       className="flex flex-col w-full md:w-[90%] mx-auto"
     >
       <div className="bg-white p-5 flex gap-14 rounded-lg shadow-md dark:bg-[#282828]">
-
         <div className="flex flex-col text-sm items-center w-full md:mb-5">
-          <label htmlFor="selectFaculty" className="mb-2"> 
+          <label htmlFor="SelectFaculty" className="mb-2">
             Select Faculty
           </label>
-          
+
           <Select
-            id="selectFaculty"
             className="w-full"
             options={faculties.map((faculty) => ({
               value: faculty.facultyId,
               label: faculty.name,
             }))}
-            onChange={(selectedOption) =>
-              handleSelectChange(selectedOption, "facultyId")
-            }
+            closeMenuOnSelect={true}
+            onChange={handleFacultySelectChange}
           />
         </div>
-        
-        <div className="flex flex-col text-sm items-center w-full md:mb-5">
-          <label htmlFor="selectDepartment" className="mb-2"> 
+
+        <div className="flex flex-col text-sm items-center w-full">
+          <label htmlFor="SelectDepartment" className="mb-2">
             Select Department
           </label>
-          
+
           <Select
-            id="selectDepartment z-50"
             className="w-full"
             options={departments.map((department) => ({
               value: department.departementId,
               label: department.name,
             }))}
-            onChange={(selectedOption) =>
-              handleSelectChange(selectedOption, "departementId")
-            }
+            closeMenuOnSelect={true}
+            onChange={handleDepartmentSelectChange}
+            value={selectedDepartment}
           />
         </div>
 
-        <div className="flex flex-col text-sm items-center w-full md:mb-5">
-          <label htmlFor="year" className="mb-2">
-            How Many Years
+        <div className="flex flex-col text-sm items-center w-full">
+          <label htmlFor="SelectAcademicYear" className="mb-2">
+            Select Academic Year
           </label>
-          <input
-            type="text"
-            id="year"
-            name="year"
-            value={formData.year}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
+
+          <Select
+            className="w-full"
+            options={academicYears.map((academicYear) => ({
+              value: academicYear.acadimicYearId,
+              label: academicYear.year,
+            }))}
+            closeMenuOnSelect={true}
+            onChange={(selectedOption) => {
+              setFormData({
+                ...formData,
+                acadimicYearId: selectedOption ? selectedOption.value : "",
+              });
+            }}
           />
         </div>
       </div>
 
-      <div className=" w-full md:w-[90%] mx-auto flex my-5 items-center justify-center">
-        <button
-          className="p-2 rounded-md bg-red-600 hover:bg-red-800 mx-w-[500px] text-white"
-        >
-          Delete Academic Year
-        </button>
-      </div>
+      <Button
+        onClick={handleDelete}
+        className="font-bold text-lg bg-red-500 text-white px-4 py-2 mt-4 rounded-lg w-[30%] mx-auto mb-5 transition-all duration-200 hover:bg-red-700"
+        data-dialog-target="animated-dialog"
+      >
+        Delete
+      </Button>
 
       <Dialog
         className="!w-96 dark:bg-gray-800"
@@ -213,4 +230,4 @@ const UpdateAcademicYear = () => {
   );
 };
 
-export default UpdateAcademicYear;
+export default DeleteAcademicYear;
