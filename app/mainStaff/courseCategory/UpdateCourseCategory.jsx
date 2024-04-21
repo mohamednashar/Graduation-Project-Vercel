@@ -85,16 +85,34 @@ export default function UpdateFaculty() {
   const [columnDefs, setColumnDefs] = useState([
 
     {
-      field: "name",
+      field: "courseCategoryName",
       filterParams: {
         filterOptions: ["contains", "startsWith", "endsWith"],
         defaultOption: "startsWith",
       },
     },
     {
-      field: "description",
+      field: "courseCategoryDescription",
+      filterOptions: ["contains", "startsWith", "endsWith"],
+
       filterParams: {
-        maxNumConditions: 10,
+        defaultOption: "startsWith",
+      },
+    },
+    {
+      field: "departementName",
+      headerName: "Department Name",
+      filterOptions: ["contains", "startsWith", "endsWith"],
+      filterParams: {
+        defaultOption: "startsWith",
+      },
+    },
+
+    {
+      field: "facultyName",
+      filterOptions: ["contains", "startsWith", "endsWith"],
+      filterParams: {
+        defaultOption: "startsWith",
       },
     },
   

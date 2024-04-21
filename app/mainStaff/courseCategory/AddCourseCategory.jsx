@@ -1,103 +1,171 @@
-"use client";
+"use client"
+import { Button, Dialog, DialogBody } from "@material-tailwind/react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Select from "react-select";
+import { deleteData } from "@/app/API/CustomHooks/useDelete";
 import { postData } from "@/app/API/CustomHooks/usePost";
-import { useState } from "react";
-import { Dialog, DialogBody } from "@material-tailwind/react";
 
-const labels = [
-  "Course Category Name",
-  "Course Category Description",
-  "Department ID",
-];
-const keys = ["name", "description", "departementId"];
+const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
-const initialFormData = keys.reduce((acc, key) => {
-  acc[key] = key === 'departementId' ? null : ""; // Initialize departmentId as null
-  return acc;
-}, {});
-
-const AddCourseCategory = () => {
-  const [formData, setFormData] = useState(initialFormData);
+const DeleteDepartment = () => {
+  const [facultyId, setFacultyId] = useState(null);
+  const [departmentId, setDepartmentId] = useState();
   const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [departments, setDepartments] = useState([]);
+  const [faculties, setFaculties] = useState([]);
+  const [courseName, setCourseName] = useState('');
+  const [courseDescription, setCourseDescription] = useState('');
+
+  const handleCourseNameChange = (event) => {
+    setCourseName(event.target.value);
+  };
+
+  const handleCourseDescriptionChange = (event) => {
+    setCourseDescription(event.target.value);
+  };
+
+  useEffect(() => {
+    const fetchFaculties = async () => {
+      try {
+        const response = await axios.get(`${API}Faculty/GetFaculties`);
+        setFaculties(response.data);
+      } catch (error) {
+        console.error("Error fetching faculties:", error);
+      }
+    };
+
+    fetchFaculties();
+  }, []);
+
+  const fetchDepartmentsByFaculty = async (facultyId) => {
+    try {
+      const response = await axios.get(`${API}Departement/GetDepartementsOfFaculty`, {
+        headers: {
+          FacultyId: facultyId,
+        },
+      });
+      setDepartments(response.data);
+    } catch (error) {
+      console.error("Error fetching departments:", error);
+    }
+  };
 
   const handleOpen = () => setOpen(!open);
 
-  const handleInputChange = (event, key) => {
-    const { value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [key]: value,
-    }));
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (
-      formData.name.trim() === "" ||
-      formData.description.trim() === "" ||
-      formData.departementId.trim() === ""
-    ) {
-      setErrorMessage("Please fill in all the required fields.");
-      setSuccessMessage("");
-      return; // Exit the function early if any field is empty
-    }
+    const courseData = {
+      name:courseName,
+      description:courseDescription,
+      departementId:departmentId
+    };
+    console.log(courseData);
+    // Here you could also send courseData to a server or another state management area
 
-    const status = await postData("CourseCategory/CreateCourseCategory", formData);
-    if (status === 200) {
-      setSuccessMessage("Submitted Successfully");
-      setErrorMessage("");
-      setOpen(true); // Open the success dialog
-    } else {
-      setErrorMessage("Failed to submit. Please try again later.");
-      setSuccessMessage("");
-      setOpen(true); // Open the error dialog
+
+    const status = await postData(`CourseCategory/CreateCourseCategory` , courseData);
+    console.log(status)
+
+    status === 200
+      ? (setSuccessMessage("Added Successfully"),
+        setErrorMessage(""),
+        setOpen(true))
+      : (setErrorMessage("Failed to Add. Please try again later."),
+        setSuccessMessage(""),
+        setOpen(true));
+  };
+ 
+  const handleSelectChange = (selectedOption, selector) => {
+    const ID = selectedOption ? selectedOption.value : null;
+    if (selector === "facultyId") {
+      setFacultyId(ID);
+      console.log("facultyId : " + facultyId )
+      fetchDepartmentsByFaculty(ID);
+    } else if (selector === "departmentId") {
+      setDepartmentId(ID);
+      console.log("departmentId : " + departmentId)
     }
   };
-
-  console.log(formData)
-
-  const renderInput = (label, type, key) => (
-    <div className="flex flex-col items-center pb-5" key={label}>
-      <label
-        htmlFor={key}
-        className="mb-2 text-sm mr-5 w-[150px] md:w-[250px] text-center dark:text-white"
-      >
-        {label}
-      </label>
-      <input
-        type={type}
-        id={key}
-        value={formData[key]}
-        onChange={(event) => handleInputChange(event, key)}
-        className="w-full block p-2 text-gray-900 border border-gray-300 rounded-lg bg-white sm:text-xs dark:bg-[#282828] dark:text-white"
-        required={key !== "departementId"}
-      />
-    </div>
-  );
 
   return (
     <form
       onSubmit={handleSubmit}
       className="flex flex-col w-full md:w-[90%] mx-auto"
     >
-      <div className="bg-white dark:bg-[#282828] p-5 rounded-lg shadow-md flex flex-wrap justify-center lg:justify-between">
-        {labels.map((label, index) => (
-          <div key={index} className="">
-            {renderInput(label, "text", keys[index])}
-          </div>
-        ))}
+      <div className="bg-white p-5 flex gap-14 rounded-lg shadow-md dark:bg-[#282828]">
+      <div className="flex flex-col text-sm items-center w-full md:mb-5">
+          <label htmlFor="courseName" className="mb-2 text-[#282828] dark:text-white"> 
+            Course Name
+          </label>
+          <input
+            id="courseName"
+            className="w-full h-full dark:text-white"
+            onChange={handleCourseNameChange}
+            value={courseName}
+          />
+        </div>
+
+        <div className="flex flex-col text-sm items-center w-full md:mb-5">
+          <label htmlFor="courseDescription" className="mb-2 text-[#282828] dark:text-white"> 
+             Course description
+          </label>
+          <input
+            id="courseDescription"
+            className="w-full h-full dark:text-white"
+            value={courseDescription}
+          onChange={handleCourseDescriptionChange}
+          />
+        </div>
+
+        <div className="flex flex-col text-sm items-center w-full md:mb-5">
+          <label htmlFor="selectFaculty" className="mb-2 text-[#282828] dark:text-white"> 
+            Select Faculty
+          </label>
+          <Select
+            id="selectFaculty"
+            className="w-full"
+            options={faculties.map((faculty) => ({
+              value: faculty.facultyId,
+              label: faculty.name,
+            }))}
+            onChange={(selectedOption) =>
+              handleSelectChange(selectedOption, "facultyId")
+            }
+          />
+        </div>
+        
+        <div className="flex flex-col text-sm items-center w-full md:mb-5">
+          <label htmlFor="selectDepartment" className="mb-2 text-[#282828] dark:text-white"> 
+            Select Department
+          </label>
+          <Select
+            id="selectDepartment"
+            className="w-full"
+            options={departments.map((department) => ({
+              value: department.departementId,
+              label: department.name,
+            }))}
+            onChange={(selectedOption) =>
+              handleSelectChange(selectedOption, "departmentId")
+            }
+          />
+        </div>
       </div>
 
-      <button
+      <Button
         type="submit"
-        className="font-bold text-lg bg-[#66bfbf] text-white px-4 py-2 mt-4 rounded-lg w-[30%] mx-auto mb-5 transition-all duration-200 hover:bg-[#f76b8a]"
+        className="font-bold text-lg bg-[#66bfbf] text-white px-4 py-2 mt-4 rounded-lg w-[30%] mx-auto mb-5 transition-all duration-200 "
+        data-dialog-target="animated-dialog"
+        onClick={ ()=>{ handleOpen ; handleSubmit; }}
       >
         Submit
-      </button>
+      </Button>
 
       <Dialog
-        className="!w-96 dark:bg-gray-800"
+        className="!w-96 bg-white dark:bg-gray-800"
         open={open}
         handler={handleOpen}
         animate={{
@@ -106,11 +174,10 @@ const AddCourseCategory = () => {
         }}
       >
         <DialogBody>
-          {/* Modal content */}
-          <div className=" text-center bg-white rounded-lg dark:bg-gray-800 p-5">
+          <div className="text-center  rounded-lg p-5">
             <button
               onClick={handleOpen}
-              className="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              className="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm ml-auto inline-flex items-center"
             >
               <svg
                 aria-hidden="true"
@@ -138,7 +205,7 @@ const AddCourseCategory = () => {
             )}
             <button
               onClick={handleOpen}
-              className="middle none center rounded-lg bg-gradient-to-tr from-green-600 to-green-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              className="bg-green-600 text-white py-3 px-6 font-bold rounded-lg uppercase shadow-md transition-all hover:bg-green-500 hover:shadow-lg active:opacity-75"
             >
               Continue
             </button>
@@ -149,4 +216,5 @@ const AddCourseCategory = () => {
   );
 };
 
-export default AddCourseCategory;
+export default DeleteDepartment;
+

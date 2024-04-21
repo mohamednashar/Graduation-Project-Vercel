@@ -1,4 +1,6 @@
 "use client";
+import React, { useEffect, useState } from "react";
+import Select from "react-select";
 import { getCourseCategories } from "@/app/API/CustomHooks/useAllData";
 import { deleteData } from "@/app/API/CustomHooks/useDelete";
 import {
@@ -8,12 +10,14 @@ import {
   DialogFooter,
   DialogHeader,
 } from "@material-tailwind/react";
-import React, { useEffect, useState } from "react";
-import Select from "react-select";
 
 function DeleteCourseCategory() {
   const [allCourseCategories, setAllCourseCategories] = useState([]);
-  const [courseCategoryId, setCourseCategoryId] = useState();
+  const [selectedFaculty, setSelectedFaculty] = useState(null);
+  const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [selectedCourseCategory, setSelectedCourseCategory] = useState(null);
+  const [courseCategoryId, setCourseCategoryId] = useState(null);
+  const [openDeleteAssistant, setOpenDeleteAssistant] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,92 +26,137 @@ function DeleteCourseCategory() {
         setAllCourseCategories(data);
       } catch (error) {
         console.error("Error fetching data:", error);
-        // Handle error as needed
       }
     };
     fetchData();
   }, []);
-  console.log(allCourseCategories);
 
-  const handleSelectChange = (selectedOption) => {
-    const ID = selectedOption ? selectedOption.value : "";
-    setCourseCategoryId(ID);
-    console.log(ID); // Log the selected ID directly after setting the state
+  const faculties = allCourseCategories.reduce((acc, item) => {
+    const facultyOption = { value: item.facultyId, label: item.facultyName };
+    if (!acc.some(fac => fac.value === facultyOption.value)) {
+      acc.push(facultyOption);
+    }
+    return acc;
+  }, []);
+
+  const departments = selectedFaculty
+    ? allCourseCategories
+        .filter(item => item.facultyId === selectedFaculty.value)
+        .reduce((acc, item) => {
+          const departmentOption = { value: item.departementId, label: item.departementName };
+          if (!acc.some(dep => dep.value === departmentOption.value)) {
+            acc.push(departmentOption);
+          }
+          return acc;
+        }, [])
+    : [];
+
+  const courseCategories = selectedDepartment
+    ? allCourseCategories
+        .filter(item => item.departementId === selectedDepartment.value)
+        .map(item => ({
+          value: item.courseCategoryId,
+          label: item.courseCategoryName,
+        }))
+    : [];
+
+  const handleFacultyChange = (option) => {
+    setSelectedFaculty(option);
+    setSelectedDepartment(null);
+    setSelectedCourseCategory(null);
+    setCourseCategoryId(null);
   };
 
-  const [openDeleteAssistant, setOpenDeleteAssistant] = useState(false);
-  const handleOpenDeleteAssistant = () => {
-    setOpenDeleteAssistant(!openDeleteAssistant);
+  const handleDepartmentChange = (option) => {
+    setSelectedDepartment(option);
+    setSelectedCourseCategory(null);
+    setCourseCategoryId(null);
   };
-  const headers = { "Content-Type": "application/json", Id: courseCategoryId };
+
+  const handleCourseCategoryChange = (option) => {
+    setSelectedCourseCategory(option);
+    setCourseCategoryId(option.value);
+  };
+
+  const handleOpenDeleteAssistant = () => setOpenDeleteAssistant(!openDeleteAssistant);
+
   const deleteCourseCategory = async () => {
+    console.log(courseCategoryId)
+    const headers = {
+      Id: courseCategoryId,
+    };
     await deleteData("CourseCategory/DeleteCourseCategory", headers);
+    setOpenDeleteAssistant(false);
   };
 
   return (
-    <div>
-      {allCourseCategories && (
-        <div className="flex justify-center min-h-[250px] bg-white dark:bg-[#282828] w-full md:w-[90%] mx-auto my-4 p-4">
-          <div>
-            <Select
-              className="w-full md:w-80"
-              options={allCourseCategories.map((category) => ({
-                value: category?.courseCategoryId,
-                label: category?.name,
-              }))}
-              closeMenuOnSelect={true}
-              onChange={handleSelectChange} // Pass the handleSelectChange function here
-            />
-          </div>
+    <>
+      <div className="flex items-center justify-between p-5 bg-white dark:bg-[#282828] gap-5">
+        <div className="flex flex-col text-sm items-center w-full md:mb-5">
+          <Select
+            id="selectFaculty"
+            options={faculties}
+            onChange={handleFacultyChange}
+            className="w-full"
+          />
         </div>
-      )}
 
-      <div className=" w-full md:w-[90%] mx-auto flex items-center justify-center">
+        <div className="flex flex-col text-sm items-center w-full md:mb-5">
+          <Select
+            id="selectDepartment"
+            options={departments}
+            onChange={handleDepartmentChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="flex flex-col text-sm items-center w-full md:mb-5">
+          <Select
+            id="selectCourseCategory"
+            options={courseCategories}
+            onChange={handleCourseCategoryChange}
+            className="w-full"
+          />
+        </div>
+      </div>
+<div className="text-center my-5">
+  
         <button
           onClick={handleOpenDeleteAssistant}
+          disabled={!selectedCourseCategory}
           className="p-2 rounded-md bg-red-600 hover:bg-red-800 mx-w-[500px] text-white"
         >
           Delete Course Category
         </button>
-      </div>
+</div>
 
-      <Dialog
-        open={openDeleteAssistant}
-        handler={handleOpenDeleteAssistant}
+      <Dialog 
         animate={{
           mount: { scale: 1, y: 0 },
           unmount: { scale: 0.9, y: -100 },
         }}
-        className="bg-white dark:bg-[#282828]"
-      >
-        <DialogHeader className="text-red-800 font-bold">
-          Delete Course Category
-        </DialogHeader>
+      open={openDeleteAssistant} 
+      handler={handleOpenDeleteAssistant}         
+      className="bg-white dark:bg-[#282828]"
+>
+        <DialogHeader className="text-red-800 font-bold">Delete Course Category</DialogHeader>
         <DialogBody className="text-lg text-red-600 font-bold">
-          This Course Category will be deleted from your system. Are you sure about
-          that?
+          This Course Category will be deleted from your system. Are you sure?
         </DialogBody>
-        <DialogFooter>
-          <Button
+        <DialogFooter className="flex items-center gap-5">
+        <Button
             variant="text"
             color="red"
             onClick={handleOpenDeleteAssistant}
             className="mr-1"
           >
             <span>Cancel</span>
-          </Button>
-          <button
-            className="bg-red-600 py-2 px-4 mx-2 hover:bg-red-900 transition-all duration-500 rounded-lg text-white font-semibold"
-            onClick={() => {
-              handleOpenDeleteAssistant();
-              deleteCourseCategory();
-            }}
-          >
+          </Button>          <Button onClick={deleteCourseCategory} color="red">
             Delete
-          </button>
+          </Button>
         </DialogFooter>
       </Dialog>
-    </div>
+    </>
   );
 }
 
