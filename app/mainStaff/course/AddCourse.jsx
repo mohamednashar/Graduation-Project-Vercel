@@ -22,6 +22,7 @@ function AddCourse() {
   const [totalMark, setTotalMark] = useState(0);
   const [academicYears, setAcademicYears] = useState([]);
   const [openDeleteAssistant, setOpenDeleteAssistant] = useState(false);
+  const [message , setMessage] = useState("")
   const API=process.env.NEXT_PUBLIC_BACKEND_API
 
   useEffect(() => {
@@ -119,7 +120,10 @@ function AddCourse() {
       departementId: selectedDepartment.value
     };
     console.log(courseData)
-    await postData("Course/CreateCourse", courseData);
+    const status = await postData("Course/CreateCourse", courseData);
+
+    status === 200 ? setMessage("Course Added") : setMessage("Something went wrong can't add new course try again in another time")
+    handleOpenDeleteAssistant()
   };
 
   return (
@@ -209,9 +213,9 @@ function AddCourse() {
         handler={handleOpenDeleteAssistant}         
         className="bg-white dark:bg-[#282828]"
       >
-        <DialogHeader className="text-red-800 font-bold">Delete Course Category</DialogHeader>
-        <DialogBody className="text-lg text-red-600 font-bold">
-          This Course Category will be deleted from your system. Are you sure?
+        <DialogHeader className="text-[#282828] dark:text-white text-2xl">Add new course</DialogHeader>
+        <DialogBody className="text-[#282828] dark:text-white text-lg text-center">
+          {message}
         </DialogBody>
         <DialogFooter className="flex items-center gap-5">
           <Button

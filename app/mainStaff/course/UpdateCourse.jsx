@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Select from "react-select";
-import axios from "axios"; 
+import axios from "axios";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
@@ -43,36 +43,23 @@ var filterParams = {
 export default function UpdateCourse() {
   const containerStyle = useMemo(() => ({ width: "100%", height: "100%" }), []);
   const gridStyle = useMemo(() => ({ height: "100%", width: "100%" }), []);
-  const [rowData, setRowData] = useState();
+  const [rowData, setRowData] = useState([]);
   const [columnDefs, setColumnDefs] = useState([
-    { field: "athlete" },
     {
-      field: "country",
+      field: "name",
       filterParams: {
         filterOptions: ["contains", "startsWith", "endsWith"],
         defaultOption: "startsWith",
       },
     },
     {
-      field: "sport",
+      field: "description",
       filterParams: {
-        maxNumConditions: 10,
+        filterOptions: ["contains", "startsWith", "endsWith"],
+        defaultOption: "startsWith",
       },
     },
-    {
-      field: "age",
-      filter: "agNumberColumnFilter",
-      filterParams: {
-        numAlwaysVisibleConditions: 2,
-        defaultJoinOperator: "OR",
-      },
-      maxWidth: 100,
-    },
-    {
-      field: "date",
-      filter: "agDateColumnFilter",
-      filterParams: filterParams,
-    },
+    { field: "totalMark", filter: "agNumberColumnFilter" },
   ]);
   const defaultColDef = useMemo(() => {
     return {
@@ -82,10 +69,8 @@ export default function UpdateCourse() {
     };
   }, []);
 
-
- 
-
   const [open, setOpen] = useState(false);
+  const [courseId , setCourseId] = useState()
 
   const handleOpen = () => setOpen(!open);
   const onSelectionChanged = useCallback(() => {
@@ -95,7 +80,7 @@ export default function UpdateCourse() {
       selectedRowsElement.innerHTML =
         selectedRows.length === 1 ? selectedRows[0].athlete : "";
     }
-    console.log(selectedRows);
+    setCourseId(selectedRows[0]?.courseId)
     handleOpen();
   }, []);
 
@@ -109,7 +94,14 @@ export default function UpdateCourse() {
   const [totalMark, setTotalMark] = useState(0);
   const [academicYears, setAcademicYears] = useState([]);
   const [openDeleteAssistant, setOpenDeleteAssistant] = useState(false);
-  const API = process.env.NEXT_PUBLIC_BACKEND_API;
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    totalMark: 0,
+    acadimicYearId: 0,
+    courseCategoryId: 0,
+    departementId: 0
+  });  const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -181,53 +173,45 @@ export default function UpdateCourse() {
     setSelectedDepartment(null);
     setSelectedCourseCategory(null);
     setSelectedAcademicYear(null);
+    setFormData({ ...formData, departementId: 0, courseCategoryId: 0, acadimicYearId: 0 });
   };
 
   const handleDepartmentChange = async (option) => {
     setSelectedDepartment(option);
     setSelectedCourseCategory(null);
     setSelectedAcademicYear(null);
+    setFormData({ ...formData, departementId: option.value, courseCategoryId: 0, acadimicYearId: 0 });
     const years = await getAcademicYears(option.value);
     setAcademicYears(years);
   };
 
-  const handleCourseCategoryChange = (option) => {
-    setSelectedCourseCategory(option);
-  };
-
   const handleAcademicYearChange = (option) => {
-    setSelectedAcademicYear(option);
+    setSelectedAcademicYear(option ? option.value : null);
+    setFormData({ ...formData, acadimicYearId: option.value });
+  };
+  const handleCourseCategoryChange = (option) => {
+    setSelectedCourseCategory(option ? option.value : null);
+    setFormData({ ...formData, courseCategoryId: option.value });
   };
 
-  const handleOpenDeleteAssistant = () =>
-    setOpenDeleteAssistant(!openDeleteAssistant);
+  const fetchCourses = async () => {
+    if (!selectedAcademicYear || !selectedCourseCategory) {
+      return; // Exit if either is not selected
+    }
 
-  const createCourse = async () => {
-    const courseData = {
-      name: courseName,
-      description: courseDescription,
-      totalMark: totalMark,
-      acadimicYearId: selectedAcademicYear.value,
-      courseCategoryId: selectedCourseCategory.value,
-      departementId: selectedDepartment.value,
-    };
-    console.log(courseData);
-    await postData("Course/CreateCourse", courseData);
-  };
+    const apiUrl = `${API}Course/GetCoursesOfAcadimicYear`;
+    const params = { CourseCategoryId: selectedCourseCategory };
+    const headers = { AcadimicYearId: selectedAcademicYear };
 
-  const onGridReady = useCallback(async (params) => {
     try {
-      const response = await axios.get(
-        `${API}GetCoursesOfAcademicYear`,
-        {
-          headers: {
-            AcadimicYearId: selectedAcademicYear.value,
-            CourseCategoryId: selectedCourseCategory.value
-          },
-        }
+      const response = await axios.get(apiUrl, { params, headers });
+      console.log(
+        "Fetched data with:",
+        selectedCourseCategory,
+        selectedAcademicYear
       );
-  
       const coursesData = response.data.map((course) => ({
+        courseId:course.courseId ,
         name: course.name,
         description: course.description,
         totalMark: course.totalMark,
@@ -236,10 +220,77 @@ export default function UpdateCourse() {
     } catch (error) {
       console.error("Error fetching courses:", error);
     }
-  }, [selectedAcademicYear, selectedCourseCategory]);
- 
+  };
+  useEffect(() => {
+    fetchCourses();
+  }, [selectedAcademicYear, selectedCourseCategory]); // Dependencies on selections
+
+  const handleOpenDeleteAssistant = () =>
+    setOpenDeleteAssistant(!openDeleteAssistant);
+
+  const onGridReady = useCallback(async () => {
+    const apiUrl = `${API}Course/GetCoursesOfAcadimicYear`; // Base API URL
+    const params = {
+      CourseCategoryId: selectedCourseCategory, // Query parameter
+    };
+    const headers = {
+      AcadimicYearId: selectedAcademicYear, // Header parameter
+    };
+    try {
+      const response = await axios.get(apiUrl, {
+        params, // Query parameters
+        headers, // Headers
+      });
+      console.log(
+        "selectedCourseCategory : " +
+          selectedCourseCategory +
+          "  selectedAcademicYear : " +
+          selectedAcademicYear
+      );
+      console.log(response.data);
+      const coursesData = response.data.map((course) => ({
+        name: course.name,
+        description: course.description,
+        totalMark: course.totalMark,
+      }));
+      console.log(coursesData);
+      setRowData(coursesData);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    }
+  }, [API, selectedAcademicYear, selectedCourseCategory]);
 
   const gridRef = useRef();
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+
+    console.log(formData)
+  };
+
+  const handleUpdate = () => {
+    const selectedRows = gridRef.current?.api.getSelectedRows();
+    if (selectedRows?.length) {
+      const selectedRow = selectedRows[0];
+      axios
+        .put(
+          `${API}Course/UpdateCourse`,
+          formData,
+          {
+            headers: {
+              Id: selectedRow.courseId,
+            },
+          }
+        )
+        .then((response) => {
+          console.log("Update successful:", response.data);
+        })
+        .catch((error) => {
+          console.error("Error updating department:", error);
+        });
+    }
+  };
 
   return (
     <>
@@ -268,7 +319,10 @@ export default function UpdateCourse() {
           <label htmlFor="selectAcademicYear">Academic Year</label>
           <Select
             id="selectAcademicYear"
-            options={academicYears}
+            options={academicYears.map((academicYear) => ({
+              value: academicYear.value,
+              label: academicYear.label,
+            }))}
             onChange={handleAcademicYearChange}
             className="w-full"
           />
@@ -278,7 +332,10 @@ export default function UpdateCourse() {
           <label htmlFor="selectCourseCategory">Course Category</label>
           <Select
             id="selectCourseCategory"
-            options={courseCategories}
+            options={courseCategories.map((courseCategory) => ({
+              value: courseCategory.value,
+              label: courseCategory.label,
+            }))}
             onChange={handleCourseCategoryChange}
             className="w-full"
           />
@@ -288,8 +345,6 @@ export default function UpdateCourse() {
       <div className="h-[600px]">
         <div style={containerStyle}>
           <div className="example-wrapper">
-           
-
             <div style={gridStyle} className={"ag-theme-quartz"}>
               <AgGridReact
                 ref={gridRef}
@@ -324,16 +379,21 @@ export default function UpdateCourse() {
                   <input
                     className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
                     placeholder="Course Name"
+                    name="name"
+                    onChange={handleInputChange}
                   />
                   <input
                     className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
                     placeholder="Course Description"
+                    name="description"
+                    onChange={handleInputChange}
                   />
                   <input
                     className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
                     placeholder="Total Mark"
+                    name="totalMark"
+                    onChange={handleInputChange}
                   />
-                
                 </div>
               </form>
             </DialogBody>
@@ -346,7 +406,10 @@ export default function UpdateCourse() {
               >
                 <span>Cancel</span>
               </Button>
-              <Button variant="gradient" color="green" onClick={handleOpen}>
+              <Button variant="gradient" color="green"   onClick={() => {
+                handleUpdate();
+                handleOpen();
+              }}>
                 <span>Update</span>
               </Button>
             </DialogFooter>
