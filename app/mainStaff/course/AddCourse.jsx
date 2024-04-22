@@ -128,6 +128,8 @@ function AddCourse() {
 
   return (
     <>
+
+    <div className="flex flex-col ">
       <div className="flex items-center justify-between p-5 bg-white dark:bg-[#282828] gap-5">
         <div className="flex flex-col text-sm items-center w-full md:mb-5">
           <label htmlFor="selectFaculty">Faculty</label>
@@ -203,6 +205,7 @@ function AddCourse() {
       >
         Submit
       </Button>
+      </div>
 
       <Dialog 
         animate={{

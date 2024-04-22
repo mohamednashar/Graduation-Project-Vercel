@@ -49,7 +49,7 @@ const page = () => {
             <TabPanel key={value} value={value}>
               {value === "Add Course" && <div className=" w-full md:w-[85%] mx-auto"><AddCourse /></div>}
               {value === "Show Courses" && <div className="min-h-[700px]  w-full md:w-[85%] mx-auto"><UpdateCourse /></div> }
-              {value === "Delete Course" && <DeleteCourse />}
+              {value === "Delete Course" && <div className="min-h-[700px]  w-full md:w-[85%] mx-auto"><DeleteCourse /></div>}
             </TabPanel>
           ))}
         </TabsBody>

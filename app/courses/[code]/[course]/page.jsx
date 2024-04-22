@@ -14,39 +14,42 @@ import Spin from "@/app/components/Spin";
 import Notes from "@/app/components/Notes";
 import CommentSection from "@/app/components/CommentSection";
 
+
+
+
 const videos = [
   {
     id: 1,
     title: "Lecture 1",
-    src: "https://www.youtube.com/embed/AovUY4OqyNM",
+    src: "https://www.youtube.com/embed/UdFOE_iPEMU",
     slideUrl:
       "https://drive.google.com/file/d/1r6mVeVs4uk0u6_Z2Ls8sF2Bk-2rCAstr/view?usp=sharing",
   },
   {
     id: 2,
     title: "Lecture 2",
-    src: "https://www.youtube.com/embed/z-4ZnPffbvc",
+    src: "https://www.youtube.com/embed/UQoLE0FHHCk",
     slideUrl:
       "https://drive.google.com/file/d/1uCNavikjGzmA9kZUUTJcQ_dTkbcVFkia/view?usp=drive_link",
   },
   {
     id: 3,
     title: "Lecture 3",
-    src: "https://www.youtube.com/embed/z-4ZnPffbvc",
+    src: "https://www.youtube.com/embed/UQoLE0FHHCk",
     slideUrl:
       "https://drive.google.com/file/d/1uCNavikjGzmA9kZUUTJcQ_dTkbcVFkia/view?usp=drive_link",
   },
   {
     id: 4,
     title: "Lecture 4",
-    src: "https://www.youtube.com/embed/z-4ZnPffbvc",
+    src: "https://www.youtube.com/embed/UQoLE0FHHCk",
     slideUrl:
       "https://drive.google.com/file/d/1uCNavikjGzmA9kZUUTJcQ_dTkbcVFkia/view?usp=drive_link",
   },
   {
     id: 5,
     title: "Lecture 5",
-    src: "https://www.youtube.com/embed/z-4ZnPffbvc",
+    src: "https://www.youtube.com/embed/UQoLE0FHHCk",
     slideUrl:
       "https://drive.google.com/file/d/1uCNavikjGzmA9kZUUTJcQ_dTkbcVFkia/view?usp=drive_link",
   },

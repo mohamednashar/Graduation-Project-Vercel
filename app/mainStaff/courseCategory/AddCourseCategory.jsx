@@ -102,7 +102,7 @@ const DeleteDepartment = () => {
           </label>
           <input
             id="courseName"
-            className="w-full h-full dark:text-white"
+            className="w-full block p-2 text-gray-900 border border-gray-300 rounded-lg bg-white sm:text-xs dark:bg-[#282828] dark:text-white"
             onChange={handleCourseNameChange}
             value={courseName}
           />
@@ -114,7 +114,7 @@ const DeleteDepartment = () => {
           </label>
           <input
             id="courseDescription"
-            className="w-full h-full dark:text-white"
+            className="w-full block p-2 text-gray-900 border border-gray-300 rounded-lg bg-white sm:text-xs dark:bg-[#282828] dark:text-white"
             value={courseDescription}
           onChange={handleCourseDescriptionChange}
           />
