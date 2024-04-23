@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+import axios from "axios";
 import {
   Button,
   Dialog,
@@ -5,21 +7,44 @@ import {
   DialogFooter,
   DialogHeader,
 } from "@material-tailwind/react";
-import React, { useState } from "react";
+
+const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
 function DeleteProf() {
   const [openDeleteProf, setOpenDeleteProf] = useState(false);
+  const [email, setEmail] = useState("");
+  
   const handleOpenDeleteProf = () => {
     setOpenDeleteProf(!openDeleteProf);
   };
+
+  const handleDeleteProf = async () => {
+    try {
+      await axios.delete(`${API}/Professor/DeleteProfessor`, {
+        headers: {
+          "Email": email
+        }
+      });
+      // Handle success, maybe show a message to the user
+      console.log("Professor deleted successfully!");
+    } catch (error) {
+      // Handle error, maybe show an error message to the user
+      console.error("Error deleting professor:", error);
+    }
+    // Close the dialog
+    setOpenDeleteProf(false);
+  };
+
   return (
     <div>
       <div className="flex items-center justify-center gap-5 bg-white dark:bg-[#282828] w-full md:w-[90%] mx-auto my-4 p-4">
-        <label htmlFor="nationalID" className="dark:text-white">national ID</label>
+        <label htmlFor="email" className="dark:text-white">Prof Email</label>
         <input
-          type="number"
-          id="nationalID"
-          className="rounded-lg p-1 border-2 dark:text-white dark:bg-[#282828]"
+          type="text"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="rounded-lg p-1 border-2 border-gray-300 dark:text-white dark:bg-[#282828] outline-none"
         />
       </div>
 
@@ -45,7 +70,7 @@ function DeleteProf() {
           Delete Prof
         </DialogHeader>
         <DialogBody className="text-lg text-red-600 font-bold">
-          This Prof will be deleted from your system . Are you sure about that?
+          This Prof will be deleted from your system. Are you sure about that?
         </DialogBody>
         <DialogFooter>
           <Button
@@ -58,7 +83,7 @@ function DeleteProf() {
           </Button>
           <button
             className="bg-red-600 py-2 px-4 mx-2 hover:bg-red-900 transition-all duration-500 rounded-lg text-white font-semibold"
-            onClick={handleOpenDeleteProf}
+            onClick={handleDeleteProf}
           >
             Delete
           </button>

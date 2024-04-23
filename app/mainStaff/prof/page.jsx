@@ -44,7 +44,7 @@ const page = () => {
           {data.map(({ value }) => (
             <TabPanel key={value} value={value}>
               {value === "Add Prof" && <AddProf />}
-              {value === "Show Profs" && <div className="h-[700px] shadow-md w-full md:w-[90%] mx-auto"><UpdateProf /></div> }
+              {value === "Show Profs" && <div className="h-[700px] w-full md:w-[90%] mx-auto"><UpdateProf /></div> }
               {value === "Delete Prof" && <DeleteProf />}
             </TabPanel>
           ))}

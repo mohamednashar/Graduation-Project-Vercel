@@ -1,78 +1,267 @@
-"use client";
 import { Button, Dialog, DialogBody } from "@material-tailwind/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Select from "react-select";
+import { postData } from "@/app/API/CustomHooks/usePost";
 
-const labels = ["College", "Department", "Number of groups"];
+const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const AddGroup = () => {
   const [formData, setFormData] = useState({
-    "number of groups": 0 // Initialize "number of groups" to 0
-  });
+    name: "",
+    studentHeadName: "",
+    studentHeadPhone: "",
+    numberOfStudent: "",
+    acadimicYearId: "",
+    departementId: "",
 
+    
+  
+  
+  });
   const [open, setOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [faculties, setFaculties] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [academicYears, setAcademicYears] = useState([]);
+  const [selectedDepartment, setSelectedDepartment] = useState(null);
+
+  useEffect(() => {
+    const fetchFaculties = async () => {
+      try {
+        const response = await axios.get(`${API}Faculty/GetFaculties`);
+        setFaculties(response.data);
+      } catch (error) {
+        console.error("Error fetching faculties:", error);
+      }
+    };
+    fetchFaculties();
+  }, []);
 
   const handleOpen = () => setOpen(!open);
 
-  const handleInputChange = (event) => {
-    const { id, value } = event.target;
-    setFormData({ ...formData, [id]: value });
+  const handleFacultySelectChange = async (selectedOption) => {
+    const facultyId = selectedOption ? selectedOption.value : "";
+    setFormData({
+      departementId: "",
+      academicYearId: "",
+      name: "",
+      studentHeadName: "",
+      studentHeadPhone: "",
+      numberOfStudent: "",
+    });
+    setSelectedDepartment(null);
+    await fetchDepartmentsByFaculty(facultyId);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("Form Data:", formData);
+  const handleDepartmentSelectChange = async (selectedOption) => {
+    setSelectedDepartment(selectedOption);
+    setFormData({
+      departementId: selectedOption ? selectedOption.value : "",
+      acadimicYearId: "",
+      name: "",
+      studentHeadName: "",
+      studentHeadPhone: "",
+      numberOfStudent: "",
+    });
+    await fetchAcademicYears(selectedOption.value);
   };
 
-  const renderInput = (label, type, id, name = null) => (
-    <div className="flex flex-col items-center pb-5" key={label}>
-      <label
-        htmlFor={id}
-        className="mb-2 text-sm mr-5 w-[150px] md:w-[250px] text-center dark:text-white"
-      >
-        {label}
-      </label>
-      {
-        <input
-          type={type}
-          id={id}
-          value={formData[id]}
-          onChange={handleInputChange}
-          className="w-full block p-2 text-gray-900 border border-gray-300 rounded-lg bg-white sm:text-xs dark:bg-[#282828] dark:text-white"
-        />
-      }
-    </div>
-  );
-
-  const renderGroupNameInputs = () => {
-    const numberOfGroups = parseInt(formData["number of groups"]); // Convert to integer
-    const groupInputs = [];
-    for (let i = 0; i < numberOfGroups; i++) {
-      groupInputs.push(renderInput("Group Name", "text", `group_${i + 1}`));
+  const fetchDepartmentsByFaculty = async (facultyId) => {
+    try {
+      const response = await axios.get(
+        `${API}Departement/GetDepartementsOfFaculty`,
+        {
+          headers: {
+            FacultyId: facultyId,
+          },
+        }
+      );
+      setDepartments(response.data);
+    } catch (error) {
+      console.error("Error fetching departments:", error);
     }
-    return groupInputs;
   };
+
+  const fetchAcademicYears = async (departmentId) => {
+    try {
+      const response = await axios.get(`${API}AcadimicYear/GetAcadimicYears`, {
+        headers: {
+          DeptId: departmentId,
+        },
+      });
+      setAcademicYears(response.data);
+    } catch (error) {
+      console.error("Error fetching academic years:", error);
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log(formData)
+  
+    if (
+      formData.departementId === "" ||
+      formData.acadimicYearId === "" ||
+      formData.name === "" ||
+      formData.studentHeadName === "" ||
+      formData.studentHeadPhone === "" ||
+      formData.numberOfStudent === ""
+    ) {
+      setErrorMessage("Please fill in all the required fields.");
+      setSuccessMessage("");
+      return;
+    }
+  
+    const data = {
+      name: formData.name,
+      studentHeadName: formData.studentHeadName,
+      studentHeadPhone: formData.studentHeadPhone,
+      numberOfStudent: parseInt(formData.numberOfStudent), // Convert to integer
+      acadimicYearId: formData.acadimicYearId, // Correct spelling of academicYearId
+      departementId: formData.departementId,
+    };
+  
+    try {
+      const response = await axios.post(`${API}Group/CreateGroup`, data);
+      if (response.status === 200) {
+        setSuccessMessage("Submitted Successfully");
+        setErrorMessage("");
+        setOpen(true);
+      } else {
+        setErrorMessage("Failed to submit. Please try again later.");
+        setSuccessMessage("");
+        setOpen(true);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setErrorMessage("Failed to submit. Please try again later.");
+      setSuccessMessage("");
+      setOpen(true);
+    }
+  };
+  
 
   return (
     <form
       onSubmit={handleSubmit}
       className="flex flex-col w-full md:w-[90%] mx-auto"
     >
-      <div className="bg-white dark:bg-[#282828] p-5 rounded-lg shadow-md flex flex-wrap justify-center lg:justify-between">
-        {labels.map((label, index) => (
-          <div key={index} className="">
-            {index === 2
-              ? renderInput(label, "number", label.toLowerCase())
-              : renderInput(label, "text", label.toLowerCase())}
+      <div className="bg-white p-5  rounded-lg shadow-md dark:bg-[#282828]  ">
+        <div className="flex gap-8 mb-10">
+          <div className="flex flex-col text-sm items-center w-full ">
+            <label htmlFor="SelectFaculty" className="mb-2">
+              Select Faculty
+            </label>
+
+            <Select
+              className="w-full"
+              options={faculties.map((faculty) => ({
+                value: faculty.facultyId,
+                label: faculty.name,
+              }))}
+              closeMenuOnSelect={true}
+              onChange={handleFacultySelectChange}
+            />
           </div>
-        ))}
-        {/* Render Group Name inputs based on the entered number of groups */}
-        {renderGroupNameInputs()}
+
+          <div className="flex flex-col text-sm items-center w-full ">
+            <label htmlFor="SelectDepartment" className="mb-2">
+              Select Department
+            </label>
+
+            <Select
+              className="w-full"
+              options={departments.map((department) => ({
+                value: department.departementId,
+                label: department.name,
+              }))}
+              closeMenuOnSelect={true}
+              onChange={handleDepartmentSelectChange}
+              value={selectedDepartment}
+            />
+          </div>
+
+          <div className="flex flex-col text-sm items-center w-full ">
+            <label htmlFor="SelectAcademicYear" className="mb-2">
+              Select Academic Year
+            </label>
+            <Select
+              className="w-full"
+              options={academicYears.map((year) => ({
+                value: year.acadimicYearId,
+                label: year.year,
+              }))}
+              onChange={(selectedOption) =>
+                setFormData({
+                  ...formData,
+                  acadimicYearId: selectedOption.value,
+                })
+              }
+              value={academicYears.find(
+                (year) => year.academicYearId === formData.academicYearId
+              )}
+            />
+          </div>
+        </div>
+
+        <div>
+          <div className="flex gap-8 mb-10">
+            <div className="flex flex-col text-sm items-center w-full ">
+              <input
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
+                type="text"
+                placeholder="Name"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+              />
+            </div>
+
+            <div className="flex flex-col text-sm items-center w-full">
+              <input
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
+                type="text"
+                placeholder="Student Head Name"
+                value={formData.studentHeadName}
+                onChange={(e) =>
+                  setFormData({ ...formData, studentHeadName: e.target.value })
+                }
+              />
+            </div>
+
+            <div className="flex flex-col text-sm items-center w-full">
+              <input
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
+                type="text"
+                placeholder="Student Head Phone"
+                value={formData.studentHeadPhone}
+                onChange={(e) =>
+                  setFormData({ ...formData, studentHeadPhone: e.target.value })
+                }
+              />
+            </div>
+
+            <div className="flex flex-col text-sm items-center w-full">
+              <input
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
+                type="number"
+                placeholder="Number of Students"
+                value={formData.numberOfStudent}
+                onChange={(e) =>
+                  setFormData({ ...formData, numberOfStudent: e.target.value })
+                }
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       <Button
-        onClick={handleOpen}
         type="submit"
-        className="font-bold text-lg bg-[#66bfbf] text-white px-4 py-2 mt-4 rounded-lg w-[30%] mx-auto mb-5 transition-all duration-200 hover:bg-[#f76b8a]"
+        className="font-bold text-lg bg-[#66bfbf] text-white px-4 py-2 mt-4 rounded-lg w-[30%] mx-auto mb-5 transition-all duration-200 hover:bg-[#5eb1b1]"
         data-dialog-target="animated-dialog"
       >
         Submit
@@ -88,11 +277,10 @@ const AddGroup = () => {
         }}
       >
         <DialogBody>
-          {/* Modal content */}
-          <div className=" text-center bg-white rounded-lg dark:bg-gray-800 p-5">
+          <div className="text-center bg-white rounded-lg p-5">
             <button
               onClick={handleOpen}
-              className="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              className="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm ml-auto inline-flex items-center"
             >
               <svg
                 aria-hidden="true"
@@ -108,28 +296,19 @@ const AddGroup = () => {
                 />
               </svg>
             </button>
-            <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 p-2 flex items-center justify-center mx-auto mb-3.5">
-              <svg
-                aria-hidden="true"
-                className="w-8 h-8 text-green-500 dark:text-green-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className="sr-only">Success</span>
-            </div>
-            <p className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-              Submitted Successfully
-            </p>
+            {successMessage && (
+              <p className="mb-4 text-lg font-semibold text-gray-900">
+                {successMessage}
+              </p>
+            )}
+            {errorMessage && (
+              <p className="mb-4 text-lg font-semibold text-red-600">
+                {errorMessage}
+              </p>
+            )}
             <button
               onClick={handleOpen}
-              class="middle none center rounded-lg bg-gradient-to-tr from-green-600 to-green-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              className="bg-green-600 text-white py-3 px-6 font-bold rounded-lg uppercase shadow-md transition-all hover:bg-green-500 hover:shadow-lg active:opacity-75"
             >
               Continue
             </button>
@@ -137,8 +316,6 @@ const AddGroup = () => {
         </DialogBody>
       </Dialog>
     </form>
-
-
   );
 };
 
