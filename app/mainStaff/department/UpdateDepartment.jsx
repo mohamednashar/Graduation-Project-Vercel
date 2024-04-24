@@ -164,6 +164,7 @@ export default function UpdateDepartment() {
           console.error("Error updating department:", error);
         });
     }
+    onGridReady()
   };
 
   const handleSelectChange = (selectedOption, selector) => {

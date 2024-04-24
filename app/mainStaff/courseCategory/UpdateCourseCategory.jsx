@@ -66,6 +66,7 @@ export default function UpdateFaculty() {
       console.error("Error updating data:", error);
       // Optionally handle the error
     }
+    onGridReady()
   };
   
 

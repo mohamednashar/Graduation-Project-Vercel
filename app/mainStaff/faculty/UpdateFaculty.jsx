@@ -93,6 +93,8 @@ export default function UpdateFaculty() {
       console.error("Error updating data:", error);
       // Optionally handle the error
     }
+    handleOpen()
+    onGridReady()
   };
 
   const [open, setOpen] = useState(false);
@@ -167,11 +169,12 @@ export default function UpdateFaculty() {
     document.querySelector("#selectedRows").innerHTML =
       selectedRows.length === 1 ? selectedRows[0].name : "";
       setInputValues({
-        id : selectedRows[0].facultyId ,
-        name:selectedRows[0].name ,
-        studentServiceNumber : selectedRows[0].studentServiceNumber ,
-        numOfYears: selectedRows[0].numOfYears ,
-        profHeadName : selectedRows[0].profHeadName ,
+        id : selectedRows[0]?.facultyId ,
+        name:selectedRows[0]?.name ,
+        studentServiceNumber : selectedRows[0]?.studentServiceNumber ,
+        numOfYears: selectedRows[0]?.numOfYears ,
+        profHeadName : selectedRows[0]?.profHeadName ,
+        
       })
     console.log(selectedRows);
     selectedRows.length === 1 && 
