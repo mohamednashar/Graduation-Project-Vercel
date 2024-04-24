@@ -6,7 +6,7 @@ import { postData } from "@/app/API/CustomHooks/usePost";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
-const AddProf = () => {
+const AddInstructor = () => {
   const [formData, setFormData] = useState({
     id: "",
     firstName: "",
@@ -101,16 +101,16 @@ const AddProf = () => {
 
     try {
       const response = await axios.post(
-        `${API}Professor/CreateProfessor`,
+        `${API}Instructor/CreateInstructor`,
         data
       );
       console.log(response);
-      setSuccessMessage("Professor created successfully.");
+      setSuccessMessage("Instructor created successfully.");
       setErrorMessage("");
       setOpen(true);
     } catch (error) {
-      console.error("Error creating professor:", error);
-      setErrorMessage("Failed to create professor. Please try again later.");
+      console.error("Error creating Instructor:", error);
+      setErrorMessage("Failed to create Instructor. Please try again later.");
       setSuccessMessage("");
       setOpen(true);
     }
@@ -394,4 +394,4 @@ const AddProf = () => {
   );
 };
 
-export default AddProf;
+export default AddInstructor;

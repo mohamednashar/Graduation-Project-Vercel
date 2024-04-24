@@ -1,5 +1,5 @@
 "use client";
-import AddAssistant from "./AddAssistant";
+import AddProf from "./AddInstructor";
 
 import {
   Tabs,
@@ -8,21 +8,24 @@ import {
   Tab,
   TabPanel,
 } from "@material-tailwind/react";
-import DeleteAssistant from "./DeleteAssistant";
-import UpdateAssistant from "./UpdateAssistant";
+import DeleteProf from "./DeleteInstructor";
+import UpdateProf from "./UpdateInstructor";
+import AddInstructor from "./AddInstructor";
+import DeleteInstructor from "./DeleteInstructor";
+import UpdateInstructor from "./UpdateInstructor";
 
 const data = [
   {
-    label: "Add Assistant",
-    value: "Add Assistant",
+    label: "Add Instructor",
+    value: "Add Instructor",
   },
   {
-    label: "Show Assistants",
-    value: "Show Assistants",
+    label: "Show Instructors",
+    value: "Show Instructors",
   },
   {
-    label: "Delete Assistant",
-    value: "Delete Assistant",
+    label: "Delete Instructor",
+    value: "Delete Instructor",
   },
 ];
 
@@ -43,9 +46,9 @@ const page = () => {
         >
           {data.map(({ value }) => (
             <TabPanel key={value} value={value}>
-              {value === "Add Assistant" && <AddAssistant />}
-              {value === "Show Assistants" && <div className="h-[700px] shadow-md w-full md:w-[90%] mx-auto"><UpdateAssistant /></div> }
-              {value === "Delete Assistant" && <DeleteAssistant />}
+              {value === "Add Instructor" && <AddInstructor />}
+              {value === "Show Instructors" && <div className="h-[700px] w-full md:w-[90%] mx-auto"><UpdateInstructor /></div> }
+              {value === "Delete Instructor" && <DeleteInstructor />}
             </TabPanel>
           ))}
         </TabsBody>

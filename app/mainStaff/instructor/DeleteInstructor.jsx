@@ -10,7 +10,7 @@ import {
 
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
-function DeleteProf() {
+function DeleteInstructor() {
   const [openDeleteProf, setOpenDeleteProf] = useState(false);
   const [email, setEmail] = useState("");
   
@@ -20,7 +20,7 @@ function DeleteProf() {
 
   const handleDeleteProf = async () => {
     try {
-      await axios.delete(`${API}Professor/DeleteProfessor`, {
+      await axios.delete(`${API}Instructor/DeleteInstructor`, {
         headers: {
           "Email": email
         }
@@ -38,7 +38,7 @@ function DeleteProf() {
   return (
     <div>
       <div className="flex items-center justify-center gap-5 bg-white dark:bg-[#282828] w-full md:w-[90%] mx-auto my-4 p-4">
-        <label htmlFor="email" className="dark:text-white">Professor Email</label>
+        <label htmlFor="email" className="dark:text-white">Instructor Email</label>
         <input
           type="text"
           id="email"
@@ -53,7 +53,7 @@ function DeleteProf() {
           onClick={handleOpenDeleteProf}
           className="p-2 rounded-md bg-red-600 hover:bg-red-800 mx-w-[500px] text-white"
         >
-          Delete Professor
+          Delete Instructor
         </button>
       </div>
 
@@ -67,10 +67,10 @@ function DeleteProf() {
         className="bg-white dark:bg-[#282828]"
       >
         <DialogHeader className="text-red-800 font-bold">
-          Delete Professor
+          Delete Instructor
         </DialogHeader>
         <DialogBody className="text-lg text-red-600 font-bold">
-          This Professor will be deleted from your system. Are you sure about that?
+          This Instructor will be deleted from your system. Are you sure about that?
         </DialogBody>
         <DialogFooter>
           <Button
@@ -93,4 +93,4 @@ function DeleteProf() {
   );
 }
 
-export default DeleteProf;
+export default DeleteInstructor;

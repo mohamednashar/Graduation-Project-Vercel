@@ -24,8 +24,8 @@ const menuItems = [
     link: "/mainStaff/faculty",
   },
   { id: 1, label: "Student", icon: Icon1, link: "/mainStaff/student" },
-  { id: 2, label: "Prof", icon: Icon2, link: "/mainStaff/prof" },
-  { id: 3, label: "Assistant", icon: Icon3, link: "/mainStaff/assistant" },
+  { id: 2, label: "Professor", icon: Icon2, link: "/mainStaff/prof" },
+  { id: 3, label: "Instructor", icon: Icon3, link: "/mainStaff/instructor" },
   {
     id: 9,
     label: "Course Category",

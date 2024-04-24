@@ -13,16 +13,16 @@ import UpdateProf from "./UpdateProf";
 
 const data = [
   {
-    label: "Add Prof",
-    value: "Add Prof",
+    label: "Add Professor",
+    value: "Add Professor",
   },
   {
-    label: "Show Profs",
-    value: "Show Profs",
+    label: "Show Professors",
+    value: "Show Professors",
   },
   {
-    label: "Delete Prof",
-    value: "Delete Prof",
+    label: "Delete Professor",
+    value: "Delete Professor",
   },
 ];
 
@@ -43,9 +43,9 @@ const page = () => {
         >
           {data.map(({ value }) => (
             <TabPanel key={value} value={value}>
-              {value === "Add Prof" && <AddProf />}
-              {value === "Show Profs" && <div className="h-[700px] w-full md:w-[90%] mx-auto"><UpdateProf /></div> }
-              {value === "Delete Prof" && <DeleteProf />}
+              {value === "Add Professor" && <AddProf />}
+              {value === "Show Professors" && <div className="h-[700px] w-full md:w-[90%] mx-auto"><UpdateProf /></div> }
+              {value === "Delete Professor" && <DeleteProf />}
             </TabPanel>
           ))}
         </TabsBody>
