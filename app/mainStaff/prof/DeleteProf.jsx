@@ -20,7 +20,7 @@ function DeleteProf() {
 
   const handleDeleteProf = async () => {
     try {
-      await axios.delete(`${API}/Professor/DeleteProfessor`, {
+      await axios.delete(`${API}Professor/DeleteProfessor`, {
         headers: {
           "Email": email
         }

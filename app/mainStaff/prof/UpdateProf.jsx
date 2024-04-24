@@ -1,36 +1,31 @@
 import axios from "axios";
-import React, {
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-  useEffect,
-} from "react";
+import React, { useCallback, useMemo, useRef, useState, useEffect } from "react";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
-import {
-  Button,
-  Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
-} from "@material-tailwind/react";
+import { Button, Dialog, DialogHeader, DialogBody, DialogFooter } from "@material-tailwind/react";
 import Select from "react-select";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
 export default function UpdateProf() {
-  const [formData, setFormData] = useState({
-    DepartmentNames: [],
-  });
   const [faculties, setFaculties] = useState([]);
-  const [facultyId, setFacultyId] = useState(null);
   const [departments, setDepartments] = useState([]);
-  const [selectedDepartmentId, setSelectedDepartmentId] = useState(null); // State to hold the selected department ID
-  const [columnDefs, setColumnDefs] = useState([]);
-
+  const [selectedDepartmentId, setSelectedDepartmentId] = useState(null);
   const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    id: null,
+    firstName: "",
+    secondName: "",
+    thirdName: "",
+    fourthName: "",
+    address: "",
+    email: "",
+    userName: "",
+    gender: "",
+    birthDay: "",
+    specification: ""
+  });
   const gridRef = useRef();
   const [rowData, setRowData] = useState([]);
 
@@ -41,47 +36,6 @@ export default function UpdateProf() {
     minWidth: 150,
     filter: true,
   }), []);
-
-  // Handle the form input change
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleOpen = () => {
-    setOpen(!open);
-  };
-
-  const onGridReady = useCallback(() => {
-    if (facultyId) {
-      fetchDepartmentsByFaculty(facultyId); // Fetch departments when the grid is ready and faculty ID is set
-    }
-  }, [facultyId]);
-
-  const fetchDepartmentsByFaculty = async (facultyId) => {
-    try {
-      const response = await axios.get(
-        `${API}Departement/GetDepartementsOfFaculty`,
-        {
-          headers: {
-            FacultyId: facultyId,
-          },
-        }
-      );
-      setDepartments(response.data); // Set fetched departments
-    } catch (error) {
-      console.error("Error fetching departments:", error);
-    }
-  };
-
-  const onSelectionChanged = useCallback(() => {
-    const selectedRows = gridRef.current?.api.getSelectedRows();
-    if (selectedRows?.length) {
-      setOpen(true);
-      document.querySelector("#selectedRows").innerHTML =
-        selectedRows[0]?.departementId || "";
-    }
-  }, []);
 
   useEffect(() => {
     const fetchFaculties = async () => {
@@ -96,86 +50,156 @@ export default function UpdateProf() {
     fetchFaculties();
   }, []);
 
-  const handleUpdate = () => {
-    const selectedRows = gridRef.current?.api.getSelectedRows();
-    if (selectedRows?.length) {
-      const selectedRow = selectedRows[0];
+  const fetchDepartmentsByFaculty = async (facultyId) => {
+    try {
+      const response = await axios.get(`${API}Departement/GetDepartementsOfFaculty`, {
+        headers: {
+          FacultyId: facultyId,
+        },
+      });
+      setDepartments(response.data);
+    } catch (error) {
+      console.error("Error fetching departments:", error);
+    }
+  };
 
-      const postData = {
-        name: formData["Department Name"],
-        studentServiceNumber: formData["Student Service Number"],
-        profHeadName: formData["Head Name"],
-        facultyId: selectedRow.facultyId,
+  const fetchProfessorsByDepartment = async (departmentId) => {
+    try {
+      const response = await axios.get(`${API}Professor/GetAllProfessorsInDepartement`, {
+        headers: {
+          DepartementId: departmentId,
+        },
+      });
+      const formattedData = response.data.map((professor) => ({
+        ...professor,
+        gender: professor.gender === "Male", // Convert gender to boolean
+      }));
+      setRowData(formattedData);
+    } catch (error) {
+      console.error("Error fetching professors:", error);
+    }
+  };
+
+  const handleFacultySelectChange = (selectedOption) => {
+    const facultyId = selectedOption ? selectedOption.value : null;
+    setSelectedDepartmentId(null); // Reset selected department
+    fetchDepartmentsByFaculty(facultyId);
+  };
+
+  const handleDepartmentSelectChange = (selectedOption) => {
+    const departmentId = selectedOption ? selectedOption.value : null;
+    setSelectedDepartmentId(departmentId);
+    fetchProfessorsByDepartment(departmentId);
+  };
+
+  const onGridReady = useCallback(() => {
+    if (selectedDepartmentId) {
+      fetchProfessorsByDepartment(selectedDepartmentId);
+    }
+  }, [selectedDepartmentId]);
+
+  const columnDefs = useMemo(() => [
+    
+    { headerName: "First Name", field: "firstName" },
+    { headerName: "Second Name", field: "secondName" },
+    { headerName: "Third Name", field: "thirdName" },
+    { headerName: "Fourth Name", field: "fourthName" },
+    { headerName: "Address", field: "address" },
+    { headerName: "Email", field: "email" },
+    { headerName: "Username", field: "userName" },
+    { headerName: "Gender", field: "gender" },
+    { headerName: "Birthday", field: "birthDay" },
+    { headerName: "Specification", field: "specification" }
+  ], []);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      // Log the data before updating
+  
+      // Reorder the formData properties
+      const reorderedData = {
+        id: formData.id || 2, // Send ID with a value of 0 if not provided
+        firstName: formData.firstName,
+        secondName: formData.secondName,
+        thirdName: formData.thirdName,
+        fourthName: formData.fourthName,
+        address: formData.address,
+        gender: formData.gender === "Male", // Convert gender to boolean
+        email: formData.email,
+        birthDay: new Date(formData.birthDay).toISOString(),
+        phoneNumber: formData.phoneNumber||"1234",
+        specification: formData.specification,
+        departementId: formData.departementId
       };
+      console.log("Data to be updated:", reorderedData);
 
-      axios
-        .put(
-          `${API}Departement/UpdateDepartement`,
-          postData,
-          {
-            headers: {
-              Id: selectedRow.departementId,
-            },
-          }
-        )
-        .then((response) => {
-          console.log("Update successful:", response.data);
-        })
-        .catch((error) => {
-          console.error("Error updating department:", error);
-        });
+  
+      // Perform the update request
+      const response = await axios.put(`${API}Professor/UpdateProfessor`, reorderedData);
+      console.log("Update successful:", response.data);
+  
+      // Optionally, you can update the grid data after successful update
+      // Refetch the professors data for the selected department
+      if (selectedDepartmentId) {
+        fetchProfessorsByDepartment(selectedDepartmentId);
+      }
+      handleClose(); // Close the modal after successful update
+    } catch (error) {
+      console.error("Error updating professor:", error);
+      // Handle error
     }
   };
+  
 
-  const handleSelectChange = (selectedOption, selector) => {
-    const ID = selectedOption ? selectedOption.value : null;
-    if (selector === "facultyId") {
-      setFacultyId(ID);
-      fetchDepartmentsByFaculty(ID); // Fetch departments when faculty ID changes
-    } else if (selector === "departmentId") {
-      setSelectedDepartmentId(ID); // Update selected department ID
-    }
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
   };
+
+  const handleRowClicked = useCallback((event) => {
+    const selectedRow = event.data;
+    console.log("Selected Professor Data:", selectedRow); // Log the data of the selected professor
+    setFormData(selectedRow); // Fill form data with selected row data
+    setOpen(true);
+  }, []);
 
   return (
     <div className="h-[600px]">
       <div className="flex gap-14">
-      <div className="flex flex-col text-sm items-center w-full md:mb-5">
-        <label htmlFor="selectFaculty" className="mb-2">
-          Select Faculty
-        </label>
-        <Select
-          id="selectFaculty"
-          className="w-full"
-          options={faculties.map((faculty) => ({
-            value: faculty.facultyId,
-            label: faculty.name,
-          }))}
-          onChange={(selectedOption) =>
-            handleSelectChange(selectedOption, "facultyId")
-          }
-        />
+        <div className="flex flex-col text-sm items-center w-full md:mb-5">
+          <label htmlFor="selectFaculty" className="mb-2">Select Faculty</label>
+          <Select
+            id="selectFaculty"
+            className="w-full"
+            options={faculties.map((faculty) => ({
+              value: faculty.facultyId,
+              label: faculty.name,
+            }))}
+            onChange={handleFacultySelectChange}
+          />
+        </div>
+        <div className="flex flex-col text-sm items-center w-full md:mb-5">
+          <label htmlFor="selectDepartment" className="mb-2">Select Department</label>
+          <Select
+            id="selectDepartment"
+            className="w-full"
+            options={departments.map((department) => ({
+              value: department.departementId,
+              label: department.name,
+            }))}
+            onChange={handleDepartmentSelectChange}
+          />
+        </div>
       </div>
-
-      <div className="flex flex-col text-sm items-center w-full md:mb-5">
-        <label htmlFor="selectDepartment" className="mb-2">
-          Select Department
-        </label>
-        <Select
-          id="selectDepartment"
-          className="w-full"
-          options={departments.map((department) => ({
-            value: department.departmentId,
-            label: department.name,
-          }))}
-          onChange={(selectedOption) =>
-            handleSelectChange(selectedOption, "departmentId")
-          }
-        />
-      </div>
-      </div>
-
-      <div style={containerStyle} >
+      <div style={containerStyle}>
         <div className="example-wrapper">
           <div className="example-header">
             <span id="selectedRows" className="hidden"></span>
@@ -185,78 +209,94 @@ export default function UpdateProf() {
               ref={gridRef}
               rowData={rowData}
               columnDefs={columnDefs}
-
               defaultColDef={defaultColDef}
               rowSelection={"single"}
-              onSelectionChanged={onSelectionChanged}
               onGridReady={onGridReady}
               pagination={true}
               paginationPageSize={100}
+              onRowClicked={handleRowClicked} // Add rowClicked event handler
             />
           </div>
         </div>
-
-        <Dialog
-          open={open}
-          handler={handleOpen}
-          animate={{
-            mount: { scale: 1, y: 0 },
-            unmount: { scale: 0.9, y: -100 },
-          }}
-          className="dark:bg-[#282828]"
-        >
-          <DialogHeader className="dark:text-white">
-            Update Department Data
-          </DialogHeader>
-          <DialogBody>
-            <form>
-              <div className="flex flex-wrap items-center gap-5">
-                <input
-                  type="text"
-                  name="Department Name"
-                  onChange={handleInputChange}
-                  className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828]"
-                  placeholder="Department Name"
-                />
-                <input
-                  type="text"
-                  name="Student Service Number"
-                  onChange={handleInputChange}
-                  className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828]"
-                  placeholder="Student Service Number"
-                />
-                <input
-                  type="text"
-                  name="Head Name"
-                  onChange={handleInputChange}
-                  className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828]"
-                  placeholder="Head Name"
-                />
-              </div>
-            </form>
-          </DialogBody>
-          <DialogFooter>
-            <Button
-              variant="text"
-              color="red"
-              onClick={handleOpen}
-              className="mr-1"
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="gradient"
-              color="green"
-              onClick={() => {
-                handleUpdate();
-                handleOpen();
-              }}
-            >
-              Update
-            </Button>
-          </DialogFooter>
-        </Dialog>
       </div>
+      <Dialog
+        open={open}
+        handler={handleClose}
+        animate={{
+          mount: { scale: 1, y: 0 },
+          unmount: { scale: 0.9, y: -100 },
+        }}
+        className="dark:bg-[#282828]"
+      >
+        <DialogHeader className="dark:text-white">Update Professor Data</DialogHeader>
+        <DialogBody>
+  <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="grid grid-cols-3 gap-4">
+      <div className="flex flex-col">
+        <label htmlFor="firstName" className="text-xs mb-1">First Name</label>
+        <input id="firstName" className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none" type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} />
+      </div>
+      <div className="flex flex-col">
+        <label htmlFor="secondName" className="text-xs mb-1">Second Name</label>
+        <input id="secondName" className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none" type="text" name="secondName" value={formData.secondName} onChange={handleInputChange} />
+      </div>
+      <div className="flex flex-col">
+        <label htmlFor="thirdName" className="text-xs mb-1">Third Name</label>
+        <input id="thirdName" className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none" type="text" name="thirdName" value={formData.thirdName} onChange={handleInputChange} />
+      </div>
+    </div>
+    <div className="grid grid-cols-3 gap-4">
+      <div className="flex flex-col">
+        <label htmlFor="fourthName" className="text-xs mb-1">Fourth Name</label>
+        <input id="fourthName" className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none" type="text" name="fourthName" value={formData.fourthName} onChange={handleInputChange} />
+      </div>
+      <div className="flex flex-col">
+        <label htmlFor="address" className="text-xs mb-1">Address</label>
+        <input id="address" className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none" type="text" name="address" value={formData.address} onChange={handleInputChange} />
+      </div>
+      <div className="flex flex-col">
+        <label htmlFor="email" className="text-xs mb-1">Email</label>
+        <input id="email" className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none" type="email" name="email" value={formData.email} onChange={handleInputChange} />
+      </div>
+    </div>
+    <div className="grid grid-cols-3 gap-4">
+      <div className="flex flex-col">
+        <label htmlFor="userName" className="text-xs mb-1">Username</label>
+        <input id="userName" className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none" type="text" name="userName" value={formData.userName} onChange={handleInputChange} />
+      </div>
+      <div className="flex flex-col">
+        <label htmlFor="gender" className="text-xs mb-1">Gender</label>
+        <Select
+          id="gender"
+        
+          options={[
+            { value: "Male", label: "Male" },
+            { value: "Female", label: "Female" }
+          ]}
+          value={{ value: formData.gender, label: formData.gender }}
+          onChange={(selectedOption) => setFormData({ ...formData, gender: selectedOption.value })}
+        />
+      </div>
+      <div className="flex flex-col">
+        <label htmlFor="birthDay" className="text-xs mb-1">Birthday</label>
+        <input id="birthDay" className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none" type="date" name="birthDay" value={formData.birthDay} onChange={handleInputChange} />
+      </div>
+    </div>
+    <div className="grid grid-cols-3 gap-4">
+      <div className="flex flex-col">
+        <label htmlFor="specification" className="text-xs mb-1">Specification</label>
+        <input id="specification" className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none" type="text" name="specification" value={formData.specification} onChange={handleInputChange} />
+      </div>
+      {/* More input fields */}
+    </div>
+  </form>
+</DialogBody>
+
+        <DialogFooter>
+          <Button variant="text" color="red" onClick={handleClose} className="mr-1">Cancel</Button>
+          <Button variant="gradient" color="green" onClick={handleSubmit}>Update</Button>
+        </DialogFooter>
+      </Dialog>
     </div>
   );
 }

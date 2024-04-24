@@ -211,3 +211,8 @@ button{
   background-color: #282828 !important;
   color: #F5F5F5;
 }
+
+.ag-body-horizontal-scroll-viewport{
+  scrollbar-width: thin;
+
+}
