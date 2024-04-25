@@ -12,7 +12,8 @@ import {
   Icon7,
   Icon8,
   Icon9,
-  Icon10
+  Icon10,
+  Icon11
 } from "./icons";
 import ThemeChanger from "./ThemeChanger";
 
@@ -37,6 +38,12 @@ const menuItems = [
     label: "Course",
     icon: Icon4,
     link: "/mainStaff/course",
+  },
+  {
+    id: 1,
+    label: "Course Cycle",
+    icon: Icon11,
+    link: "/mainStaff/courseCycle",
   },
   {
     id: 10,
