@@ -13,7 +13,8 @@ import {
   Icon8,
   Icon9,
   Icon10,
-  Icon11
+  Icon11,
+  Icon12,
 } from "./icons";
 import ThemeChanger from "./ThemeChanger";
 
@@ -51,6 +52,14 @@ const menuItems = [
     icon: Icon10,
     link: "/mainStaff/academicYear",
   },
+
+  {
+    id: 10,
+    label: "Section",
+    icon: Icon12,
+    link: "/mainStaff/section",
+  },
+
 
   {
     id: 5,
