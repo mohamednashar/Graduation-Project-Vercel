@@ -174,14 +174,14 @@ export default function UpdateGroup() {
   const handleOpenDeleteAssistant = () =>
     setOpenDeleteAssistant(!openDeleteAssistant);
 
-  const fetchGridData = useCallback(async (academicYearId) => {
-    if (!academicYearId) {
+  const fetchGridData = useCallback(async (departementId) => {
+    if (!departementId) {
       return; // Exit if no academic year is selected
     }
     const apiUrl = `${API}Group/GetGroupsOfDepartement`;
     const config = {
       headers: {
-        DepartementId: selectedDepartment,
+        DepartementId: departementId,
       },
     };
     try {
@@ -247,6 +247,7 @@ export default function UpdateGroup() {
         })
         .then((response) => {
           console.log("Update successful:", response.data);
+          fetchGridData(selectedDepartment)
         })
         .catch((error) => {
           console.error("Error updating department:", error);
