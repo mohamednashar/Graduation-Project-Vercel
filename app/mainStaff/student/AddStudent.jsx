@@ -65,6 +65,16 @@ const AddStudent = () => {
     getAcademicYears(selectedOption?.value);
   };
 
+  const handleGroupSelectChange = (selectedOption) => {
+    setSelectedGroup(selectedOption);
+    setFormData({
+      ...formData,
+      groupId: selectedOption ? selectedOption.value : "",
+    });
+    console.log(formData);
+    getGroups(selectedOption?.value)
+
+  };
   const fetchDepartmentsByFaculty = async (facultyId) => {
     try {
       const response = await axios.get(
@@ -106,7 +116,7 @@ const AddStudent = () => {
     try {
       const response = await axios.get(`${API}Group/GetGroupsOfAcadimicYear`, {
         headers: {
-          AcadimicYearId: formData.acadimicYearId,
+          AcadimicYearId: acadimicYearId,
         },
       });
       console.log(response.data);
@@ -171,22 +181,12 @@ const AddStudent = () => {
       acadimicYearId: selectedOption ? selectedOption?.value : "",
     });
     console.log(formData);
-    selectedOption.value
-      ? getGroups(selectedOption.value)
-      : getGroups(selectedOption?.value);
+    
+    
+    selectedOption ? getGroups(selectedOption.value):""
   };
 
-  const handleGroupSelectChange = (selectedOption) => {
-    setSelectedGroup(selectedOption);
-    setFormData({
-      ...formData,
-      groupId: selectedOption ? selectedOption?.value : "",
-    });
-    console.log(formData);
-    selectedOption.value
-      ? getGroups(selectedOption.value)
-      : getGroups(selectedOption?.value);
-  };
+
 
   const handleChange = (event) => {
     const { name, value } = event.target;

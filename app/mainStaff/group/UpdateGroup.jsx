@@ -1,11 +1,15 @@
 "use client";
-import { useEffect, useState } from "react";
-import Select from "react-select";
 import axios from "axios";
+import React, {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  useEffect,
+} from "react";
+import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
-import { AgGridReact } from "ag-grid-react";
-import { useCallback, useMemo, useRef } from "react";
 import {
   Button,
   Dialog,
@@ -13,8 +17,9 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-import { getCourseCategories } from "@/app/API/CustomHooks/useAllData";
-import { postData } from "@/app/API/CustomHooks/usePost";
+import Select from "react-select";
+
+import getData from "@/app/API/CustomHooks/useGet";
 
 var filterParams = {
   maxNumConditions: 1,
@@ -52,14 +57,38 @@ export default function UpdateGroup() {
         defaultOption: "startsWith",
       },
     },
+
     {
-      field: "description",
+      field: "studentHeadName",
       filterParams: {
         filterOptions: ["contains", "startsWith", "endsWith"],
         defaultOption: "startsWith",
       },
     },
-    { field: "totalMark", filter: "agNumberColumnFilter" },
+
+    {
+      field: "studentHeadPhone",
+      filterParams: {
+        filterOptions: ["contains", "startsWith", "endsWith"],
+        defaultOption: "startsWith",
+      },
+    },
+
+    {
+      field: "numberOfStudent",
+      filterParams: {
+        filterOptions: ["contains", "startsWith", "endsWith"],
+        defaultOption: "startsWith",
+      },
+    },
+
+    {
+      field: "year",
+      filterParams: {
+        filterOptions: ["contains", "startsWith", "endsWith"],
+        defaultOption: "startsWith",
+      },
+    },
   ]);
   const defaultColDef = useMemo(() => {
     return {
@@ -70,44 +99,41 @@ export default function UpdateGroup() {
   }, []);
 
   const [open, setOpen] = useState(false);
-  const [courseId , setCourseId] = useState()
 
   const handleOpen = () => setOpen(!open);
-  const onSelectionChanged = useCallback(() => {
-    const selectedRows = gridRef.current.api.getSelectedRows();
-    const selectedRowsElement = document.querySelector("#selectedRows");
-    if (selectedRowsElement) {
-      selectedRowsElement.innerHTML =
-        selectedRows.length === 1 ? selectedRows[0].athlete : "";
-    }
-    setCourseId(selectedRows[0]?.courseId)
-    handleOpen();
-  }, []);
 
-  const [allCourseCategories, setAllCourseCategories] = useState([]);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+
+  };
+
   const [selectedFaculty, setSelectedFaculty] = useState(null);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
-  const [selectedCourseCategory, setSelectedCourseCategory] = useState(null);
-  const [selectedAcademicYear, setSelectedAcademicYear] = useState(null);
-  const [courseName, setCourseName] = useState("");
-  const [courseDescription, setCourseDescription] = useState("");
-  const [totalMark, setTotalMark] = useState(0);
-  const [academicYears, setAcademicYears] = useState([]);
+  const [groups, setGroups] = useState([]);
   const [openDeleteAssistant, setOpenDeleteAssistant] = useState(false);
+  const [faculties, setFaculties] = useState([]);
+  const [departments, setDepartments] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
-    description: "",
-    totalMark: 0,
-    acadimicYearId: 0,
-    courseCategoryId: 0,
-    departementId: 0
-  });  const API = process.env.NEXT_PUBLIC_BACKEND_API;
+    studentHeadName: "",
+    studentHeadPhone: 0,
+    numberOfStudent: 0,
+    departementId:0,
+
+  });
+  const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await getCourseCategories();
-        setAllCourseCategories(data);
+        const data = await getData("Faculty/GetFaculties");
+        console.log(data);
+        setFaculties(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -115,191 +141,133 @@ export default function UpdateGroup() {
     fetchData();
   }, []);
 
-  const faculties = allCourseCategories.reduce((acc, item) => {
-    const facultyOption = { value: item.facultyId, label: item.facultyName };
-    if (!acc.some((fac) => fac.value === facultyOption.value)) {
-      acc.push(facultyOption);
-    }
-    return acc;
-  }, []);
-
-  const departments = selectedFaculty
-    ? allCourseCategories
-        .filter((item) => item.facultyId === selectedFaculty.value)
-        .reduce((acc, item) => {
-          const departmentOption = {
-            value: item.departementId,
-            label: item.departementName,
-          };
-          if (!acc.some((dep) => dep.value === departmentOption.value)) {
-            acc.push(departmentOption);
-          }
-          return acc;
-        }, [])
-    : [];
-
-  const courseCategories = selectedDepartment
-    ? allCourseCategories
-        .filter((item) => item.departementId === selectedDepartment.value)
-        .map((item) => ({
-          value: item.courseCategoryId,
-          label: item.courseCategoryName,
-        }))
-    : [];
-
-  const getAcademicYears = async (departementId) => {
+  const fetchDepartmentsByFaculty = async (facultyId) => {
     try {
-      const response = await axios.get(`${API}AcadimicYear/GetAcadimicYears`, {
-        headers: {
-          DeptId: departementId,
-        },
-      });
-      console.log(response.data);
-      const years = response.data.map((year) => ({
-        value: year.acadimicYearId,
-        label: year.year,
-      }));
-      console.log("Years:", years); // Log transformed years
-      setAcademicYears(response.data);
-      return years; // Return the years
-    } catch (err) {
-      console.log(err);
-      return [];
+      const response = await axios.get(
+        `${API}Departement/GetDepartementsOfFaculty`,
+        {
+          headers: {
+            FacultyId: facultyId,
+          },
+        }
+      );
+      setDepartments(response.data);
+    } catch (error) {
+      console.error("Error fetching departments:", error);
     }
   };
 
   const handleFacultyChange = (option) => {
     setSelectedFaculty(option);
     setSelectedDepartment(null);
-    setSelectedCourseCategory(null);
-    setSelectedAcademicYear(null);
-    setFormData({ ...formData, departementId: 0, courseCategoryId: 0, acadimicYearId: 0 });
+    setFormData({ ...formData, departementId: 0, acadimicYearId: 0 });
+    fetchDepartmentsByFaculty(option.value);
+    console.log(option.value);
   };
 
   const handleDepartmentChange = async (option) => {
-    setSelectedDepartment(option);
-    setSelectedCourseCategory(null);
-    setSelectedAcademicYear(null);
-    setFormData({ ...formData, departementId: option.value, courseCategoryId: 0, acadimicYearId: 0 });
-    const years = await getAcademicYears(option.value);
-    setAcademicYears(years);
+    option ? setSelectedDepartment(option?.value) : ""
+    setFormData({ ...formData, departementId: selectedDepartment});
+    console.log(formData)
   };
-
-  const handleAcademicYearChange = (option) => {
-    setSelectedAcademicYear(option ? option.value : null);
-    setFormData({ ...formData, acadimicYearId: option.value });
-  };
-  const handleCourseCategoryChange = (option) => {
-    setSelectedCourseCategory(option ? option.value : null);
-    setFormData({ ...formData, courseCategoryId: option.value });
-  };
-
-  const fetchCourses = async () => {
-    if (!selectedAcademicYear || !selectedCourseCategory) {
-      return; // Exit if either is not selected
-    }
-
-    const apiUrl = `${API}Course/GetCoursesOfAcadimicYear`;
-    const params = { CourseCategoryId: selectedCourseCategory };
-    const headers = { AcadimicYearId: selectedAcademicYear };
-
-    try {
-      const response = await axios.get(apiUrl, { params, headers });
-      console.log(
-        "Fetched data with:",
-        selectedCourseCategory,
-        selectedAcademicYear
-      );
-      const coursesData = response.data.map((course) => ({
-        courseId:course.courseId ,
-        name: course.name,
-        description: course.description,
-        totalMark: course.totalMark,
-      }));
-      setRowData(coursesData);
-    } catch (error) {
-      console.error("Error fetching courses:", error);
-    }
-  };
-  useEffect(() => {
-    fetchCourses();
-  }, [selectedAcademicYear, selectedCourseCategory]); // Dependencies on selections
 
   const handleOpenDeleteAssistant = () =>
     setOpenDeleteAssistant(!openDeleteAssistant);
 
-  const onGridReady = useCallback(async () => {
-    const apiUrl = `${API}Course/GetCoursesOfAcadimicYear`; // Base API URL
-    const params = {
-      CourseCategoryId: selectedCourseCategory, // Query parameter
-    };
-    const headers = {
-      AcadimicYearId: selectedAcademicYear, // Header parameter
+  const fetchGridData = useCallback(async (academicYearId) => {
+    if (!academicYearId) {
+      return; // Exit if no academic year is selected
+    }
+    const apiUrl = `${API}Group/GetGroupsOfDepartement`;
+    const config = {
+      headers: {
+        DepartementId: selectedDepartment,
+      },
     };
     try {
-      const response = await axios.get(apiUrl, {
-        params, // Query parameters
-        headers, // Headers
-      });
-      console.log(
-        "selectedCourseCategory : " +
-          selectedCourseCategory +
-          "  selectedAcademicYear : " +
-          selectedAcademicYear
-      );
-      console.log(response.data);
-      const coursesData = response.data.map((course) => ({
-        name: course.name,
-        description: course.description,
-        totalMark: course.totalMark,
-      }));
-      console.log(coursesData);
-      setRowData(coursesData);
+      const response = await axios.get(apiUrl, config);
+      setRowData(response.data);
     } catch (error) {
-      console.error("Error fetching courses:", error);
+      console.error("Error fetching groups:", error);
     }
-  }, [API, selectedAcademicYear, selectedCourseCategory]);
+  }, []);
+
+  useEffect(() => {
+    // Initially load or reload data when academic year changes
+    fetchGridData(selectedDepartment);
+  }, [selectedDepartment, fetchGridData]);
+  const onGridReady = useCallback((params) => {
+    gridRef.current = params.api;  // Make sure this line is correct
+    fetchGridData(selectedDepartment);
+  }, [fetchGridData, selectedDepartment]);
+  
 
   const gridRef = useRef();
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-
-    console.log(formData)
-  };
+  const onRowSelected = useCallback((event) => {
+    if (event.node.isSelected()) {
+      const selectedRowData = event.data;
+      setFormData({
+        name: selectedRowData.name,
+        studentHeadName: selectedRowData.studentHeadName,
+        studentHeadPhone: selectedRowData.studentHeadPhone,
+        numberOfStudent: selectedRowData.numberOfStudent,
+      });
+      setOpen(true); // Open the dialog
+    }
+  }, []);
 
   const handleUpdate = () => {
-    const selectedRows = gridRef.current?.api.getSelectedRows();
-    if (selectedRows?.length) {
-      const selectedRow = selectedRows[0];
-      axios
-        .put(
-          `${API}Course/UpdateCourse`,
-          formData,
-          {
-            headers: {
-              Id: selectedRow.courseId,
-            },
-          }
-        )
+
+
+    if (gridRef.current) {
+      const selectedRows = gridRef.current.getSelectedRows();
+      if (selectedRows.length > 0) {
+        const selectedRow = selectedRows[0];
+        setFormData({ ...formData, acadimicYearId: selectedRow.acadimicYearId });
+        console.log(formData)
+
+        
+    const reorderedData = {
+    
+      name: formData.name,
+      studentHeadName: formData.studentHeadName,
+      studentHeadPhone: formData.studentHeadPhone,
+      numberOfStudent: formData.numberOfStudent,
+      acadimicYearId:selectedRow.acadimicYearId ,
+      departementId:selectedDepartment ,
+    };
+    console.log("Data to be updated:", reorderedData);
+
+        console.log(selectedRow);
+        axios.put(`${API}Group/UpdateGroup`, reorderedData, {
+          headers: {
+            Id: selectedRow.groupId,
+          },
+        })
         .then((response) => {
           console.log("Update successful:", response.data);
         })
         .catch((error) => {
           console.error("Error updating department:", error);
         });
+      }
     }
   };
+  
 
   return (
     <>
       <div className="flex items-center justify-between p-2 gap-5">
         <div className="flex flex-col text-sm items-center w-full md:mb-5">
           <label htmlFor="selectFaculty">Faculty</label>
+
           <Select
-            id="selectFaculty"
-            options={faculties}
+            id="selectAcademicYear"
+            options={faculties.map((faculty) => ({
+              value: faculty.facultyId,
+              label: faculty.name,
+            }))}
             onChange={handleFacultyChange}
             className="w-full"
           />
@@ -307,36 +275,14 @@ export default function UpdateGroup() {
 
         <div className="flex flex-col text-sm items-center w-full md:mb-5">
           <label htmlFor="selectDepartment">Department</label>
-          <Select
-            id="selectDepartment"
-            options={departments}
-            onChange={handleDepartmentChange}
-            className="w-full"
-          />
-        </div>
 
-        <div className="flex flex-col text-sm items-center w-full md:mb-5">
-          <label htmlFor="selectAcademicYear">Academic Year</label>
           <Select
             id="selectAcademicYear"
-            options={academicYears.map((academicYear) => ({
-              value: academicYear.value,
-              label: academicYear.label,
+            options={departments.map((department) => ({
+              value: department.departementId,
+              label: department.name,
             }))}
-            onChange={handleAcademicYearChange}
-            className="w-full"
-          />
-        </div>
-
-        <div className="flex flex-col text-sm items-center w-full md:mb-5">
-          <label htmlFor="selectCourseCategory">Course Category</label>
-          <Select
-            id="selectCourseCategory"
-            options={courseCategories.map((courseCategory) => ({
-              value: courseCategory.value,
-              label: courseCategory.label,
-            }))}
-            onChange={handleCourseCategoryChange}
+            onChange={handleDepartmentChange}
             className="w-full"
           />
         </div>
@@ -353,10 +299,10 @@ export default function UpdateGroup() {
                 defaultColDef={defaultColDef}
                 rowSelection={"single"}
                 onGridReady={onGridReady}
-                onSelectionChanged={onSelectionChanged}
                 pagination={true}
                 paginationPageSize={100}
                 paginationPageSizeSelector={[20, 50, 100]}
+                onRowSelected={onRowSelected}
               />
             </div>
           </div>
@@ -371,29 +317,41 @@ export default function UpdateGroup() {
             className="dark:bg-[#282828]"
           >
             <DialogHeader className="dark:text-white">
-              Update Course
+              Update Group
             </DialogHeader>
             <DialogBody>
               <form>
                 <div className="flex flex-wrap items-center gap-5 ">
                   <input
                     className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
-                    placeholder="Course Name"
+                    placeholder="Group Name"
                     name="name"
+                    value={formData.name}
                     onChange={handleInputChange}
                   />
                   <input
                     className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
-                    placeholder="Course Description"
-                    name="description"
+                    placeholder="Student Head Name"
+                    name="studentHeadName"
+                    value={formData.studentHeadName}
                     onChange={handleInputChange}
                   />
                   <input
                     className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
-                    placeholder="Total Mark"
-                    name="totalMark"
+                    placeholder="Student Head Phone"
+                    name="studentHeadPhone"
+                    value={formData.studentHeadPhone}
                     onChange={handleInputChange}
                   />
+                  <input
+                    className="rounded-md p-2 border border-solid border-gray-800 dark:text-white dark:bg-[#282828] outline-none"
+                    placeholder="Number of Students"
+                    name="numberOfStudent"
+                    value={formData.numberOfStudent}
+                    onChange={handleInputChange}
+                  />
+
+                
                 </div>
               </form>
             </DialogBody>
@@ -406,10 +364,14 @@ export default function UpdateGroup() {
               >
                 <span>Cancel</span>
               </Button>
-              <Button variant="gradient" color="green"   onClick={() => {
-                handleUpdate();
-                handleOpen();
-              }}>
+              <Button
+                variant="gradient"
+                color="green"
+                onClick={() => {
+                  handleUpdate();
+                  handleOpen();
+                }}
+              >
                 <span>Update</span>
               </Button>
             </DialogFooter>
