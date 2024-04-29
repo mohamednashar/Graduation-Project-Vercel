@@ -1,7 +1,7 @@
 import React from 'react'
 import Login from './login/page'
 
-function page() {
+const page = () => {
   return (
     <div>
       <Login/>

@@ -15,6 +15,7 @@ import ThemeChanger from "./ThemeChanger";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Disclosure } from "@headlessui/react";
+import { signOut } from "next-auth/react";
 
 const navigation = [
   { name: "Home", href: "/main", current: true },
@@ -52,7 +53,9 @@ export default function Example() {
   const pathName = usePathname();
   let activeLink = pathName.slice(0);
 
+
   return (
+   
     <Disclosure as="nav" className="bg-[white] dark:bg-[#1e1e1e]">
       {({ open }) => (
         <>
@@ -308,11 +311,9 @@ export default function Example() {
                           fill="#90A4AE"
                         />
                       </svg>
-                      <Link href="/">
-                        <Typography variant="small" className="font-medium">
+                        <Typography onClick={(e) => { e.preventDefault(); signOut(); }} variant="small" className="font-medium">
                           Sign Out
                         </Typography>
-                      </Link>
                     </MenuItem>
                   </MenuList>
                 </Menu>
@@ -343,5 +344,6 @@ export default function Example() {
         </>
       )}
     </Disclosure>
+      
   );
 }
