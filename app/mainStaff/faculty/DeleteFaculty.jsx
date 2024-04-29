@@ -1,6 +1,6 @@
 "use client";
-import { getFaculties } from "@/app/API/CustomHooks/useAllData";
-import { deleteData } from "@/app/API/CustomHooks/useDelete";
+import { getFaculties } from "../../CustomHooks/useAllData";
+import { deleteData } from "../../CustomHooks/useDelete";
 import getData from "../../CustomHooks/useGet";
 import {
   Button,

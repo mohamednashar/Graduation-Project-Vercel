@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
-import { getCourseCategories } from "@/app/API/CustomHooks/useAllData";
-import { deleteData } from "@/app/API/CustomHooks/useDelete";
+import { getCourseCategories } from "../../CustomHooks/useAllData";
+import { deleteData } from "../../CustomHooks/useDelete";
 import {
   Button,
   Dialog,

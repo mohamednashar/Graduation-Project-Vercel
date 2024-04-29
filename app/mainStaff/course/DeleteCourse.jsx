@@ -8,7 +8,7 @@ import {
   DialogFooter,
   DialogHeader,
 } from "@material-tailwind/react";
-import { getCourseCategories } from "@/app/API/CustomHooks/useAllData";
+import { getCourseCategories } from "../../CustomHooks/useAllData";
 import { postData } from "../../CustomHooks/usePost";
 import { deleteData } from "../../CustomHooks/useDelete";
 
