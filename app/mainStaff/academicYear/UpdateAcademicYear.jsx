@@ -2,8 +2,8 @@ import { Button, Dialog, DialogBody } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Select from "react-select";
-import { postData } from "@/app/API/CustomHooks/usePost";
-import { updateData } from "@/app/API/CustomHooks/useUpdate";
+import { postData } from "../../CustomHooks/usePost";
+import { updateData } from "../../CustomHooks/useUpdate";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 

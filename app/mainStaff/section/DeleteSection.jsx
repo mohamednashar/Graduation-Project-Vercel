@@ -2,7 +2,7 @@ import { Button, Dialog, DialogBody } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Select from "react-select";
-import getData from "@/app/API/CustomHooks/useGet";
+import getData from "../../CustomHooks/useGet";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 

@@ -12,7 +12,7 @@ import {
   DialogFooter,
 
 } from "@material-tailwind/react";
-import { updateData } from "@/app/API/CustomHooks/useUpdate";
+import { updateData } from "../../CustomHooks/useUpdate";
 
 export default function UpdateFaculty() {
   const [formData, setFormData] = useState({

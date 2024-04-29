@@ -19,7 +19,7 @@ import {
 } from "@material-tailwind/react";
 import Select from "react-select";
 
-import getData from "@/app/API/CustomHooks/useGet";
+import getData from "../../CustomHooks/useGet";
 
 var filterParams = {
   maxNumConditions: 1,

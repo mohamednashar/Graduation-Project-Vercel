@@ -3,7 +3,7 @@ import { Button, Dialog, DialogBody } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Select from "react-select";
-import { deleteData } from "@/app/API/CustomHooks/useDelete";
+import { deleteData } from "../../CustomHooks/useDelete";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 

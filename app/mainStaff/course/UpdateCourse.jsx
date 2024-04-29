@@ -14,7 +14,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import { getCourseCategories } from "@/app/API/CustomHooks/useAllData";
-import { postData } from "@/app/API/CustomHooks/usePost";
+import { postData } from "../../CustomHooks/usePost";
 
 var filterParams = {
   maxNumConditions: 1,

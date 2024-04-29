@@ -216,3 +216,7 @@ button{
   scrollbar-width: thin;
 
 }
+
+.selected-row {
+  background-color: #cce5ff; /* Change the background color for selected rows */
+}

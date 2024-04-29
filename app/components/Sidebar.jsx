@@ -15,6 +15,7 @@ import {
   Icon10,
   Icon11,
   Icon12,
+  Icon13,
 } from "./icons";
 import ThemeChanger from "./ThemeChanger";
 
@@ -41,7 +42,7 @@ const menuItems = [
     link: "/mainStaff/course",
   },
   {
-    id: 1,
+    id: 5,
     label: "Course Cycle",
     icon: Icon11,
     link: "/mainStaff/courseCycle",
@@ -54,7 +55,7 @@ const menuItems = [
   },
 
   {
-    id: 10,
+    id: 11,
     label: "Section",
     icon: Icon12,
     link: "/mainStaff/section",
@@ -62,21 +63,28 @@ const menuItems = [
 
 
   {
-    id: 5,
+    id: 6,
     label: "Department",
     icon: Icon5,
     link: "/mainStaff/department",
   },
 
   {
-    id: 6,
+    id: 13,
+    label: "Students Section",
+    icon: Icon13,
+    link: "/mainStaff/assignStudentToSection",
+  },
+
+  {
+    id: 12,
     label: "Group",
     icon: Icon6,
     link: "/mainStaff/group",
   },
 
   {
-    id: 7,
+    id: 8,
     label: "Logout",
     icon: Icon7,
     link: "/",

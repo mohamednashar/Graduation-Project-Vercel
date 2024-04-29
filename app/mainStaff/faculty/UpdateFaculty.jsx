@@ -12,7 +12,7 @@ import {
   DialogFooter,
 
 } from "@material-tailwind/react";
-import { updateData } from "@/app/API/CustomHooks/useUpdate";
+import { deleteData } from "../../CustomHooks/useDelete";
 
 var filterParams = {
   maxNumConditions: 1,

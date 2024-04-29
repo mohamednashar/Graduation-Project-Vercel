@@ -1,5 +1,5 @@
 "use client";
-import { postData } from "@/app/API/CustomHooks/usePost";
+import { postData } from "../../CustomHooks/usePost";
 import { useState } from "react";
 import { Dialog, DialogBody } from "@material-tailwind/react";
 const labels = [

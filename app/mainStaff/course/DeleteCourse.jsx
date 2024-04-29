@@ -9,8 +9,8 @@ import {
   DialogHeader,
 } from "@material-tailwind/react";
 import { getCourseCategories } from "@/app/API/CustomHooks/useAllData";
-import { postData } from "@/app/API/CustomHooks/usePost";
-import { deleteData } from "@/app/API/CustomHooks/useDelete";
+import { postData } from "../../CustomHooks/usePost";
+import { deleteData } from "../../CustomHooks/useDelete";
 
 function DeleteCourse() {
   const [allCourseCategories, setAllCourseCategories] = useState([]);
