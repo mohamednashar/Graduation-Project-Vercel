@@ -38,7 +38,7 @@ export default function DeleteStudentsFromSection() {
   const [sections, setSections] = useState([]);
   const [sectionId, setSectionId] = useState();
   const [selectedSection, setSelectedSection] = useState([]);
-  const [dataSent , setDataSent] = useState([""])
+  const [dataSent , setDataSent] = useState([])
   const [failedMessage , setFailedMessage] = useState([""])
   const [successMessage , setSuccessMessage] = useState("")
   const [formData, setFormData] = useState({
@@ -265,13 +265,13 @@ export default function DeleteStudentsFromSection() {
       // Perform the update request
       const response = await axios.delete(
         `${API}StudentSection/DeleteStudentsFromSection`,
-        dataSent, // Pass the request body data
         {
-            headers: {
-                'SectionId': sectionId // Pass the sectionId in the header
-            }
+          headers: {
+            SectionId: sectionId,
+          },
+          data: dataSent, // Pass the request body data
         }
-    );
+      );
 
     const status = response.status;
     console.log(response.status)
