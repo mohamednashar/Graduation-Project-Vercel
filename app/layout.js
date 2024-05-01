@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
       >
          <AuthProvider>
         <ThemeHandler>
-        {(!pathname.startsWith("/mainStaff") && pathname !== "/" && pathname !== "/login") && <Navbar />}
+        {(!pathname.startsWith("/mainStaff") && pathname !== "/" && pathname !== "/login"&& pathname !== "/forgotPassword"&&!pathname.startsWith("/password-reset") ) && <Navbar />}
 
           <div>{children}</div>
         </ThemeHandler>
