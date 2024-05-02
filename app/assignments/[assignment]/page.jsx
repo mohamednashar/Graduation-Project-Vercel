@@ -5,8 +5,8 @@ import Prof from './Prof'
 function page({params}) {
   return (
     <div>
-      <Student params={params}/>
-      {/* <Prof params={params}/> */}
+      {/* <Student params={params}/> */}
+      <Prof params={params}/>
     </div>
   )
 }
