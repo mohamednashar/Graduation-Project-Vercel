@@ -24,7 +24,6 @@ const Login = () => {
     const signInResponse = await signIn("credentials", {
       username: username,
       password: password,
-      role: userType,
       redirect: false, // We handle redirect manually
     });
 

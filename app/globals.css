@@ -162,6 +162,10 @@ button{
   font-family: '__Poppins_e04c4e', '__Poppins_Fallback_e04c4e' !important;
 }
 
+p,h1,h2,h3{
+  font-family: '__Poppins_e04c4e', '__Poppins_Fallback_e04c4e' !important;
+}
+
 
 
 .dark .ag-body-vertical-scroll-container {
@@ -220,3 +224,5 @@ button{
 .selected-row {
   background-color: #cce5ff; /* Change the background color for selected rows */
 }
+
+

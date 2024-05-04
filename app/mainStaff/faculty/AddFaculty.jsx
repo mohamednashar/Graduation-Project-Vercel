@@ -65,11 +65,11 @@ const AddFaculty = () => {
         {label}
       </label>
       <input
-        type={type}
+        type="text"
         id={key}
         value={formData[key]}
         onChange={(event) => handleInputChange(event, key)}
-        className="w-full block p-2 text-gray-900 border border-gray-300 rounded-lg bg-white sm:text-xs dark:bg-[#282828] dark:text-white"
+        className="w-full block p-2 text-gray-900 border border-gray-300 rounded-lg bg-white sm:text-xs outline-none dark:bg-[#282828] dark:text-white"
         required={key !== "profHeadName"}
       />
     </div>

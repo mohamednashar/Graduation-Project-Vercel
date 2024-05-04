@@ -22,7 +22,6 @@ export const authOptions = {
             body: JSON.stringify({
               userName: credentials.username,
               password: credentials.password,
-              role: "string",
             }),
           });
           const user = await res.json();

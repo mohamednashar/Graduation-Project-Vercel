@@ -1,12 +1,12 @@
-import QuizList from "./QuizList";
+import React from 'react'
+import CreateQuiz from './CreateQuiz'
 
 const page = () => {
   return (
-    <div className="mt-5">
-            <QuizList />
-            {/* <CreateQuiz /> */}
+    <div>
+      <CreateQuiz/>
     </div>
-  );
-};
+  )
+}
 
-export default page;
+export default page

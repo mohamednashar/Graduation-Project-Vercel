@@ -3,7 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import ThemeChanger from "@/app/components/ThemeChanger";
-import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const PasswordReset = () => {
@@ -12,13 +12,14 @@ const PasswordReset = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const { token } = useParams();
+
+  const searchParams = useSearchParams()
+  const token = searchParams.get('token')
   console.log(token);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Perform your form validation here if needed
     if (newPassword !== confirmPassword) {
       setError("Passwords do not match");
       return;

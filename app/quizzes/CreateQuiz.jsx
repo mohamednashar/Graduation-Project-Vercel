@@ -1,153 +1,235 @@
-"use client"
-import React, { useState } from 'react';
-import 'animate.css/animate.min.css';
+  "use client";
+  import React, { useState, useEffect } from "react";
+  import axios from "axios";
+  import Select from "react-select";
+  import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+  const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
-const CreateQuiz = () => {
-  const [courseName, setCourseName] = useState('');
-  const [chapterName, setChapterName] = useState('');
-  const [points, setPoints] = useState(0);
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
-  const [duration, setDuration] = useState(0);
-  const [numQuestions, setNumQuestions] = useState(1);
-  const [questions, setQuestions] = useState([{ question: '', options: ['', '', ''], correctAnswer: 0 }]);
-  const [quizSubmitted, setQuizSubmitted] = useState(false);
-
-  const handleQuestionChange = (index, value) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[index].question = value;
-    setQuestions(updatedQuestions);
-  };
-
-  const handleOptionChange = (questionIndex, optionIndex, value) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[questionIndex].options[optionIndex] = value;
-    setQuestions(updatedQuestions);
-  };
-
-  const handleCorrectAnswerChange = (questionIndex, value) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[questionIndex].correctAnswer = parseInt(value, 10);
-    setQuestions(updatedQuestions);
-  };
-
-  const addQuestion = () => {
-    setNumQuestions(numQuestions + 1);
-    setQuestions([...questions, { question: '', options: ['', '', ''], correctAnswer: 0 }]);
-  };
-
-  const handleDeleteQuestion = (index) => {
-    if (numQuestions > 1) {
-      setNumQuestions(numQuestions - 1);
-      const updatedQuestions = [...questions];
-      updatedQuestions.splice(index, 1);
-      setQuestions(updatedQuestions);
-    }
-  };
-
-  const handleSubmit = () => {
-    // Implement the logic to submit the quiz data to your backend or handle it accordingly
-    console.log({
-      courseName,
-      chapterName,
-      points,
-      date,
-      time,
-      duration,
-      questions,
+  const CreateQuiz = () => {
+    const router=useRouter()
+    const [formData, setFormData] = useState({
+      name: "",
+      faullMarks: 0,
+      title: "",
+      sartedAt: new Date().toISOString().substr(0, 16),
+      deadLine: {
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+      },
+      examType: "Quiz",
+      sectionId: 0,
+      courseId: 0,
+      courseCycleId: 0,
     });
 
-    // Display success message
-    setQuizSubmitted(true);
+    const [courses, setCourses] = useState([]);
+    const { data: session } = useSession();
+    const userName = session?.user?.userName;
+
+    useEffect(() => {
+      const fetchCourses = async () => {
+        try {
+          const response = await axios.get(
+            `${API}Course/GetAllCoursesOfProfessor`,
+            {
+              headers: {
+                ProfessorUserName: userName,
+              },
+            }
+          );
+          setCourses(response.data);
+        } catch (error) {
+          console.error("Error fetching courses:", error);
+        }
+      };
+      fetchCourses();
+    }, [userName]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      if (name === "hours" || name === "minutes" || name === "seconds") {
+        setFormData({
+          ...formData,
+          deadLine: {
+            ...formData.deadLine,
+            [name]: parseInt(value),
+          },
+        });
+      } else {
+        setFormData({ ...formData, [name]: value });
+      }
+    };
+
+    const handleTimeChange = (e) => {
+      const value = e.target.value;
+      const [hours, minutes] = value.split(":").map(Number);
+      setFormData({
+        ...formData,
+        sartedAt: `${formData.sartedAt.substr(0, 11)}${value}:00.000Z`,
+      });
+    };
+
+    const handleDateChange = (e) => {
+      const date = new Date(e.target.value);
+      const formattedDate = date.toISOString().substr(0, 16);
+      setFormData({
+        ...formData,
+        sartedAt: formattedDate,
+      });
+    };
+
+    const handleDeadlineChange = (e) => {
+      const value = e.target.value;
+      const [hours, minutes] = value.split(":").map(Number);
+      setFormData({
+        ...formData,
+        deadLine: {
+          hours,
+          minutes,
+          seconds: 0,
+        },
+      });
+    };
+
+    const handleSubmit = async (e) => {
+      console.log(formData)
+      e.preventDefault();
+      try {
+        const response = await axios.post(`${API}Exam/CreateExam`, formData);
+        console.log("Exam created:", response.data);
+        const examId = response.data.examId;
+      router.push(`/createQuestions?examId=${examId}`);
+      } catch (error) {
+        console.error("Error creating exam:", error);
+      }
+    };
+
+    return (
+      <div className="flex justify-center items-center mb-10 mt-10">
+      <div className="w-full max-w-xl p-8 bg-white rounded-lg shadow-md">
+        <h1 className="text-2xl mb-4 text-center text-black font-semibold">Create Exam</h1>
+        <div className="grid grid-cols-2 gap-8 mb-4">
+          <div className="col-span-2">
+            <label htmlFor="course" className="block text-sm font-medium text-gray-700 mb-1">
+              Select Course:
+            </label>
+            <Select
+              className="text-sm"
+              id="course"
+              options={courses.map((course) => ({
+                value: course.courseCycleId,
+                label: course.courseName,
+              }))}
+              onChange={(selectedOption) =>
+                setFormData({ ...formData, courseCycleId: selectedOption.value })
+              }
+            />
+          </div>
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+              Name:
+            </label>
+            <input
+              id="name"
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="block w-full border-gray-300 rounded-lg shadow-sm border outline-none sm:text-sm px-2 py-1 h-9"
+            />
+          </div>
+          <div>
+            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+              Description:
+            </label>
+            <input
+              id="title"
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              className="block w-full border-gray-300 rounded-lg shadow-sm border outline-none sm:text-sm px-2 py-1 h-9"
+            />
+          </div>
+          <div>
+            <label htmlFor="sartedAt" className="block text-sm font-medium text-gray-700 mb-1">
+              Exam Start Date:
+            </label>
+            <input
+              id="sartedAt"
+              type="date"
+              name="sartedAt"
+              value={formData.sartedAt ? formData.sartedAt.substr(0, 10) : ""}
+              onChange={handleDateChange}
+              className="block w-full border-gray-300 rounded-lg shadow-sm border outline-none sm:text-sm px-2 py-1 h-9"
+            />
+          </div>
+          <div>
+            <label htmlFor="startTime" className="block text-sm font-medium text-gray-700 mb-1">
+              Start Time:
+            </label>
+            <input
+              id="startTime"
+              type="time"
+              name="startTime"
+              value={formData.sartedAt ? formData.sartedAt.substr(11, 5) : ""}
+              onChange={handleTimeChange}
+              className="block w-full border-gray-300 rounded-lg shadow-sm border outline-none sm:text-sm px-2 py-1 h-9"
+            />
+          </div>
+          <div>
+            <label htmlFor="deadline" className="block text-sm font-medium text-gray-700 mb-1">
+              Exam Deadline:
+            </label>
+            <input
+              id="deadline"
+              type="time"
+              name="deadline"
+              value={`${formData.deadLine.hours
+                .toString()
+                .padStart(2, "0")}:${formData.deadLine.minutes
+                .toString()
+                .padStart(2, "0")}`}
+              onChange={handleDeadlineChange}
+              className="block w-full border-gray-300 rounded-lg shadow-sm border outline-none sm:text-sm px-2 py-1 h-9"
+            />
+          </div>
+          <div className="">
+            <label htmlFor="examType" className="block text-sm font-medium text-gray-700 mb-1">
+              Exam Type:
+            </label>
+            <Select
+              className="text-sm"
+              id="examType"
+              options={[
+                { value: "Quiz", label: "Quiz" },
+                { value: "Midterm", label: "Midterm" },
+                { value: "Semester", label: "Semester" },
+                { value: "Final", label: "Final" },
+              ]}
+              value={{ value: formData.examType, label: formData.examType }}
+              onChange={(selectedOption) =>
+                setFormData({ ...formData, examType: selectedOption.value })
+              }
+            />
+          </div>
+        </div>
+        <div className="text-center">
+          <button
+            onClick={handleSubmit}
+            type="submit"
+            className="inline-flex justify-center py-2 mt-3 px-5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#66bfbf] hover:bg-[#57a6a6] transition-all duration-200"
+          >
+            Create Exam
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    
+    );
   };
 
-  return (
-    <div className="max-w-3xl mx-auto mt-8 p-6 bg-white rounded shadow-md mb-5">
-      <h2 className="text-2xl font-bold mb-4">Create a Quiz</h2>
-
-      <input
-        type="text"
-        placeholder="Course Name"
-        value={courseName}
-        onChange={(e) => setCourseName(e.target.value)}
-        className="w-full border rounded py-2 px-3 mb-4"
-      />
-
-      <div className="mt-4">
-        {[...Array(numQuestions)].map((_, index) => (
-          <div
-            key={index}
-            id={`question-${index}`}
-            className={`mb-4 animate__animated animate__fadeInUp`}
-          >
-            <div className="flex justify-between items-center mb-2">
-              <h4 className="text-md font-semibold">Question {index + 1}</h4>
-              {numQuestions > 1 && (
-                <button
-                  onClick={() => handleDeleteQuestion(index)}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  Delete
-                </button>
-              )}
-            </div>
-            <input
-              type="text"
-              placeholder="Enter your question"
-              value={questions[index].question}
-              onChange={(e) => handleQuestionChange(index, e.target.value)}
-              className="w-full border rounded py-2 px-3 mb-2"
-            />
-            <ul>
-              {[...Array(4)].map((_, optionIndex) => (
-                <li key={optionIndex} className="mb-2">
-                  <input
-                    type="text"
-                    placeholder={`Option ${optionIndex + 1}`}
-                    value={questions[index].options[optionIndex]}
-                    onChange={(e) => handleOptionChange(index, optionIndex, e.target.value)}
-                    className="w-full border rounded py-2 px-3"
-                  />
-                </li>
-              ))}
-            </ul>
-            <label className="block mt-2">
-              Correct Answer:
-              <select
-                value={questions[index].correctAnswer}
-                onChange={(e) => handleCorrectAnswerChange(index, e.target.value)}
-                className="border rounded py-2 px-3 mt-1"
-              >
-                {[...Array(4)].map((_, i) => (
-                  <option key={i} value={i}>
-                    {String.fromCharCode(65 + i)}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-        ))}
-        <button
-          onClick={addQuestion}
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
-        >
-          Add Question
-        </button>
-      </div>
-      <button
-        onClick={handleSubmit}
-        className="bg-green-500 text-white py-2 px-4 rounded mt-4 hover:bg-green-700"
-      >
-        Submit Quiz
-      </button>
-
-      {quizSubmitted && (
-        <div className="mt-4 p-4 bg-green-100 text-green-700 border rounded">
-          Quiz submitted successfully!
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default CreateQuiz;
+  export default CreateQuiz;
