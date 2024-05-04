@@ -255,7 +255,7 @@ const VideoPlayer = ({ videoSrc, isOpen }) => {
       {!iframeLoaded && <Spin />}
 
       <iframe
-        className={` mx-auto min-w-[370px] h-[320px] md:h-full  animate__animated animate__fadeIn ${
+        className={` mx-auto min-w-[350px] h-[320px] md:h-full  animate__animated animate__fadeIn ${
           iframeLoaded ? "" : "hidden"
         }
         ${isOpen ? "md:w-3/4" : "md:w-1/2"}
@@ -267,7 +267,7 @@ const VideoPlayer = ({ videoSrc, isOpen }) => {
   );
 };
 
-const IndexPage = () => {
+const Lectures = () => {
   const [currentVideo, setCurrentVideo] = useState(videos[0]);
   const selectVideo = (video) => {
     setCurrentVideo(video);
@@ -376,4 +376,4 @@ const IndexPage = () => {
   );
 };
 
-export default IndexPage;
+export default Lectures;

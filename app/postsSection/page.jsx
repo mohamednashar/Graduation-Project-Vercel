@@ -1,10 +1,10 @@
 import React from 'react'
-import CreateQuiz from './CreateQuiz'
+import PostProf from './PostProf'
 
-const page = () => {
+function page() {
   return (
     <div>
-      <CreateQuiz/>
+      <PostProf/>
     </div>
   )
 }
