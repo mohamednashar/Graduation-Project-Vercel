@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { useState } from "react";
 
-export function CardDefault({ courseTitle, description, group, professor }) {
+export function CardDefault({ courseTitle, description, group, professor , faculty , department }) {
+  const direction = description ? "sections" : "courses";
   return (
     <div className="max-w-screen-lg mx-4 mt-6 overflow-hidden border dark:border-none rounded-t-xl sm:mx-auto">
       <div className="flex flex-col overflow-hidden bg-white dark:bg-[#1e1e1e] dark:text-white sm:flex-row md:h-80">
@@ -53,11 +54,14 @@ export function CardDefault({ courseTitle, description, group, professor }) {
             {description}
           </h2>
           <div className="flex mt-8 sm:mt-auto items-center justify-between">
-            <div>
-          <p className="capitalize">Prof {professor}</p>
+          <div>
+            {professor &&  <p className="capitalize">Prof {professor}</p>}
+            {faculty && department && <div className="flex flex-col gap-3">
+            <p className="capitalize">Faculty : {faculty}</p>
+            <p className="capitalize">Department : {department}</p></div> }
           </div>
             <Link
-              href={`courses/${courseTitle}-${group}`}
+              href={`${direction}/${courseTitle}-${group}`}
               className="group flex w-44 cursor-pointer select-none items-center justify-center rounded-full bg-[#66bfbf] px-6 py-2 text-white dark:text-black transition-all duration-200 hover:bg-[#4e9999]"
             >
               <div className="flex items-center justify-center w-full py-1 font-semibold text-center rounded group">
