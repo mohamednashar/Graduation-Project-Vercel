@@ -1,5 +1,5 @@
 "use client";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import {
   Menu,
   MenuHandler,
@@ -15,7 +15,7 @@ import ThemeChanger from "./ThemeChanger";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Disclosure } from "@headlessui/react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 const navigation = [
   { name: "Home", href: "/main", current: true },
@@ -50,8 +50,17 @@ function ClockIcon() {
 }
 
 export default function Example() {
+  const { data: session } = useSession();
+  const role = session?.user?.roles;
+  const isStudent = role?.includes("Student");
+
   const pathName = usePathname();
   let activeLink = pathName.slice(0);
+  const [quizMenuOpen, setQuizMenuOpen] = useState(false);
+  const toggleQuizMenu = () => {
+    setQuizMenuOpen(!quizMenuOpen);
+  };
+
 
 
   return (
@@ -94,34 +103,60 @@ export default function Example() {
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4 ">
-                    {navigation.map((item) => {
-                      return (
-                        <Link
-                          key={item.name}
-                          href={item.href}
-                          className={classNames(
-                            "rounded-md px-3 py-2 text-sm font-medium hover:text-[#66bfbf] transition-all duration-200 hover:scale-105",
-                            (item.name === "Home" && activeLink === "/main") ||
-                              (item.name === "Assignments" &&
-                                activeLink.startsWith("/assignments")) ||
-                              (item.name === "Quiz" &&
-                                activeLink.startsWith("/quizzes")) ||
-                              (item.name === "Meeting" &&
-                                activeLink === "/meeting") ||
-                              (item.name === "Calendar" &&
-                                activeLink === "/calendar")||
-                                (item.name === "Posts" &&
-                                  activeLink.startsWith("/posts"))
-                              ? "bg-gray-200 dark:bg-[#353535] dark:text-white transition-all duration-200 "
-                              : ""
-                            // Add other classes here if needed
-                          )}
-                        >
-                          {item.name}
-                        </Link>
-                      );
-                    })}
+                  {navigation.map((item) => (
+          // Check if the item is "Quiz"
+          item.name === "Quiz"&&isStudent===true ? (
+            // Render a button instead of a Link
+            <button
+              key={item.name}
+              onClick={toggleQuizMenu}
+              className={classNames(
+                "rounded-md px-3 py-2 text-sm font-medium hover:text-[#66bfbf] transition-all duration-200 hover:scale-105",
+                // Check if the quiz menu is open and set appropriate classes
+                quizMenuOpen ? "bg-gray-200 dark:bg-[#353535] dark:text-white transition-all duration-200" : ""
+              )}
+            >
+              {item.name}
+            </button>
+          ) : (
+            // Render the Link for other items
+            <Link
+            key={item.name}
+            href={item.href}
+            className={classNames(
+              "rounded-md px-3 py-2 text-sm font-medium hover:text-[#66bfbf] transition-all duration-200 hover:scale-105",
+              (item.name === "Home" && activeLink === "/main") ||
+              (item.name === "Assignments" && activeLink.startsWith("/assignments")) ||
+              (item.name === "Meeting" && activeLink === "/meeting") ||
+              (item.name === "Calendar" && activeLink === "/calendar") ||
+              (item.name === "Posts" && activeLink.startsWith("/posts")) ||
+              ((item.name === "Quiz" || item.name === "CoursesExams") && 
+               (activeLink.startsWith("/quizzes") || activeLink.startsWith("/coursesExams"))) // Apply gray background to "Quiz" and "CoursesExams" when active link is either "/quizzes" or "/coursesExams"
+                ? "bg-gray-200 dark:bg-[#353535] dark:text-white transition-all duration-200 "
+                : ""
+              // Add other classes here if needed
+            )}
+          >
+            {item.name}
+          </Link>
+          
+          )
+        ))}
                   </div>
+                  {quizMenuOpen && (
+        <div className="absolute top-14 left-24 z-10 bg-white dark:bg-[#1e1e1e] border border-gray-300 dark:border-gray-800 rounded-md shadow-lg">
+          {/* Dropdown content here */}
+          <ul className="flex flex-col text-center justify-center">
+            <li className="px-4 py-2 hover:bg-gray-300 rounded-t-md transition-all duration-200 border-b-2 border-gray-300">
+              <Link onClick={toggleQuizMenu} href="/coursesExams">Exams Of Courses</Link>
+            </li>
+            <li className="px-4 py-2 hover:bg-gray-300 rounded-b-md transition-all duration-200">
+              <Link onClick={toggleQuizMenu} href="/sectionsExams">Exams Of Sections</Link>
+            </li>
+            {/* Add more quiz links here */}
+          </ul>
+        </div>
+      )}
                 </div>
               </div>
               <div className="flex items-center justify-center gap-6">

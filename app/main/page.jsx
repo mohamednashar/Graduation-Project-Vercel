@@ -28,7 +28,6 @@ const Page = () => {
   const [sectionsInstructor, setSectionsInstructor] = useState([]);
   const userName = session?.user?.userName;
   const role = session?.user?.roles;
-  console.log(role);
 
   const isInstructor = role?.includes("Instructor");
   const isStudent = role?.includes("Student");
