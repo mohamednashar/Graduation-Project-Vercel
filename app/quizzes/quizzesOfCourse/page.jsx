@@ -117,14 +117,7 @@ const QuizzesOfCourse = () => {
                 <div className="flex space-x-2">
                   <button className="bg-blue-500 text-white px-3 py-1 rounded-md">
                     <FontAwesomeIcon icon={faEdit} />
-                    <Link
-                      href={{
-                        pathname: "/quizzes/edit",
-                        query: { courseCycleId },
-                      }}
-                    >
-                      Edit
-                    </Link>
+                    <Link href={{ pathname: '/quizzes/edit', query: { courseCycleId, examId: exam.examId } }}>Edit</Link>
                   </button>
                   <button
                     className="bg-red-500 text-white px-3 py-1 rounded-md"
