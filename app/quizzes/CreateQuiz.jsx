@@ -90,15 +90,15 @@ const CreateQuiz = () => {
   return (
     <>
       <div className="flex justify-center items-center mb-10 mt-10">
-        <div className="w-full max-w-xl p-8 bg-white rounded-lg shadow-md">
-          <h1 className="text-2xl mb-4 text-center text-black font-semibold">
+        <div className="w-full max-w-xl p-8 bg-white dark:bg-[#1e1e1e] rounded-lg shadow-md">
+          <h1 className="text-2xl mb-4 text-center text-black font-semibold dark:text-gray-100">
             Create Exam
           </h1>
           <div className="grid grid-cols-2 gap-8 mb-4">
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-100"
               >
                 Name:
               </label>
@@ -108,13 +108,13 @@ const CreateQuiz = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="block w-full border-gray-300 rounded-lg shadow-sm border outline-none sm:text-sm px-2 py-1 h-9"
+                className="block w-full border-gray-300 rounded-lg shadow-sm border outline-none sm:text-sm px-2 py-1 h-9 dark:bg-[#1e1e1e]"
               />
             </div>
             <div>
               <label
                 htmlFor="title"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-100"
               >
                 Description:
               </label>
@@ -124,13 +124,13 @@ const CreateQuiz = () => {
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                className="block w-full border-gray-300 rounded-lg shadow-sm border outline-none sm:text-sm px-2 py-1 h-9"
+                className="block w-full border-gray-300 rounded-lg shadow-sm border outline-none sm:text-sm px-2 py-1 h-9 dark:bg-[#1e1e1e]"
               />
             </div>
             <div>
               <label
                 htmlFor="sartedAt"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-100"
               >
                 Exam Start Date:
               </label>
@@ -140,13 +140,13 @@ const CreateQuiz = () => {
                 name="sartedAt"
                 value={formData.sartedAt ? formData.sartedAt.substr(0, 10) : ""}
                 onChange={handleDateChange}
-                className="block w-full border-gray-300 rounded-lg shadow-sm border outline-none sm:text-sm px-2 py-1 h-9"
+                className="block w-full border-gray-300 rounded-lg shadow-sm border outline-none sm:text-sm px-2 py-1 h-9 dark:bg-[#1e1e1e]"
               />
             </div>
             <div>
               <label
                 htmlFor="startTime"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-100"
               >
                 Start Time:
               </label>
@@ -156,41 +156,42 @@ const CreateQuiz = () => {
                 name="startTime"
                 value={formData.sartedAt ? formData.sartedAt.substr(11, 5) : ""}
                 onChange={handleTimeChange}
-                className="block w-full border-gray-300 rounded-lg shadow-sm border outline-none sm:text-sm px-2 py-1 h-9"
+                className="block w-full border-gray-300 rounded-lg shadow-sm border outline-none sm:text-sm px-2 py-1 h-9 dark:bg-[#1e1e1e]"
               />
             </div>
             <div>
               <label
                 htmlFor="deadlineHours"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-100"
               >
                 Exam Duration:
               </label>
-              <div className="flex items-center">
+              <div className="flex items-center gap-2">
+              <span className="text-sm">Hours</span>
                 <input
                   id="deadlineHours"
                   type="number"
                   name="deadlineHours"
                   value={formData.deadLine.hours}
                   onChange={handleChange}
-                  className="w-1/2 mr-1 block border-gray-300 rounded-lg shadow-sm border outline-none sm:text-sm px-2 py-1 h-9"
+                  className=" w-1/2 border-gray-300 rounded-lg shadow-sm border outline-none sm:text-sm px-2 py-1 h-9 dark:bg-[#1e1e1e]"
                 />
-                <span className="text-sm">Hours</span>
+               <span className="text-sm">Minutes</span>
                 <input
                   id="deadlineMinutes"
                   type="number"
                   name="deadlineMinutes"
                   value={formData.deadLine.minutes}
                   onChange={handleChange}
-                  className="w-1/2 ml-1 block border-gray-300 rounded-lg shadow-sm border outline-none sm:text-sm px-2 py-1 h-9"
+                  className="w-1/2  border-gray-300 rounded-lg shadow-sm border outline-none sm:text-sm px-2 py-1 h-9 dark:bg-[#1e1e1e]"
                 />
-                <span className="text-sm">Minutes</span>
+                
               </div>
             </div>
             <div className="">
               <label
                 htmlFor="examType"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-100"
               >
                 Exam Type:
               </label>

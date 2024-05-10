@@ -109,15 +109,20 @@ const CoursesExams = () => {
               {exam.examType}
             </p>
             <p className="text-gray-600 mb-2">
-              <span className="font-semibold text-black">Starting Date:</span>{" "}
+              <span className="font-semibold text-black">Start Date:</span>{" "}
               {new Date(exam.startedDate).toLocaleDateString()}
             </p>
             <p className="text-gray-600 mb-2">
-              <span className="font-semibold text-black">Time:</span>{" "}
+              <span className="font-semibold text-black">Start Time:</span>{" "}
               {new Date(exam.startedDate).toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
               })}
+            </p>
+
+            <p className="text-gray-600 mb-2">
+              <span className="font-semibold text-black">Duration:</span>{" "}
+              {exam.deadLine.split(':').slice(0, 2).join(':')}
             </p>
             <p className="text-gray-600">
               <span className="font-semibold text-black">Marks:</span>{" "}

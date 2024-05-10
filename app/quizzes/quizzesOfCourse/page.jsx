@@ -25,34 +25,47 @@ const QuizzesOfCourse = () => {
   const [loading, setLoading] = useState(true);
   const [selectedExam, setSelectedExam] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const todayDate = new Date().toLocaleDateString(); // Get today's date
+  const todayDate = new Date(); // Get today's date and time
 
   useEffect(() => {
-    fetchExams();
-  }, [courseCycleId]);
+    const fetchExams = async () => {
+      try {
+        const response = await axios.get(
+          `${API}Exam/GetExamsOfCourseCycleToProfessor`,
+          {
+            headers: {
+              ProfessorUserName: userName,
+              CourseCycleId: courseCycleId,
+            },
+          }
+        );
+        console.log(response.status);
+        setExams(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch exams:", error);
+        setLoading(false);
+      }
+    };
 
-  const fetchExams = async () => {
-    try {
-      const response = await axios.get(
-        `${API}Exam/GetExamsOfCourseCycleToProfessor`,
-        {
-          headers: {
-            ProfessorUserName: userName,
-            CourseCycleId: courseCycleId,
-          },
-        }
-      );
-      setExams(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Failed to fetch exams:", error);
-      setLoading(false);
+    if (courseCycleId) {
+      fetchExams();
     }
-  };
+  }, [courseCycleId, userName]);
 
   const formatDate = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
-    return dateTime.toLocaleDateString();
+    return dateTime.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const formatDateTime = (dateTimeString) => {
+    const dateTime = new Date(dateTimeString);
+    const date = dateTime.toLocaleDateString();
+    const time = formatDate(dateTimeString);
+    return { date, time };
   };
 
   const handleDeleteClick = (exam) => {
@@ -90,6 +103,16 @@ const QuizzesOfCourse = () => {
     setDialogOpen(false);
   };
 
+  const isEditEnabled = (exam) => {
+    const startDate = new Date(exam.startedAt);
+    return startDate >= todayDate;
+  };
+
+  const isShowEnabled = (exam) => {
+    const startDate = new Date(exam.startedAt);
+    return startDate > todayDate;
+  };
+
   return (
     <>
       <div className="mx-16 p-4 mb-10">
@@ -97,28 +120,64 @@ const QuizzesOfCourse = () => {
           {exams.map((exam) => (
             <div
               key={exam.examId}
-              className="bg-white p-4 shadow-md rounded-2xl w-full"
+              className="bg-white p-4 shadow-md rounded-2xl w-full dark:bg-[#1e1e1e]"
             >
               <div className="flex justify-between items-center mb-4 ">
                 <div className=" gap-4 flex flex-col">
                   <h2 className="text-xl font-bold">{exam.examName}</h2>
+
                   <p>{exam.examTitle}</p>
                   <p className="font-semibold">
                     <span className="font-bold text-[#66bfbf]">
-                      Starts On:{" "}
+                      Exam Type:{" "}
                     </span>
-                    {formatDate(exam.startedAt)}
+                    {exam.examType}
+                  </p>
+                  <p className="font-semibold">
+                    <span className="font-bold text-[#66bfbf]">
+                      Start Date:{" "}
+                    </span>
+                    {formatDateTime(exam.startedAt).date}
+                  </p>
+                  <p className="font-semibold">
+                    <span className="font-bold text-[#66bfbf]">
+                      Start Time:{" "}
+                    </span>
+                    {formatDateTime(exam.startedAt).time}
                   </p>
                   <p className="font-semibold">
                     <span className="font-bold text-[#66bfbf]">Duration: </span>
-                    {exam.deadLine}
+                    {exam.deadLine.split(":").slice(0, 2).join(":")}
+                  </p>
+                  <p className="font-semibold">
+                    <span className="font-bold text-[#66bfbf]">
+                      Full Marks:{" "}
+                    </span>
+                    {exam.examFullMarks}
                   </p>
                 </div>
+
                 <div className="flex space-x-2">
-                  <button className="bg-blue-500 text-white px-3 py-1 rounded-md">
-                    <FontAwesomeIcon icon={faEdit} />
-                    <Link href={{ pathname: '/quizzes/edit', query: { courseCycleId, examId: exam.examId } }}>Edit</Link>
-                  </button>
+                  {isEditEnabled(exam) ? (
+                    <Link
+                      href={{
+                        pathname: "/quizzes/edit",
+                        query: { courseCycleId, examId: exam.examId },
+                      }}
+                      className="bg-blue-500 text-white px-3 py-1 rounded-md"
+                    >
+                      <FontAwesomeIcon icon={faEdit} />
+                      <button>Edit</button>
+                    </Link>
+                  ) : (
+                    <button
+                      className="bg-blue-500 text-white px-3 py-1 rounded-md opacity-50 cursor-not-allowed"
+                      disabled
+                    >
+                      <FontAwesomeIcon icon={faEdit} />
+                      <span>Edit</span>
+                    </button>
+                  )}
                   <button
                     className="bg-red-500 text-white px-3 py-1 rounded-md"
                     onClick={() => handleDeleteClick(exam)}
@@ -126,17 +185,23 @@ const QuizzesOfCourse = () => {
                     <FontAwesomeIcon icon={faTrashAlt} />
                     <span className="ml-2">Delete</span>
                   </button>
-                  <button
-                    className={`bg-green-500 text-white px-3 py-1 rounded-md cursor-pointer ${
-                      formatDate(exam.startedAt) !== todayDate
-                        ? "opacity-50 cursor-not-allowed"
-                        : ""
-                    }`}
-                    disabled={formatDate(exam.startedAt) !== todayDate}
-                  >
-                    <FontAwesomeIcon icon={faEye} />
-                    <span className="ml-2">Show</span>
-                  </button>
+                  {isShowEnabled(exam) ? (
+                    <button
+                      className="bg-green-500 text-white px-3 py-1 rounded-md opacity-50 cursor-not-allowed"
+                      disabled
+                    >
+                      <FontAwesomeIcon icon={faEye} />
+                      <span className="ml-2">Show</span>
+                    </button>
+                  ) : (
+                    <Link
+                      href="Link Elshow Hena"
+                      className="bg-green-500 text-white px-3 py-1 rounded-md cursor-pointer"
+                    >
+                      <FontAwesomeIcon icon={faEye} />
+                      <button>Show</button>
+                    </Link>
+                  )}
                 </div>
               </div>
               <div className="border-t border-gray-200 pt-2">
