@@ -1,13 +1,15 @@
 "use client";
-  import { Button } from "@material-tailwind/react";
+import React, { useState, useEffect } from "react";
+import { Button, Dialog, DialogHeader, DialogBody, DialogFooter } from "@material-tailwind/react";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
-import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const Exam = () => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogContent, setDialogContent] = useState("");
   const searchParams = useSearchParams();
   const examId = searchParams?.get("examid");
   const { data: session } = useSession();
@@ -73,13 +75,17 @@ const Exam = () => {
   };
 
   const handleSubmit = async () => {
+    setDialogContent("Are you sure you want to submit the exam?");
+    setDialogOpen(true);
+  };
+
+  const handleConfirmSubmit = async () => {
     try {
       const studentMCQAnswers = [];
       const studentTFQAnswers = [];
       
       // Prepare MCQ answers
       quizData.forEach((question, index) => {
-   
         if (question.options.length > 2) { // Check if it's an MCQ question
           const answerIndex = question.options.findIndex(option => option === userAnswers[index]);
           const studentAnswer = `Option${String.fromCharCode(65 + answerIndex)}`; // Convert index to option letter (A, B, C, ...)
@@ -101,16 +107,24 @@ const Exam = () => {
         studentMCQAnswers: studentMCQAnswers,
         studentTFQAnswers: studentTFQAnswers
       };
-      console.log(requestBody)
   
+      // Submit the exam...
       const response = await axios.post(`${API}Exam/SubmitExamToStudent`, requestBody);
       console.log("Submitted data:", response.data);
-      setShowResult(true); // Show result after submitting
+      
+      // Handle response and dialog content based on response
+      if (response.status === 200) {
+        setDialogContent("Exam submitted successfully!");
+      } else {
+        setDialogContent("You have already submitted this exam.");
+      }
+      setDialogOpen(true); // Open the dialog
     } catch (error) {
       console.error("Error submitting exam:", error);
+      setDialogContent("Error submitting exam. You might have already submitted this exam.");
+      setDialogOpen(true);
     }
   };
-  
 
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
@@ -120,72 +134,86 @@ const Exam = () => {
   };
 
   return (
-    <div className="mt-5 flex items-center justify-center bg-gray-100 dark:bg-[#121212]">
-      <div className="w-full max-w-xl md:w-3/4">
-        {showResult ? (
-          <div className="flex items-center justify-center flex-col">
-            <h3 className="text-xl font-semibold mb-2 text-center">Result</h3>
-            <p className="text-center text-2xl font-bold text-green-500">
-              Your score:{" "}
-              {
-                userAnswers.filter(
-                  (answer, index) => answer === quizData[index].correctAnswer
-                ).reduce((total, correctAnswer, index) => total + (correctAnswer ? quizData[index].degree : 0), 0)
-              }{" "}
-              out of {quizData.length * 5} (Total Marks: {quizData.reduce((total, question) => total + question.degree, 0)})
-            </p>
-          </div>
-        ) : (
-          <div>
-            <div className="text-center mb-4">
-              <p className="text-lg font-semibold">
-                Time Remaining: {formatTime(timer)}
+    <>
+      <div className="mt-5 flex items-center justify-center bg-gray-100 dark:bg-[#121212]">
+        <div className="w-full max-w-xl md:w-3/4">
+          {showResult ? (
+            <div className="flex items-center justify-center flex-col">
+              <h3 className="text-xl font-semibold mb-2 text-center">Result</h3>
+              <p className="text-center text-2xl font-bold text-green-500">
+                Your score:{" "}
+                {
+                  userAnswers.filter(
+                    (answer, index) => answer === quizData[index].correctAnswer
+                  ).reduce((total, correctAnswer, index) => total + (correctAnswer ? quizData[index].degree : 0), 0)
+                }{" "}
+                out of {quizData.length * 5} (Total Marks: {quizData.reduce((total, question) => total + question.degree, 0)})
               </p>
             </div>
-            {quizData.map((question, index) => (
-              <div key={index} className="mb-8 p-4 bg-white dark:bg-[#1e1e1e] rounded-lg shadow-md">
-                <div className="mb-4">
-                  <p className="text-lg break-words">
-                    {index + 1}. {question.question}
-                  </p>
-                </div>
-                <ul className="space-y-2">
-                  {question.options.map((option, optionIndex) => (
-                    <label
-                      key={optionIndex}
-                      htmlFor={`option_${index}_${optionIndex}`}
-                      className="cursor-pointer transition-all duration-200 ease-in-out hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md p-2 block"
-                    >
-                      <li className="flex items-center">
-                        <input
-                          type="radio"
-                          id={`option_${index}_${optionIndex}`}
-                          name={`option_${index}`} // Add a name attribute to group radio buttons for each question
-                          value={option}
-                          checked={userAnswers[index] === option}
-                          onChange={() => handleAnswer(index, option)}
-                          className="mr-2"
-                        />
-                        <span>{option}</span>
-                      </li>
-                    </label>
-                  ))}
-                </ul>
+          ) : (
+            <div>
+              <div className="text-center mb-4">
+                <p className="text-lg font-semibold">
+                  Time Remaining: {formatTime(timer)}
+                </p>
               </div>
-            ))}
-            <div className="flex justify-center mt-6 mb-6">
-              <Button
-                ripple={true}
-                onClick={handleSubmit}
-                className="bg-[#66bfbf] hover:bg-[#4e9999] text-white px-6 py-2 rounded-md text-md capitalize  transition-all duration-200"
-              >
-                Submit
-              </Button>
+              {quizData.map((question, index) => (
+                <div key={index} className="mb-8 p-4 bg-white dark:bg-[#1e1e1e] rounded-lg shadow-md">
+                  <div className="mb-4">
+                    <p className="text-lg break-words">
+                      {index + 1}. {question.question}
+                    </p>
+                  </div>
+                  <ul className="space-y-2">
+                    {question.options.map((option, optionIndex) => (
+                      <label
+                        key={optionIndex}
+                        htmlFor={`option_${index}_${optionIndex}`}
+                        className="cursor-pointer transition-all duration-200 ease-in-out hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md p-2 block"
+                      >
+                        <li className="flex items-center">
+                          <input
+                            type="radio"
+                            id={`option_${index}_${optionIndex}`}
+                            name={`option_${index}`} // Add a name attribute to group radio buttons for each question
+                            value={option}
+                            checked={userAnswers[index] === option}
+                            onChange={() => handleAnswer(index, option)}
+                            className="mr-2"
+                          />
+                          <span>{option}</span>
+                        </li>
+                      </label>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+              <div className="flex justify-center mt-6 mb-6">
+                <Button
+                  ripple={true}
+                  onClick={handleSubmit}
+                  className="bg-[#66bfbf] hover:bg-[#4e9999] text-white px-6 py-2 rounded-md text-md capitalize  transition-all duration-200"
+                >
+                  Submit
+                </Button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
+      <Dialog open={dialogOpen} handler={() => setDialogOpen(!dialogOpen)}>
+        <DialogHeader>Confirmation</DialogHeader>
+        <DialogBody>{dialogContent}</DialogBody>
+        <DialogFooter>
+          <Button variant="text" color="red" onClick={() => setDialogOpen(false)}>
+            Cancel
+          </Button>
+          <Button variant="gradient" color="green" onClick={handleConfirmSubmit}>
+            Confirm
+          </Button>
+        </DialogFooter>
+      </Dialog>
+    </>
   );
 };
 

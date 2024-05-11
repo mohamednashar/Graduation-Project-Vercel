@@ -3,8 +3,8 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-function Page({ params }) {
-  params = useParams();
+function Page() {
+  const params = useParams();
   const linkParam = params.studentAnswer;
 
   // Find the index of "studentNameValue"
@@ -56,123 +56,128 @@ function Page({ params }) {
     fetchStudentAnswers();
   }, []);
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  const formatTime = (dateString) => {
+    const date = new Date(dateString);
+    const hour = date.getHours().toString().padStart(2, "0");
+    const minute = date.getMinutes().toString().padStart(2, "0");
+    return `${hour}:${minute}`;
+  };
+
   return (
-    <div className="bg-gray-100 dark:bg-[#282828] p-4 rounded-lg shadow-md">
-      <div className="flex justify-center my-2 ">
-      <img
-        alt="student photo"
-        src={answers.studentImageUrl ? answers.studentImageUrl : "/user.png"}
-        className="rounded-full object-cover w-[150px] h-[150px]"
-      />
-      </div>
-      <h2 className="text-xl font-bold text-center my-5">
-        {answers.studentFullName}
-      </h2>
-      <h2 className="text-xl font-bold text-center my-5">
-        {" "}
-        username : {answers.studentUserName}
-      </h2>
-      <h2 className="text-xl font-bold text-center my-5">
-        degree get {" : "} {answers.studentTotalMarks}
-      </h2>
-      <h2 className="text-xl font-bold text-center mt-5 mb-10">
-        Submitted date {" : "} {answers.studentSubmissionDate}
-      </h2>
+    <div className="flex justify-center items-center my-5">
+      <div className="bg-white p-8 rounded-lg shadow-md mx-2 md:mx-16 w-full">
+        <div className="flex justify-center my-2">
+          <img
+            alt="student photo"
+            src={
+              answers.studentImageUrl ? answers.studentImageUrl : "/user.png"
+            }
+            className="rounded-full object-cover w-[150px] h-[150px]"
+          />
+        </div>
+        <h2 className="text-xl font-bold text-center my-5">
+          {answers.studentFullName}
+        </h2>
+        <h2 className="text-xl font-bold text-center my-5">
+          Username: {answers.studentUserName}
+        </h2>
+        <h2 className="text-xl font-bold text-center my-5">
+          Total Mark: {answers.studentTotalMarks}
+        </h2>
+        <div className="flex justify-center items-center my-5">
+          <p className="text-xl font-bold text-center ">Submitted Date:</p>
+          <p className="text-xl font-bold text-center ml-1">
+            {formatDate(answers.studentSubmissionDate)}
+          </p>
+        </div>
+        <div className="flex justify-center items-center">
+          <p className="text-xl font-bold text-center">Submitted Time:</p>
+          <p className="text-xl font-bold text-center ml-1">
+            {formatTime(answers.studentSubmissionDate)}
+          </p>
+        </div>
 
-      <div className="mt-4">
-        <h3 className="text-lg font-bold mb-2">Multiple Choice Questions</h3>
-        {answers?.mcqInfoWithStudentAnswerDtos?.map((mcq, index) => (
-          <div key={index} className="mb-2 font-semibold">
-            <p>{mcq.text}</p>
-            <ul className=" pl-4  text-lg shadow-md my-5">
-              <li
-                className={
-                  "OptionA" === mcq.correctAnswer &&
-                  mcq.studentAnswer === "OptionA"
-                    ? "text-green-600 border-2 border-green-800 w-fit rounded-md p-2"
-                    : "OptionA" != mcq.correctAnswer &&
-                      mcq.studentAnswer === "OptionA"
-                    ? "text-red-500 border-2 border-red-800 rounded-md w-fit p-2"
-                    : "OptionA" === mcq.correctAnswer &&
-                      mcq.studentAnswer != "OptionA"
-                    ? "text-green-600 border-2 border-green-800 w-fit rounded-md p-2"
-                    : ""
-                }
-              >
-                {mcq.optionA}
-              </li>
-              <li
-                className={
-                  "OptionB" === mcq.correctAnswer &&
-                  mcq.studentAnswer === "OptionB"
-                    ? "text-green-600 border-2 border-green-800 w-fit rounded-md p-2"
-                    : "OptionB" != mcq.correctAnswer &&
-                      mcq.studentAnswer === "OptionB"
-                    ? "text-red-500 border-2 border-red-800 rounded-md w-fit p-2"
-                    : "OptionB" === mcq.correctAnswer &&
-                      mcq.studentAnswer != "OptionB"
-                    ? "text-green-600 border-2 border-green-800 w-fit rounded-md p-2"
-                    : ""
-                }
-              >
-                {mcq.optionB}
-              </li>
-              <li
-                className={
-                  "OptionC" === mcq.correctAnswer &&
-                  mcq.studentAnswer === "OptionC"
-                    ? "text-green-600 border-2 border-green-800 w-fit rounded-md p-2"
-                    : "OptionC" != mcq.correctAnswer &&
-                      mcq.studentAnswer === "OptionC"
-                    ? "text-red-500 border-2 border-red-800 rounded-md w-fit p-2"
-                    : "OptionC" === mcq.correctAnswer &&
-                      mcq.studentAnswer != "OptionC"
-                    ? "text-green-600 border-2 border-green-800 w-fit rounded-md p-2"
-                    : ""
-                }
-              >
-                {mcq.optionC}
-              </li>
-              <li
-                className={
-                  "OptionD" === mcq.correctAnswer &&
-                  mcq.studentAnswer === "OptionD"
-                    ? "text-green-600 border-2 border-green-800 w-fit rounded-md p-2"
-                    : "OptionD" != mcq.correctAnswer &&
-                      mcq.studentAnswer === "OptionD"
-                    ? "text-red-500 border-2 border-red-800 rounded-md w-fit p-2"
-                    : "OptionD" === mcq.correctAnswer &&
-                      mcq.studentAnswer != "OptionD"
-                    ? "text-green-600 border-2 border-green-800 w-fit rounded-md p-2"
-                    : ""
-                }
-              >
-                {mcq.optionD}
-              </li>
-            </ul>
-          </div>
-        ))}
-      </div>
+        <div className="mt-4">
+          <h3 className="text-lg font-bold mb-2">Multiple Choice Questions</h3>
+          {answers?.mcqInfoWithStudentAnswerDtos?.map((mcq, index) => (
+            <div key={index} className="bg-gray-100 rounded-lg p-4 mb-4">
+              <p>{mcq.text}</p>
+              <p className="text-sm font-semibold mb-2">Degree: {mcq.degree}</p>
+              <div className="grid grid-cols-2 gap-4 mt-4">
+                <Choice
+                  choice={mcq.optionA}
+                  isCorrect={mcq.correctAnswer === "OptionA"}
+                  isSelected={mcq.studentAnswer === "OptionA"}
+                />
+                <Choice
+                  choice={mcq.optionB}
+                  isCorrect={mcq.correctAnswer === "OptionB"}
+                  isSelected={mcq.studentAnswer === "OptionB"}
+                />
+                <Choice
+                  choice={mcq.optionC}
+                  isCorrect={mcq.correctAnswer === "OptionC"}
+                  isSelected={mcq.studentAnswer === "OptionC"}
+                />
+                <Choice
+                  choice={mcq.optionD}
+                  isCorrect={mcq.correctAnswer === "OptionD"}
+                  isSelected={mcq.studentAnswer === "OptionD"}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
 
-      <div className="mt-4">
-        <h3 className="text-lg font-bold mb-2">True/False Questions</h3>
-        {answers?.tfqInfoWithStudentAnswerDtos?.map((tfq, index) => (
-          <div key={index} className="mb-2 font-semibold shadow-md my-3 p-5">
-            <p>{tfq.text}</p>
-            <p
-              className={
-                tfq.studetAnswer === tfq.corectAnswer
-                  ? "text-green-600"
-                  : "text-red-600"
-              }
-            >
-              Student Answer: {tfq.studetAnswer ? "True" : "False"}
-            </p>
-          </div>
-        ))}
+        <div className="mt-4">
+          <h3 className="text-lg font-bold mb-2">True/False Questions</h3>
+          {answers?.tfqInfoWithStudentAnswerDtos?.map((tfq, index) => (
+            <div key={index} className="bg-gray-100 rounded-lg p-4 mb-4">
+              <p>{tfq.text}</p>
+              <p className="text-sm font-semibold mb-2">Degree: {tfq.degree}</p>
+              <p
+                className={
+                  tfq.studetAnswer === tfq.corectAnswer
+                    ? "text-green-600"
+                    : "text-red-600"
+                }
+              >
+                Student Answer: {tfq.studetAnswer ? "True" : "False"}
+                {tfq.studetAnswer === tfq.corectAnswer
+                  ? " (Correct)"
+                  : " (Incorrect)"}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 }
+
+const Choice = ({ choice, isCorrect, isSelected }) => {
+  return (
+    <div
+      className={`${
+        isSelected ? (isCorrect ? "bg-green-600" : "bg-red-600") : "bg-gray-200"
+      } p-4 rounded-lg text-center`}
+    >
+      <span
+        className={isCorrect && !isSelected ? "font-bold text-green-600" : ""}
+      >
+        {choice}
+      </span>{" "}
+    </div>
+  );
+};
 
 export default Page;

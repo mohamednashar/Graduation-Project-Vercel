@@ -100,7 +100,7 @@ export default function Show() {
   }, [rowData]);
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center mt-5">
       <div className="h-full max-w-screen-xl">
         <div className="example-wrapper h-[700px] w-[1050px]">
           <div className={"ag-theme-quartz h-[700px]"}>

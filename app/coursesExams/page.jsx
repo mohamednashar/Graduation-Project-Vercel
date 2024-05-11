@@ -122,7 +122,7 @@ const CoursesExams = () => {
 
             <p className="text-gray-600 mb-2">
               <span className="font-semibold text-black">Duration:</span>{" "}
-              {exam.deadLine.split(':').slice(0, 2).join(':')}
+              {exam.deadLine.split(":").slice(0, 2).join(":")}
             </p>
             <p className="text-gray-600">
               <span className="font-semibold text-black">Marks:</span>{" "}
