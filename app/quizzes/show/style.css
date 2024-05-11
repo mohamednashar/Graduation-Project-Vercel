@@ -1,0 +1,18 @@
+.ag-theme-quartz .ag-header-cell-label {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 700;
+
+}
+
+.ag-theme-quartz .ag-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 17px;
+
+}

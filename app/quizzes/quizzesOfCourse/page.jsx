@@ -195,7 +195,10 @@ const QuizzesOfCourse = () => {
                     </button>
                   ) : (
                     <Link
-                      href="Link Elshow Hena"
+                    href={{
+                      pathname: "/quizzes/show",
+                      query: { examId: exam.examId },
+                    }}
                       className="bg-green-500 text-white px-3 py-1 rounded-md cursor-pointer"
                     >
                       <FontAwesomeIcon icon={faEye} />
@@ -226,8 +229,8 @@ const QuizzesOfCourse = () => {
       <Dialog open={dialogOpen} handler={handleCloseDialog}>
         <DialogHeader>Delete Exam</DialogHeader>
         <DialogBody>
-          Are you sure you want to delete the exam "
-          {selectedExam && selectedExam.examName}"?
+          Are you sure you want to delete the exam 
+          {selectedExam && selectedExam.examName}
         </DialogBody>
         <DialogFooter>
           <Button variant="text" color="red" onClick={handleCloseDialog}>
