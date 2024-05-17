@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import ThemeChanger from "../components/ThemeChanger";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const Login = () => {
@@ -15,6 +15,14 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(""); // State for displaying error message
   const router = useRouter();
+  
+  const { data: session } = useSession();
+
+  if (session) {
+    router.push('/main');
+    return null; 
+  }
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -89,6 +97,7 @@ const Login = () => {
         break;
     }
   };
+
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 h-screen">

@@ -1,9 +1,10 @@
-"use client"
+"use client";
 import { useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import ThemeChanger from "@/app/components/ThemeChanger";
 import { useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const PasswordReset = () => {
@@ -13,8 +14,9 @@ const PasswordReset = () => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const searchParams = useSearchParams()
-  const token = searchParams.get('token')
+  const searchParams = useSearchParams();
+  let token = searchParams.get("token");
+  token = token.replace(/ /g, "+");
   console.log(token);
 
   const handleSubmit = async (e) => {
@@ -49,6 +51,7 @@ const PasswordReset = () => {
       setSuccessMessage(""); // Clear any previous success messages
     }
   };
+
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 h-screen">

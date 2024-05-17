@@ -30,6 +30,12 @@ module.exports = {
         hostname: 'images.unsplash.com',
        
       },
+      {
+        protocol: 'https',
+        hostname: 'localhost',
+        port: '7052',
+       
+      },
     ],
 
   },
