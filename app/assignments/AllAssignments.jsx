@@ -126,7 +126,7 @@ const AllAssignments = () => {
 
       <div className="flex justify-center">
         <button
-          className="bg-[#66bfbf] px-4 py-2 rounded-lg text-white font-semibold hover:bg-[#5aaeae] transition-all duration-200"
+          className="mb-10 bg-[#66bfbf] px-4 py-2 rounded-lg text-white font-semibold hover:bg-[#5aaeae] transition-all duration-200"
           onClick={handleOpen}
         >
           Create Assignment

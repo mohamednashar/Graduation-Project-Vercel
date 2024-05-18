@@ -18,10 +18,10 @@ const Login = () => {
   
   const { data: session } = useSession();
 
-  if (session) {
-    router.push('/main');
-    return null; 
-  }
+  // if (session) {
+  //   router.push('/main');
+  //   return null; 
+  // }
 
 
   const handleSubmit = async (e) => {

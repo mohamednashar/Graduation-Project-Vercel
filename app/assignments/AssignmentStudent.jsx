@@ -134,6 +134,7 @@ const AssignmentStudent = () => {
                   href={{
                     pathname: `/assignments/${assignment.name}`,
                     query: {
+                      sectionId:assignment.sectionId,
                       assignmentId: assignment.assignmentId,
                     },
                   }}
