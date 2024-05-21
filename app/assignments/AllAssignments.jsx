@@ -19,6 +19,7 @@ const AllAssignments = () => {
   const sectionId = searchParams.get("sectionId");
   const [assignments, setAssignments] = useState([]);
   const [open, setOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [newAssignment, setNewAssignment] = useState({
     name: "",
     description: "",
@@ -26,8 +27,15 @@ const AllAssignments = () => {
     endedAt: "",
     sectionId: sectionId,
   });
+  const [assignmentToDelete, setAssignmentToDelete] = useState(null);
 
   const handleOpen = () => setOpen(!open);
+  const handleDeleteOpen = (assignment) => {
+    setAssignmentToDelete(assignment);
+    setDeleteOpen(true);
+  };
+  const handleDeleteClose = () => setDeleteOpen(false);
+
   const { data: session } = useSession();
   const userName = session?.user?.userName;
 
@@ -41,7 +49,7 @@ const AllAssignments = () => {
     try {
       // Format the endedAt value
       const formattedEndedAt = newAssignment.endedAt + ":00.000Z";
-  
+
       const response = await axios.post(
         `${API}Assignement/CreateAssignement`,
         {
@@ -54,14 +62,16 @@ const AllAssignments = () => {
           },
         }
       );
-      console.log('Assignment created:', response.data);
-      setAssignments(prevAssignments => [...prevAssignments, newAssignment]);
-            handleOpen(); 
+      console.log("Assignment created:", response.data);
+      setAssignments((prevAssignments) => [
+        ...prevAssignments,
+        response.data,
+      ]);
+      handleOpen();
     } catch (error) {
-      console.error('Error creating assignment:', error);
+      console.error("Error creating assignment:", error);
     }
   };
-  
 
   const fetchAssignments = async () => {
     try {
@@ -78,6 +88,27 @@ const AllAssignments = () => {
       setAssignments(response.data);
     } catch (error) {
       console.error("Error fetching assignments:", error);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`${API}Assignement/DeleteAssignement`, {
+        headers: {
+          Id: assignmentToDelete.assignmentId,
+        },
+        params: {
+          InstructorUserName: userName,
+        },
+      });
+      setAssignments((assignments) =>
+        assignments.filter(
+          (assignment) => assignment.assignmentId !== assignmentToDelete.assignmentId
+        )
+      );
+      setDeleteOpen(false);
+    } catch (error) {
+      console.error("Error deleting assignment:", error);
     }
   };
 
@@ -100,9 +131,7 @@ const AllAssignments = () => {
                 <div>
                   <h2 className="text-xl font-semibold">{assignment.name}</h2>
                   <p className="text-gray-600">{assignment.description}</p>
-                  <p className="text-gray-600">
-                    Full Mark: {assignment.fullMark}
-                  </p>
+                  <p className="text-gray-600">Full Mark: {assignment.fullMark}</p>
                   <p className="text-gray-600">
                     Ends At: {new Date(assignment.endedAt).toLocaleString()}
                   </p>
@@ -114,7 +143,10 @@ const AllAssignments = () => {
                   <button className="bg-green-500 text-white px-3 py-1 rounded flex items-center">
                     <FontAwesomeIcon icon={faEye} className="mr-2" /> Show
                   </button>
-                  <button className="bg-red-500 text-white px-3 py-1 rounded flex items-center">
+                  <button
+                    className="bg-red-500 text-white px-3 py-1 rounded flex items-center"
+                    onClick={() => handleDeleteOpen(assignment)}
+                  >
                     <FontAwesomeIcon icon={faTrash} className="mr-2" /> Delete
                   </button>
                 </div>
@@ -235,6 +267,45 @@ const AllAssignments = () => {
             className="mr-1"
           >
             <span>Add new Assignment</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
+
+      <Dialog
+        open={deleteOpen}
+        handler={handleDeleteClose}
+        animate={{
+          mount: { scale: 1, y: 0 },
+          unmount: { scale: 0.9, y: -100 },
+        }}
+        className="dark:bg-[#282828]"
+      >
+        <DialogHeader className="dark:text-white">
+          Confirm Delete
+        </DialogHeader>
+        <DialogBody>
+          <p className="dark:text-white">
+            Are you sure you want to delete this assignment?
+          </p>
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant="text"
+            color="red"
+            onClick={handleDeleteClose}
+            className="mr-1"
+          >
+            <span>Cancel</span>
+          </Button>
+          <Button
+            variant="text"
+            color="green"
+            onClick={() => {
+              handleDelete();
+              handleDeleteClose();
+            }}            className="mr-1"
+          >
+            <span>Confirm</span>
           </Button>
         </DialogFooter>
       </Dialog>

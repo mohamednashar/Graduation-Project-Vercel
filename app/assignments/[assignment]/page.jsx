@@ -1,12 +1,11 @@
 "use client"
 import React from 'react'
 import Student from './Student'
-import Prof from './Prof'
 import { useSession } from 'next-auth/react';
 import AllAssignments from '../AllAssignments';
 import { Spinner } from '@material-tailwind/react';
 
-function page({params}) {
+function page() {
   const { data: session, status } = useSession();
 
   if (status === "loading") {

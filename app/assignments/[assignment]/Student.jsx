@@ -83,9 +83,9 @@ function Student() {
     const newFormData = new FormData();
     newFormData.append("SectionId", sectionId);
     newFormData.append("AssignementId", assignmentId);
-    newFormData.append("FormFile", file); // Append the file directly
-    newFormData.append("Name", file.name); // Append the file name
-    newFormData.append("FileType", mapMimeTypeToSimplifiedType(file.type)); // Convert file type
+    newFormData.append("FormFile", file);
+    newFormData.append("Name", file.name); 
+    newFormData.append("FileType", mapMimeTypeToSimplifiedType(file.type)); 
 
     setFormData(newFormData); // Update FormData state
   };
