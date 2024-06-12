@@ -1,9 +1,10 @@
-"use client"
+"use client";
 import Link from "next/link";
 import { useState } from "react";
 import ThemeChanger from "../components/ThemeChanger";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Spinner } from "@material-tailwind/react"; // Import Spinner component
 
 const Login = () => {
   const [userType, setUserType] = useState("student");
@@ -14,6 +15,7 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(""); // State for displaying error message
+  const [loading, setLoading] = useState(false); // State for loading indicator
   const router = useRouter();
   
   const { data: session } = useSession();
@@ -23,9 +25,9 @@ const Login = () => {
   //   return null; 
   // }
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true when form is submitted
 
     // Perform your form validation here if needed
 
@@ -38,6 +40,7 @@ const Login = () => {
     if (signInResponse?.error) {
       // Handle authentication error
       setError("Invalid username, password, or role");
+      setLoading(false); // Set loading to false if there's an error
       return;
     }
 
@@ -97,7 +100,6 @@ const Login = () => {
         break;
     }
   };
-
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 h-screen">
@@ -188,11 +190,15 @@ const Login = () => {
             <button
               onClick={handleSubmit}
               type="submit"
-              className="flex w-full justify-center rounded-md bg-[#66bfbf] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#4e9999] transition-all duration-200 "
+              className="flex items-center w-full justify-center rounded-md bg-[#66bfbf] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#4e9999] transition-all duration-200 "
             >
               Log in
+              {loading && (
+              <Spinner className="h-5 w-5 ml-2" /> 
+          )}
             </button>
           </div>
+        
         </div>
         <div
           id="x"
