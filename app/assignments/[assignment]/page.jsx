@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import AllAssignments from '../AllAssignments';
 import { Spinner } from '@material-tailwind/react';
 
-function page() {
+function Page() {
   const { data: session, status } = useSession();
 
   if (status === "loading") {
@@ -24,4 +24,4 @@ function page() {
   );
 }
 
-export default page
+export default Page

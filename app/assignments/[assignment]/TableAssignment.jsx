@@ -69,12 +69,7 @@ const TABLE_ROWS = [
     job: "Manager",
     org: "Executive",
     date: "04/10/21",
-  },
-
-
-
-
-  
+  },  
 ];
 
  

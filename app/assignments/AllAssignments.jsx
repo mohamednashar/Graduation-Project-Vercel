@@ -17,6 +17,7 @@ import {
   DialogFooter,
   Spinner,
 } from "@material-tailwind/react";
+import Link from "next/link";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
@@ -30,8 +31,18 @@ const AllAssignments = () => {
   const sectionId = searchParams.get("sectionId");
   const [assignments, setAssignments] = useState([]);
   const [open, setOpen] = useState(false);
+  const [openUpdate, setOpenUpdate] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [id, setId] = useState(0);
   const [newAssignment, setNewAssignment] = useState({
+    name: "",
+    description: "",
+    fullMark: 0,
+    endedAt: "",
+    sectionId: sectionId,
+  });
+
+  const [updatedAssignment, setUpdatedAssignment] = useState({
     name: "",
     description: "",
     fullMark: 0,
@@ -42,6 +53,10 @@ const AllAssignments = () => {
   const [fileSelected, setFileSelected] = useState(false); // New state for file selected
 
   const handleOpen = () => setOpen(!open);
+  const handleOpenUpdate = () => {
+    setOpenUpdate(!openUpdate);
+    console.log(openUpdate);
+  };
   const handleDeleteOpen = (assignment) => {
     setAssignmentToDelete(assignment);
     setDeleteOpen(true);
@@ -54,6 +69,11 @@ const AllAssignments = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewAssignment({ ...newAssignment, [name]: value });
+  };
+
+  const handleInputUpdateChange = (e) => {
+    const { name, value } = e.target;
+    setUpdatedAssignment({ ...updatedAssignment, [name]: value });
   };
 
   const handleSubmit = async (e) => {
@@ -217,6 +237,38 @@ const AllAssignments = () => {
     }
   };
 
+  const handleSubmitUpdate = async (e) => {
+    e.preventDefault();
+    setLoading(true); // Set loading to true when the form submission starts
+    try {
+      const formattedEndedAt = updatedAssignment.endedAt ;
+
+      const response = await axios.put(
+        `${API}Assignement/UpdateAssignement`,
+        {
+          ...updatedAssignment,
+          endedAt: formattedEndedAt,
+        },
+        {
+          params: {
+            InstructorUserName: userName,
+          },
+          headers: {
+            Id: id, 
+          },
+        }
+      );
+
+      handleOpenUpdate();
+      fetchAssignments();
+      setFormData(null);
+    } catch (error) {
+      console.error("Error creating assignment:", error);
+    } finally {
+      setLoading(false); // Set loading to false when the form submission finishes
+    }
+  };
+
   return (
     <>
       <div className="p-6">
@@ -238,12 +290,39 @@ const AllAssignments = () => {
                   </p>
                 </div>
                 <div className="flex space-x-2">
-                  <button className="bg-blue-500 text-white px-3 py-1 rounded flex items-center">
+                  <button
+                    onClick={() => {
+                      handleOpenUpdate();
+                      setId(assignment.assignmentId);
+
+                      setUpdatedAssignment({
+                        name: assignment.name,
+                        description:assignment.description,
+                        fullMark: assignment.fullMark,
+                        endedAt: assignment.endedAt ,
+                        sectionId: sectionId,
+                      });
+                    }}
+                    className="bg-blue-500 text-white px-3 py-1 rounded flex items-center"
+                  >
                     <FontAwesomeIcon icon={faEdit} className="mr-2" /> Edit
                   </button>
-                  <button className="bg-green-500 text-white px-3 py-1 rounded flex items-center">
-                    <FontAwesomeIcon icon={faEye} className="mr-2" /> Show
-                  </button>
+                  
+                  
+                  <Link
+                    href={{
+                      pathname: "show",
+                      query: {
+                        name: assignment.name,
+                        id: assignment.assignmentId,
+                      },
+                    }}
+                  >
+                    {" "}
+                    <button className="bg-green-500 text-white px-3 py-1 rounded flex items-center">
+                      <FontAwesomeIcon icon={faEye} className="mr-2" /> Show
+                    </button>
+                  </Link>
                   <button
                     className="bg-red-500 text-white px-3 py-1 rounded flex items-center"
                     onClick={() => handleDeleteOpen(assignment)}
@@ -430,6 +509,114 @@ const AllAssignments = () => {
             className="mr-1"
           >
             <span>Confirm</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
+
+      {/*  Update Assignment Details */}
+
+      <Dialog
+        open={openUpdate}
+        handler={handleOpenUpdate}
+        animate={{
+          mount: { scale: 1, y: 0 },
+          unmount: { scale: 0.9, y: -100 },
+        }}
+        className="dark:bg-[#282828]"
+      >
+        <DialogHeader className="dark:text-white">Edit Assignment</DialogHeader>
+        <DialogBody>
+          <div className="mx-auto w-full max-w-[550px]">
+            <form onSubmit={handleSubmitUpdate}>
+              <div className="mb-5">
+                <label
+                  htmlFor="name"
+                  className="mb-3 block text-base font-medium text-[#07074D] dark:text-white"
+                >
+                  Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  placeholder="Name Of Assignment"
+                  value={updatedAssignment.name}
+                  onChange={handleInputUpdateChange}
+                  className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md dark:bg-[#3f3f3f] dark:text-white"
+                />
+              </div>
+              <div className="mb-5">
+                <label
+                  htmlFor="description"
+                  className="mb-3 block text-base font-medium text-[#07074D] dark:text-white"
+                >
+                  Assignment Details
+                </label>
+                <textarea
+                  rows="5"
+                  name="description"
+                  id="description"
+                  placeholder="Assignment Details"
+                  value={updatedAssignment.description}
+                  onChange={handleInputUpdateChange}
+                  className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md dark:bg-[#3f3f3f] dark:text-white"
+                />
+              </div>
+              <div className="mb-5">
+                <label
+                  htmlFor="endedAt"
+                  className="mb-3 block text-base font-medium text-[#07074D] dark:text-white"
+                >
+                  Assignment Deadline
+                </label>
+                <input
+                  type="datetime-local"
+                  name="endedAt"
+                  id="endedAt"
+                  placeholder="deadline"
+                  value={updatedAssignment.endedAt}
+                  onChange={handleInputUpdateChange}
+                  className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md dark:bg-[#3f3f3f] dark:text-white"
+                />
+              </div>
+              <div className="mb-5">
+                <label
+                  htmlFor="fullMark"
+                  className="mb-3 block text-base font-medium text-[#07074D] dark:text-white"
+                >
+                  Points Assignment
+                </label>
+                <input
+                  type="number"
+                  name="fullMark"
+                  id="fullMark"
+                  placeholder="Points"
+                  value={updatedAssignment.fullMark}
+                  onChange={handleInputUpdateChange}
+                  className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md dark:bg-[#3f3f3f] dark:text-white"
+                />
+              </div>
+            </form>
+          </div>
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant="text"
+            color="red"
+            onClick={handleOpenUpdate}
+            className="mr-1"
+          >
+            <span>Cancel</span>
+          </Button>
+          <Button
+            variant="text"
+            color="green"
+            onClick={handleSubmitUpdate}
+            className="mr-1 flex items-center"
+            disabled={loading} // Disable button when loading
+          >
+            <span>Edit Assignment</span>
+            {loading && <Spinner className="ml-1 h-4 w-4" color="teal" />}
           </Button>
         </DialogFooter>
       </Dialog>
