@@ -268,25 +268,42 @@ const AllAssignments = () => {
       setLoading(false); // Set loading to false when the form submission finishes
     }
   };
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const formattedDate = date.toLocaleDateString(); // Format date
+    const formattedTime = date.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    }); // Format time
+    return { formattedDate, formattedTime };
+  };
 
   return (
     <>
       <div className="p-6">
         <div className="grid grid-cols-1 gap-4">
-          {assignments.map((assignment) => (
+          {assignments.map((assignment) => {
+                        const { formattedDate, formattedTime } = formatDate(assignment.endedAt);
+                        return(
+            
+            
             <div
               key={assignment.assignmentId}
               className="bg-white shadow-md rounded-lg p-4"
             >
-              <div className="flex justify-between items-center">
-                <div>
+              <div className="flex justify-between items-center ">
+                <div className="flex flex-col gap-2">
                   <h2 className="text-xl font-semibold">{assignment.name}</h2>
                   <p className="text-gray-600">{assignment.description}</p>
                   <p className="text-gray-600">
-                    Full Mark: {assignment.fullMark}
+                    <span className="font-semibold">Full Mark: </span>
+                     {assignment.fullMark}
                   </p>
                   <p className="text-gray-600">
-                    Ends At: {new Date(assignment.endedAt).toLocaleString()}
+                  <span className="font-semibold">Deadline Date: </span> {formattedDate}
+                  </p>
+                  <p className="text-gray-600">
+                  <span className="font-semibold">Deadline Time: </span> {formattedTime}
                   </p>
                 </div>
                 <div className="flex space-x-2">
@@ -332,7 +349,8 @@ const AllAssignments = () => {
                 </div>
               </div>
             </div>
-          ))}
+          );
+        })}
         </div>
       </div>
 
