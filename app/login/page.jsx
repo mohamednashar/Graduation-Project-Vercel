@@ -132,7 +132,7 @@ const Login = () => {
         </h2>
       </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm bg-white dark:bg-[#1e1e1e] p-5 rounded-b-2xl shadow-lg">
-        <div className="space-y-6">
+        <div className="space-y-8">
           {error && (
             <div className="text-red-500 text-center">{error}</div>
           )}
@@ -150,6 +150,7 @@ const Login = () => {
                 id="username"
                 name="username"
                 type="text"
+                placeholder="User Name"
                 autoComplete="username"
                 required
                 className="block w-full rounded-md py-1.5 text-gray-900 dark:text-gray-100 dark:bg-[#222222]  shadow-sm border ring-gray-300 placeholder:text-gray-400 p-3 outline-none sm:text-sm sm:leading-6"
@@ -180,6 +181,7 @@ const Login = () => {
                 id="password"
                 name="password"
                 type="password"
+                placeholder="••••••••"
                 autoComplete="current-password"
                 required
                 className="block w-full rounded-md py-1.5 text-gray-900 dark:text-gray-100 dark:bg-[#222222]  shadow-sm border ring-gray-300 placeholder:text-gray-400 p-3 outline-none sm:text-sm sm:leading-6"
@@ -202,10 +204,10 @@ const Login = () => {
         </div>
         <div
           id="x"
-          className="mt-10 text-center text-sm mb-5 flex justify-center gap-4 items-center text-[#66bfbf]"
+          className="mb-5 text-center text-sm  flex justify-center gap-4 items-center text-[#66bfbf]"
         >
           {/* Add labels for Prof, Student, and Staff */}
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <input
               type="radio"
               name="checkboxProf"
@@ -256,8 +258,9 @@ const Login = () => {
             <label className="font-bold" htmlFor="staff">
               Staff
             </label>
-          </div>
+          </div> */}
         </div>
+
       </div>
     </div>
   );

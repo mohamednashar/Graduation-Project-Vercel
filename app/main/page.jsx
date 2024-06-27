@@ -9,6 +9,7 @@ import {
   AccordionBody,
 } from "@material-tailwind/react";
 import Link from "next/link";
+import setAuthorizationToken from "../components/setAuthorizationToken";
 
 const CUSTOM_ANIMATION = {
   mount: { scale: 1 },
@@ -32,6 +33,8 @@ const Page = () => {
   const isInstructor = role?.includes("Instructor");
   const isStudent = role?.includes("Student");
   const isProfessor = role?.includes("Professor");
+  const token = session?.user?.jwtToken;
+  setAuthorizationToken(token)
 
   const handleOpen = (courseCycleId, index) => {
     setOpen(open === index ? -1 : index);
