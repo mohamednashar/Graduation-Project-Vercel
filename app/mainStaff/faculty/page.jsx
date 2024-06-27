@@ -10,6 +10,8 @@ import {
 } from "@material-tailwind/react";
 import DeleteFaculty from "./DeleteFaculty";
 import UpdateFaculty from "./UpdateFaculty";
+import setAuthorizationToken from "@/app/components/setAuthorizationToken";
+import { useSession } from "next-auth/react";
 
 const data = [
   {
@@ -26,6 +28,9 @@ const data = [
   },
 ];
 
+
+
+
 const page = () => {
   const defaultTabValue = data[0].value;
   const tabAnimate = {
@@ -33,6 +38,10 @@ const page = () => {
     mount: { y: 0, scale: 1 },
     unmount: { y: 50, scale: 0.7 },
   };
+  const { data: session } = useSession();
+  const token = session?.user?.jwtToken;
+setAuthorizationToken(token)
+
   return (
     <div>
       <Tabs value={defaultTabValue}>
