@@ -10,6 +10,7 @@ import {
 } from "@material-tailwind/react";
 import Link from "next/link";
 import setAuthorizationToken from "../components/setAuthorizationToken";
+import useTokenRefresh from "../components/refreshToken";
 
 const CUSTOM_ANIMATION = {
   mount: { scale: 1 },
@@ -35,6 +36,15 @@ const Page = () => {
   const isProfessor = role?.includes("Professor");
   const token = session?.user?.jwtToken;
   setAuthorizationToken(token)
+  const { startTokenRefresh, stopTokenRefresh } = useTokenRefresh();
+
+  useEffect(() => {
+    startTokenRefresh();
+
+    // Clean up function to clear interval on component unmount
+    return () => stopTokenRefresh();
+  }, []);
+
 
   const handleOpen = (courseCycleId, index) => {
     setOpen(open === index ? -1 : index);

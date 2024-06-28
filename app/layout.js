@@ -6,19 +6,14 @@ import { usePathname } from "next/navigation";
 import ThemeHandler from "./components/ThemeHandler";
 import AuthProvider from "./components/AuthProvider";
 import { useEffect } from 'react';
-import { startTokenRefresh, stopTokenRefresh } from "./components/refreshToken";
+
 const poppins = Poppins({ subsets: ["latin"],weight:['400','500','600','700'] });
 
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
 
-  useEffect(() => {
-    startTokenRefresh();
 
-    // Clean up function to clear interval on component unmount
-    return () => stopTokenRefresh();
-  }, []);
 
   return (
     <html lang="en">
