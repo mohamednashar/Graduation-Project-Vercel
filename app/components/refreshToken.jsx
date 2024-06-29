@@ -1,41 +1,35 @@
-"use client"
+"use client";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import setAuthorizationToken from "./setAuthorizationToken";
+import { useEffect } from "react";
 import axios from "axios";
 
 const useTokenRefresh = () => {
   const { data: session } = useSession();
   let intervalId = null;
-  const [newToken , setNewToken] = useState("")
   const token = session?.user?.jwtToken;
-  const API = process.env.NEXT_PUBLIC_BACKEND_API ;
-  const refreshToken = async() => {
-    if (token) {
-      try{
-        const result = await axios.post(`${API}Authentication/RefreshToken` ,{ headers:
-          {
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': session?.user?.refreshToken, 
-      }})
+  const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
-      setNewToken(result?.data?.jwtToken)
+  const refreshToken = async () => {
+  
+      try {
+        const response = await axios.post(`${API}Authentication/RefreshToken`, {}, {
+          withCredentials: true, // Ensure cookies are sent with the request
+        });
 
-      setAuthorizationToken(newToken);
-
-      }catch(err){
-        console.log(err)
+        const result = response.data;
+        console.log(result)
+        console.log("Token refreshed successfully");
+        return result;
+      } catch (error) {
+        console.error('There was a problem with the refresh operation:', error.response ? error.response.data : error.message);
       }
-      
-
-    
-    }
+  
   };
 
   const startTokenRefresh = () => {
     refreshToken(); // Initial token refresh
 
-    // Set interval to refresh token every 2 minutes (120,000 milliseconds)
+    // Set interval to refresh token every 1.5 minutes (90,000 milliseconds)
     intervalId = setInterval(refreshToken, 90000);
   };
 

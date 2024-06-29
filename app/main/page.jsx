@@ -11,6 +11,8 @@ import {
 import Link from "next/link";
 import setAuthorizationToken from "../components/setAuthorizationToken";
 import useTokenRefresh from "../components/refreshToken";
+import Cookies from 'js-cookie';
+
 
 const CUSTOM_ANIMATION = {
   mount: { scale: 1 },
@@ -35,11 +37,21 @@ const Page = () => {
   const isStudent = role?.includes("Student");
   const isProfessor = role?.includes("Professor");
   const token = session?.user?.jwtToken;
+  console.log(token)
+  const refreshToken = session?.user?.refreshToken;
+  console.log(refreshToken)
   setAuthorizationToken(token)
   const { startTokenRefresh, stopTokenRefresh } = useTokenRefresh();
 
+  const setRefreshToken = (refreshToken) => {
+    Cookies.set('refreshToken', refreshToken, { expires: 30 }); // The cookie will expire in 30 days
+  };
+
   useEffect(() => {
-    startTokenRefresh();
+    if(refreshToken){
+        setRefreshToken(refreshToken);
+        startTokenRefresh();
+      }
 
     // Clean up function to clear interval on component unmount
     return () => stopTokenRefresh();
