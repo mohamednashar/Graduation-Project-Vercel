@@ -20,8 +20,8 @@ import { signOut, useSession } from "next-auth/react";
 const navigation = [
   { name: "Home", href: "/main", current: true },
   { name: "Quiz", href: "/quizzes", current: false },
-  { name: "Meeting", href: "/meeting", current: false },
-  { name: "Calendar", href: "/calendar", current: false },
+  // { name: "Meeting", href: "/meeting", current: false },
+  // { name: "Calendar", href: "/calendar", current: false },
   { name: "Assignments", href: "/assignments", current: false },
   { name: "Posts", href: "/posts", current: false },
 ];

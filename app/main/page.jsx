@@ -167,15 +167,17 @@ const Page = () => {
   }, [open]);
 
   return (
-    <div className="mb-10 flex flex-col gap-8">
+    <div className="mb-10 flex flex-col gap-8 ">
       <div className="text-center ">
-        <h1 className="mt-5 text-2xl font-bold pb-2 border-b-4 inline-block border-solid border-[#66bfbf]">
+       {isInstructor? <h1 className="mt-5 text-2xl font-bold pb-2 border-b-4 inline-block border-solid border-[#66bfbf] ">
+          SECTIONS
+        </h1>:<h1 className="mt-5 text-2xl font-bold pb-2 border-b-4 inline-block border-solid border-[#66bfbf] ">
           COURSES
-        </h1>
+        </h1>}
         {isStudent &&
           coursesStudent.map((course, index) => (
             <div
-              className="max-w-screen-lg mx-4 mt-6 overflow-hidden border dark:border-none rounded-t-xl  sm:mx-auto"
+              className="max-w-screen-lg mx-4 overflow-hidden  rounded-t-xl  sm:mx-auto " 
               key={course.courseId}
             >
               <CardDefault
@@ -183,7 +185,7 @@ const Page = () => {
                 group={course.groupName}
                 professor={`${course.professorFirstName} ${course.professorSecondName}`}
               />
-              <div className="max-w-screen-lg mx-4  overflow-hidden rounded-b-xl sm:mx-auto">
+              <div className="max-w-screen-lg mx-4 overflow-hidden rounded-b-xl sm:mx-auto ">
                 <div className="flex flex-col overflow-hidden bg-white dark:bg-[#1e1e1e] dark:text-white sm:flex-row ">
                   <div className="w-full">
                     <Accordion
@@ -192,10 +194,10 @@ const Page = () => {
                       className="bg-[white]  dark:bg-[#282828] rounded-b-xl"
                     >
                       <AccordionHeader
-                        className="dark:text-white px-3 hover:bg-[#F5F5F5] dark:hover:bg-[#242424]"
+                        className="dark:text-white px-3 hover:bg-gray-300 dark:hover:bg-[#242424] border-none"
                         onClick={() => handleOpen(course.courseCycleId, index)}
                       >
-                        Get section
+                        Sections
                       </AccordionHeader>
                       <AccordionBody className="dark:text-white mx-3">
                         <Link
@@ -226,7 +228,7 @@ const Page = () => {
         {isProfessor &&
           coursesProf.map((course, index) => (
             <div
-              className="max-w-screen-lg mx-4 mt-6 overflow-hidden border dark:border-none rounded-t-xl  sm:mx-auto"
+              className="max-w-screen-lg mx-4 overflow-hidden dark:border-none rounded-t-xl  sm:mx-auto"
               key={course.courseId}
             >
               <CardDefault
@@ -245,10 +247,10 @@ const Page = () => {
                       className="bg-[white]  dark:bg-[#282828] rounded-b-xl"
                     >
                       <AccordionHeader
-                        className="dark:text-white px-3 hover:bg-[#F5F5F5] dark:hover:bg-[#242424]"
+                        className="dark:text-white px-3 hover:bg-[#F5F5F5] dark:hover:bg-[#242424] border-none"
                         onClick={() => handleOpen(course.courseCycleId, index)}
                       >
-                        Get section
+                        Sections
                       </AccordionHeader>
                       {sectionsProf.map((section, index) => {
                         return (
@@ -283,7 +285,7 @@ const Page = () => {
         {isInstructor &&
           sectionsInstructor.map((section, index) => (
             <div
-              className="max-w-screen-lg mx-4 mt-6 overflow-hidden border dark:border-none rounded-t-xl  sm:mx-auto"
+              className="max-w-screen-lg mx-4 overflow-hidden dark:border-none rounded-t-xl  sm:mx-auto"
               key={section.courseId}
             >
               <CardDefault
@@ -293,24 +295,24 @@ const Page = () => {
                 faculty={section.facultyName}
                 department={section.departmentName}
               />
-              <div className="max-w-screen-lg mx-4  overflow-hidden rounded-b-xl sm:mx-auto">
+              <div className="max-w-screen-lg mx-4 overflow-hidden rounded-b-xl sm:mx-auto">
                 <div className="flex flex-col overflow-hidden bg-white dark:bg-[#1e1e1e] dark:text-white sm:flex-row ">
-                  <div className="w-full">
+                  <div className="w-full ">
                     <Accordion
                       open={open === index}
                       animate={CUSTOM_ANIMATION}
-                      className="bg-[white]  dark:bg-[#282828] rounded-b-xl"
+                      className="bg-[white]  dark:bg-[#1e1e1e] rounded-b-xl "
                     >
                       <AccordionHeader
-                        className="dark:text-white px-3 hover:bg-[#F5F5F5] dark:hover:bg-[#242424]"
+                        className="dark:text-white px-3 hover:bg-gray-200 dark:hover:bg-[#242424] border-none "
                         onClick={() => handleOpen(1, index)}
                       >
-                        Get Course
+                        Courses
                       </AccordionHeader>
 
                       <AccordionBody
                         key={index}
-                        className="dark:text-white mx-3"
+                        className="dark:text-white border-t"
                       >
                         <Link
                           href={`courses/${section.courseName}-${section.groupName}`}

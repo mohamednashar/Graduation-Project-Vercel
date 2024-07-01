@@ -4,6 +4,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt, faEye } from "@fortawesome/free-solid-svg-icons";
+import Link from "next/link";
 import {
   Button,
   Dialog,
@@ -14,32 +15,30 @@ import {
 import { useSearchParams } from "next/navigation";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import CreateQuiz from "../CreateQuiz";
-import Link from "next/link";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const QuizzesOfCourse = () => {
-  const axiosAuth = useAxiosAuth();
+  const axiosAuth=useAxiosAuth()
   const { data: session } = useSession();
   const userName = session?.user?.userName;
   const searchParams = useSearchParams();
-  const courseCycleId = searchParams?.get("id");
+  const Id = searchParams?.get("id");
   const [exams, setExams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedExam, setSelectedExam] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [createQuizDialogOpen, setCreateQuizDialogOpen] = useState(false); // New state for CreateQuiz dialog
   const todayDate = new Date(); // Get today's date and time
 
   useEffect(() => {
     const fetchExams = async () => {
       try {
         const response = await axiosAuth.get(
-          `${API}Exam/GetExamsOfCourseCycleToProfessor`,
+          `${API}Exam/GetExamsOfSectionToInstuructor`,
           {
             headers: {
-              ProfessorUserName: userName,
-              CourseCycleId: courseCycleId,
+              InstructorUserName: userName,
+              SectionId: Id,
             },
           }
         );
@@ -52,10 +51,10 @@ const QuizzesOfCourse = () => {
       }
     };
 
-    if (courseCycleId) {
+    if (Id) {
       fetchExams();
     }
-  }, [courseCycleId, userName]);
+  }, [Id, userName]);
 
   const formatDate = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
@@ -105,14 +104,6 @@ const QuizzesOfCourse = () => {
   const handleCloseDialog = () => {
     setSelectedExam(null);
     setDialogOpen(false);
-  };
-
-  const handleOpenCreateQuizDialog = () => {
-    setCreateQuizDialogOpen(true);
-  };
-
-  const handleCloseCreateQuizDialog = () => {
-    setCreateQuizDialogOpen(false);
   };
 
   const isEditEnabled = (exam) => {
@@ -207,10 +198,10 @@ const QuizzesOfCourse = () => {
                     </button>
                   ) : (
                     <Link
-                      href={{
-                        pathname: "/quizzes/show",
-                        query: { examId: exam.examId },
-                      }}
+                    href={{
+                      pathname: "/quizzes/show",
+                      query: { examId: exam.examId },
+                    }}
                       className="bg-green-500 text-white px-3 py-1 rounded-md cursor-pointer"
                     >
                       <FontAwesomeIcon icon={faEye} />
@@ -227,12 +218,15 @@ const QuizzesOfCourse = () => {
         </div>
         {/* Button for creating exam */}
         <div className="mt-4 flex justify-center">
-          <button
+          <Link
             className="bg-[#66bfbf] font-semibold hover:bg-[#5bacac] transition-all duration-200 text-white px-4 py-2 rounded-md"
-            onClick={handleOpenCreateQuizDialog}
+            href={{
+              pathname: "quizzesOfCourse/createExam",
+              query: { courseCycleId },
+            }}
           >
             Create Exam
-          </button>
+          </Link>
         </div>
       </div>
       <Dialog open={dialogOpen} handler={handleCloseDialog}>
@@ -253,10 +247,6 @@ const QuizzesOfCourse = () => {
             Confirm
           </Button>
         </DialogFooter>
-      </Dialog>
-      <Dialog className="bg-transparent shadow-none" open={createQuizDialogOpen} handler={handleCloseCreateQuizDialog}>
-          <CreateQuiz />
-          
       </Dialog>
     </>
   );

@@ -23,7 +23,7 @@ const CreateQuiz = () => {
   const handleOpen = () => setOpen(!open);
 
   const searchParams = useSearchParams();
-  const courseCycleId = searchParams.get("courseCycleId");
+  const courseCycleId = searchParams.get("id");
 
   const { data: session } = useSession();
   const userName = session?.user?.userName;

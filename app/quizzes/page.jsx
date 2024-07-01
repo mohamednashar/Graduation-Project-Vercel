@@ -1,11 +1,13 @@
-"use client"
-import React from 'react'
-import CourseCycleProf from './CourseCycleProf'
+"use client";
+import React from "react";
+import QuizDetails from "./QuizDetails";
 
 const page = () => {
   return (
-    <div><CourseCycleProf /></div>
-  )
-}
+    <div>
+      <QuizDetails />
+    </div>
+  );
+};
 
-export default page
+export default page;
