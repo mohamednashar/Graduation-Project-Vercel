@@ -13,10 +13,12 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import { useSearchParams } from "next/navigation";
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const QuizzesOfCourse = () => {
+  const axiosAuth=useAxiosAuth()
   const { data: session } = useSession();
   const userName = session?.user?.userName;
   const searchParams = useSearchParams();
@@ -30,7 +32,7 @@ const QuizzesOfCourse = () => {
   useEffect(() => {
     const fetchExams = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosAuth.get(
           `${API}Exam/GetExamsOfCourseCycleToProfessor`,
           {
             headers: {
@@ -81,7 +83,7 @@ const QuizzesOfCourse = () => {
     const data = JSON.stringify(userName);
 
     try {
-      const response = await axios.delete(`${API}Exam/DeleteExam`, {
+      const response = await axiosAuth.delete(`${API}Exam/DeleteExam`, {
         headers: headers,
         data: data,
       });

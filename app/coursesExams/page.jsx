@@ -4,10 +4,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Select from "react-select";
 import Link from "next/link";
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const CoursesExams = () => {
+  const axiosAuth=useAxiosAuth()
   const { data: session } = useSession();
   const userName = session?.user?.userName;
   const [courses, setCourses] = useState([]);
@@ -17,7 +19,7 @@ const CoursesExams = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosAuth.get(
           `${API}Course/GetAllCoursesOfStudent`,
           {
             headers: {
@@ -44,7 +46,7 @@ const CoursesExams = () => {
   const handleSelectChange = async (selectedOption) => {
     setSelectedCourse(selectedOption);
     try {
-      const response = await axios.get(
+      const response = await axiosAuth.get(
         `${API}Exam/GetAllExamsOfCourseCycleToStudent`,
         {
           params: {

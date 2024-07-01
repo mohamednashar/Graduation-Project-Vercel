@@ -1,9 +1,11 @@
 "use client";
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 function Page() {
+  const axiosAuth=useAxiosAuth()
   const params = useParams();
   const linkParam = params.studentAnswer;
 
@@ -30,7 +32,7 @@ function Page() {
   useEffect(() => {
     const fetchStudentAnswers = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosAuth.get(
           `${API}Exam/GetStudentanswerOfExamWithModelAnswer`,
           {
             params: {

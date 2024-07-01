@@ -11,8 +11,10 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import Select from 'react-select';
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 
 function Page() {
+  const axiosAuth=useAxiosAuth()
   const { data: session } = useSession();
   const userName = session?.user?.userName;
   const searchParams = useSearchParams();
@@ -47,7 +49,7 @@ function Page() {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get(`${API}Exam/GetAllQuestionsOfExam`, {
+        const response = await axiosAuth.get(`${API}Exam/GetAllQuestionsOfExam`, {
           params: { ExamId: examId, ExamCreatorUserName: userName },
         });
         setQuestions(response.data);
@@ -84,7 +86,7 @@ function Page() {
       "Content-Type": "application/json",
     };
     try {
-      const response = await axios.delete(`${API}TFQ/DeleteTFQ`, {
+      const response = await axiosAuth.delete(`${API}TFQ/DeleteTFQ`, {
         headers: headers,
         data: data,
       });
@@ -107,7 +109,7 @@ function Page() {
       "Content-Type": "application/json",
     };
     try {
-      const response = await axios.delete(`${API}MCQ/DeleteMCQ`, {
+      const response = await axiosAuth.delete(`${API}MCQ/DeleteMCQ`, {
         headers: headers,
         data: data,
       });
@@ -125,7 +127,7 @@ function Page() {
 
   const handleUpdate = async (question) => {
     try {
-      const response = await axios.put(`${API}TFQ/UpdateTFQ`, TFQuestion, {
+      const response = await axiosAuth.put(`${API}TFQ/UpdateTFQ`, TFQuestion, {
         headers: { TFQId: question.questionId },
       });
       setOpenDialogId(null);
@@ -141,7 +143,7 @@ function Page() {
   const handleUpdateMCQ = async (question) => {
     console.log(MCQuestion);
     try {
-      const response = await axios.put(`${API}MCQ/UpdateMCQ`, MCQuestion, {
+      const response = await axiosAuth.put(`${API}MCQ/UpdateMCQ`, MCQuestion, {
         headers: { MCQId: question.questionId },
       });
       setOpenDialogUpdateMCQId(null);
@@ -233,7 +235,7 @@ function Page() {
           };
   
           // Sending transformed data to the backend
-          const response = await axios.post(`${API}MCQ/CreateMCQ`, formData);
+          const response = await axiosAuth.post(`${API}MCQ/CreateMCQ`, formData);
           console.log("MCQ created successfully!", response.data); // Log response data
           // You can add further actions here like showing a success message or redirecting
           setDoneUpdate(doneUpdate + 1);
@@ -250,7 +252,7 @@ function Page() {
       console.log(tfFormData)
       e.preventDefault();
       try {
-          await axios.post(`${API}TFQ/CreateTFQ`, {
+          await axiosAuth.post(`${API}TFQ/CreateTFQ`, {
               examId: examId,
               ...tfFormData
           });

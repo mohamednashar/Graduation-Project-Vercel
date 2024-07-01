@@ -4,10 +4,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Select from "react-select";
 import Link from "next/link";
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const AssignmentStudent = () => {
+  const axiosAuth=useAxiosAuth()
   const { data: session } = useSession();
   const userName = session?.user?.userName;
   const [sections, setSections] = useState([]);
@@ -17,7 +19,7 @@ const AssignmentStudent = () => {
   useEffect(() => {
     const fetchSections = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosAuth.get(
           `${API}Section/GetAllSectionsOfStudnet`,
           {
             params: {
@@ -53,7 +55,7 @@ const AssignmentStudent = () => {
   const handleSelectChange = async (selectedOption) => {
     setSelectedSection(selectedOption);
     try {
-      const response = await axios.get(
+      const response = await axiosAuth.get(
         `${API}Assignement/GetAllAssignemntsOfSection`,
         {
           params: {

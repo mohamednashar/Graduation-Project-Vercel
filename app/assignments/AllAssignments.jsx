@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -18,10 +17,13 @@ import {
   Spinner,
 } from "@material-tailwind/react";
 import Link from "next/link";
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const AllAssignments = () => {
+  const axiosAuth=useAxiosAuth()
+
   const [loading, setLoading] = useState(false); // Loading state
   const [fileIcon, setFileIcon] = useState(null);
   const [fileName, setFileName] = useState(""); // Add fileName state
@@ -82,7 +84,7 @@ const AllAssignments = () => {
     try {
       const formattedEndedAt = newAssignment.endedAt + ":00.000Z";
 
-      const response = await axios.post(
+      const response = await axiosAuth.post(
         `${API}Assignement/CreateAssignement`,
         {
           ...newAssignment,
@@ -105,7 +107,7 @@ const AllAssignments = () => {
       // Check if a file is selected and upload it
       if (formData) {
         formData.append("AssignementId", createdAssignment.assignmentId);
-        await axios.post(
+        await axiosAuth.post(
           `${API}FileProcessingOfAssignement/UploadFileToAssignement`,
           formData,
           {
@@ -131,7 +133,7 @@ const AllAssignments = () => {
 
   const fetchAssignments = async () => {
     try {
-      const response = await axios.get(
+      const response = await axiosAuth.get(
         `${API}Assignement/GetAllAssignemntsOfSection`,
         {
           params: {
@@ -149,7 +151,7 @@ const AllAssignments = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`${API}Assignement/DeleteAssignement`, {
+      await axiosAuth.delete(`${API}Assignement/DeleteAssignement`, {
         headers: {
           Id: assignmentToDelete.assignmentId,
         },
@@ -243,7 +245,7 @@ const AllAssignments = () => {
     try {
       const formattedEndedAt = updatedAssignment.endedAt ;
 
-      const response = await axios.put(
+      const response = await axiosAuth.put(
         `${API}Assignement/UpdateAssignement`,
         {
           ...updatedAssignment,

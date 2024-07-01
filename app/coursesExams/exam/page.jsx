@@ -4,10 +4,12 @@ import { Button, Dialog, DialogHeader, DialogBody, DialogFooter } from "@materia
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import axios from "axios";
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const Exam = () => {
+  const axiosAuth=useAxiosAuth()
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState("");
   const searchParams = useSearchParams();
@@ -25,7 +27,7 @@ const Exam = () => {
 
     const fetchExamQuestions = async () => {
       try {
-        const response = await axios.get(`${API}Exam/GetAllExamWorkNowToStudent`, {
+        const response = await axiosAuth.get(`${API}Exam/GetAllExamWorkNowToStudent`, {
           params: {
             ExamId: examId,
             StudnetUserName: userName,
@@ -109,7 +111,7 @@ const Exam = () => {
       };
   
       // Submit the exam...
-      const response = await axios.post(`${API}Exam/SubmitExamToStudent`, requestBody);
+      const response = await axiosAuth.post(`${API}Exam/SubmitExamToStudent`, requestBody);
       console.log("Submitted data:", response.data);
       
       // Handle response and dialog content based on response

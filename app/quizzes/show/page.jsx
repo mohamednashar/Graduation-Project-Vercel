@@ -7,7 +7,9 @@ import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import "./style.css"
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 export default function Show() {
+  const axiosAuth=useAxiosAuth()
   const [rowData, setRowData] = useState([]);
   const [columnDefs, setColumnDefs] = useState([]);
   const { data: session } = useSession();
@@ -68,7 +70,7 @@ export default function Show() {
 
   const fetchingData = async () => {
     try {
-      const response = await axios.get(`${API}Exam/GetAllStudnetsAttendExam`, {
+      const response = await axiosAuth.get(`${API}Exam/GetAllStudnetsAttendExam`, {
         params: {
           ExamId: examId,
           ExamCreatorUserName: userName,

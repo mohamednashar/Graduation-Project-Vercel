@@ -2,9 +2,11 @@ import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const CourseCycleProf = () => {
+  const axiosAuth=useAxiosAuth()
   const { data: session } = useSession();
   const userName = session?.user?.userName;
   const [courses, setCourses] = useState([]);
@@ -12,7 +14,7 @@ const CourseCycleProf = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosAuth.get(
           `${API}Course/GetAllCoursesOfProfessor`,
           {
             headers: {

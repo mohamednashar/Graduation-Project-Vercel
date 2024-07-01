@@ -12,10 +12,12 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import { useSession } from "next-auth/react";
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_API;
 
 const CreateQuiz = () => {
+  const axiosAuth=useAxiosAuth()
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(!open);
@@ -78,7 +80,7 @@ const CreateQuiz = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${API}Exam/CreateExam`, formData);
+      const response = await axiosAuth.post(`${API}Exam/CreateExam`, formData);
       console.log("Exam created:", response.data);
       handleOpen(); // Open dialog
     } catch (error) {

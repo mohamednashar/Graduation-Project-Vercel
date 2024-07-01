@@ -9,9 +9,7 @@ import {
   AccordionBody,
 } from "@material-tailwind/react";
 import Link from "next/link";
-import setAuthorizationToken from "../components/setAuthorizationToken";
-import useTokenRefresh from "../components/refreshToken";
-import Cookies from 'js-cookie';
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 
 
 const CUSTOM_ANIMATION = {
@@ -36,26 +34,10 @@ const Page = () => {
   const isInstructor = role?.includes("Instructor");
   const isStudent = role?.includes("Student");
   const isProfessor = role?.includes("Professor");
-  const token = session?.user?.jwtToken;
-  console.log(token)
-  const refreshToken = session?.user?.refreshToken;
-  console.log(refreshToken)
-  setAuthorizationToken(token)
-  const { startTokenRefresh, stopTokenRefresh } = useTokenRefresh();
+  const axiosAuth=useAxiosAuth()
 
-  const setRefreshToken = (refreshToken) => {
-    Cookies.set('refreshToken', refreshToken, { expires: 30 }); // The cookie will expire in 30 days
-  };
+ 
 
-  useEffect(() => {
-    if(refreshToken){
-        setRefreshToken(refreshToken);
-        startTokenRefresh();
-      }
-
-    // Clean up function to clear interval on component unmount
-    return () => stopTokenRefresh();
-  }, []);
 
 
   const handleOpen = (courseCycleId, index) => {
@@ -66,7 +48,7 @@ const Page = () => {
   useEffect(() => {
     async function fetchCoursesStudent() {
       try {
-        const response = await axios.get(
+        const response = await axiosAuth.get(
           `${API}Course/GetAllCoursesOfStudent`,
           {
             headers: {
@@ -86,8 +68,8 @@ const Page = () => {
 
     async function fetchCoursesProf() {
       try {
-        const response = await axios.get(
-          `${API}Course/GetAllCoursesOfProfessor`,
+        const response = await axiosAuth.get(
+          `Course/GetAllCoursesOfProfessor`,
           {
             headers: {
               ProfessorUserName: userName,
@@ -106,7 +88,7 @@ const Page = () => {
 
     async function fetchSectionsInstructor() {
       try {
-        const response = await axios.get(
+        const response = await axiosAuth.get(
           `${API}Section/GetAllSectionsOfInstructor`,
           {
             headers: {
@@ -136,7 +118,7 @@ const Page = () => {
   useEffect(() => {
     async function fetchSectionOfCourse() {
       try {
-        const response = await axios.get(
+        const response = await axiosAuth.get(
           `${API}Section/GetSectionOfCourseToStudent`,
           {
             headers: {
@@ -158,7 +140,7 @@ const Page = () => {
 
     async function fetchSectionsOfCourseCycle() {
       try {
-        const response = await axios.get(
+        const response = await axiosAuth.get(
           `${API}Section/GetAllSectionsOfCourseCycle`,
           {
             headers: {
